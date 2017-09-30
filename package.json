@@ -1,0 +1,23 @@
+{
+  "name": "nistath.github.io",
+  "version": "1.0.0",
+  "description": "Nick Stathas's Personal Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nistath/nistath.github.io.git"
+  },
+  "author": "Nickolas Stathas",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nistath/nistath.github.io/issues"
+  },
+  "homepage": "https://github.com/nistath/nistath.github.io#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1"
+  }
+}

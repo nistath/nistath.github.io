@@ -1,0 +1,67 @@
+.profile {
+	background-color: #27ae60
+}
+
+.bio {
+	background-color: #2c3e50;
+	color: #f2f1ef;
+}
+
+.container-fluid {
+  height: 100%;
+}
+
+.mainrow {
+	height: 100%;
+	overflow: hidden;
+}
+
+.twothirdrow {
+	height: 67%;
+	overflow: hidden;
+}
+
+.halfrow {
+	height: 50%;
+	overflow: hidden;
+}
+
+.thirdrow {
+	height: 34%;
+}
+
+.nametext {
+	padding: 0;
+	margin: 0;
+	background-color: #ffffff;
+}
+
+.profgrid {
+	width: 80%;
+}
+
+.slink {
+	margin-top: auto;
+}
+
+.slink img {
+	height: 100%;
+	background-color: #e74c3c;
+}
+
+img {
+	width: 100%;
+}
+
+html, body {
+	height: 100%;
+	background:gray;
+}
+
+@mixin vertical-align($position: relative) {
+  position: $position;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
