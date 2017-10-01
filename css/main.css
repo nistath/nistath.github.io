@@ -1,6 +1,35 @@
 .profile {
-	background-image: url("/img/bg.jpg");
 	background-color: #27ae60;
+	margin:0;
+	padding:0;
+	font-family:"arial",heletica,sans-serif;
+	font-size:12px;
+	background: #2980b9 url('/img/background.png') repeat 0 0;
+	-webkit-animation: 10s linear 0s normal none infinite animate;
+	-moz-animation: 10s linear 0s normal none infinite animate;
+	-ms-animation: 10s linear 0s normal none infinite animate;
+	-o-animation: 10s linear 0s normal none infinite animate;
+	animation: 10s linear 0s normal none infinite animate;
+}
+@-webkit-keyframes animate {
+	from {background-position:0 0;}
+	to {background-position: 500px 0;}
+}
+@-moz-keyframes animate {
+	from {background-position:0 0;}
+	to {background-position: 500px 0;}
+}
+@-ms-keyframes animate {
+	from {background-position:0 0;}
+	to {background-position: 500px 0;}
+}
+@-o-keyframes animate {
+	from {background-position:0 0;}
+	to {background-position: 500px 0;}
+}
+@keyframes animate {
+	from {background-position:0 0;}
+	to {background-position: 500px 0;}
 }
 
 .bio {
@@ -33,8 +62,7 @@
 }
 
 .nametext {
-	padding: 0;
-	margin: 0;
+	font-family: "Trebuchet MS";
 }
 
 .profgrid {
@@ -56,6 +84,33 @@
 
 .slink img {
 	height: 100%;
+}
+
+.slink figure {
+	opacity: 1;
+	background-color: #ffffff;
+}
+
+.slink a:hover img {
+	opacity: 1;
+	-webkit-animation: shade 0.5s;
+	animation: shade 0.5s;
+}
+@-webkit-keyframes flash {
+	0% {
+		opacity: .4;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes flash {
+	0% {
+		opacity: .4;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 .slink i {
@@ -89,12 +144,12 @@ html, body {
 	padding: 0.4em;
 }
 
-#resume img {
-	background-color: #ecf0f1;
+#portfolio img {
+	background-color: #9b59b6;
 	padding: 0.3em;
 }
 
-#portfolio img {
-	background-color: #e67e22;
+#resume img {
+	background-color: #ecf0f1;
 	padding: 0.3em;
 }
