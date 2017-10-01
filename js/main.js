@@ -3,9 +3,8 @@ function rot13(s) {
 }
 
 var email = rot13("avfgngu@zvg.rqh");
-var envel = '<i class="fa fa-envelope"></i> ';
 
-$("#email").html(envel + email)
+$("#email").html(function() { return $(this).html().replace("Turn on JavaScript!", email); })
 	.attr("href", "mailto: " + email);
 
 $(function () {

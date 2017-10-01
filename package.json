@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/nistath/nistath.github.io#readme",
   "devDependencies": {
+    "async-file": "^2.0.2",
+    "bluebird": "^3.5.0",
     "browser-sync": "^2.18.13",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-markdown": "^1.2.0"
   }
 }
