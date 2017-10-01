@@ -7,3 +7,7 @@ var envel = '<i class="fa fa-envelope"></i> ';
 
 $("#email").html(envel + email)
 	.attr("href", "mailto: " + email);
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
