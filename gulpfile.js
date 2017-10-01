@@ -13,6 +13,7 @@ gulp.task('watch', () => {
 		}
 	});
 	bs.watch("*.html").on("change", bs.reload);
+	bs.watch("js/*.js").on("change", bs.reload);
 
 	bs.init(bsOptions);
 });

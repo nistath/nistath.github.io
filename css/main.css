@@ -1,5 +1,6 @@
 .profile {
-	background-color: #27ae60
+	background-image: url("/img/bg.jpg");
+	background-color: #27ae60;
 }
 
 .bio {
@@ -13,7 +14,8 @@
 
 .mainrow {
 	height: 100%;
-	overflow: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .twothirdrow {
@@ -33,20 +35,35 @@
 .nametext {
 	padding: 0;
 	margin: 0;
-	background-color: #ffffff;
 }
 
 .profgrid {
 	width: 80%;
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.social {
+	margin-top: 0.5em;
 }
 
 .slink {
-	margin-top: auto;
+	height: 100%;
+	margin: auto;
+	text-align: center;
 }
 
 .slink img {
 	height: 100%;
-	background-color: #e74c3c;
+}
+
+.slink i {
+	height: 100%;
+  display: inline-block;
+  font-size: 2vw;
+  text-align: center;
+  vertical-align: middle;
 }
 
 img {
@@ -58,10 +75,26 @@ html, body {
 	background:gray;
 }
 
-@mixin vertical-align($position: relative) {
-  position: $position;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+#email {
+	color: white;
+	text-decoration: none;
+}
+
+#linkedin img {
+	background-color: #0274b3;
+}
+
+#github img {
+	background-color: #000000;
+	padding: 0.4em;
+}
+
+#resume img {
+	background-color: #ecf0f1;
+	padding: 0.3em;
+}
+
+#portfolio img {
+	background-color: #e67e22;
+	padding: 0.3em;
 }
