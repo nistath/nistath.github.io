@@ -5,7 +5,7 @@ function rot13(s) {
 var email = rot13("avfgngu@zvg.rqh");
 
 $("#email").html(function() { return $(this).html().replace("Turn on JavaScript!", email); })
-	.attr("href", "mailto: " + email);
+	.attr("href", "mailto:" + email);
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

@@ -84,6 +84,7 @@
 	height: 100%;
 	margin: auto;
 	text-align: center;
+	user-select: none;
 }
 
 .slink img {
