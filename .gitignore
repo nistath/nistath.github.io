@@ -1,3 +1,7 @@
+## bad files
+Gemfile.lock
+package-lock.json
+
 ## .gitignore for Jekyll
 _site/
 .sass-cache/

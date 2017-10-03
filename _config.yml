@@ -28,8 +28,6 @@ sass:
   sass_dir: _sass
   style: compressed
 markdown: kramdown
-plugins:
-  - jekyll-feed
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -38,10 +36,14 @@ exclude:
  - Gemfile
  - Gemfile.lock
  - package.json
- - package.json.lock
+ - package-lock.json
  - node_modules
  - gulpfile.js
+ - .editorconfig
+ - .gitattributes
+ - .gitignore
  - vendor/bundle/
  - vendor/cache/
  - vendor/gems/
  - vendor/ruby/
+ - LICENSE.txt

@@ -1,3 +1,20 @@
+img {
+	user-select: none;
+}
+
+.bio {
+	padding-top: 5%;
+	padding-bottom: auto;
+	padding-left: 5%;
+	padding-right: auto;
+
+	overflow-y: auto;
+}
+
+.bio p {
+	font-size: 16pt;
+}
+
 .profile {
 	background-color: #27ae60;
 	margin: 0;
@@ -78,6 +95,7 @@
 
 .nametext h1 {
 	font-family: "Trebuchet MS";
+  font-size: 4vh;
 }
 
 .slink {
