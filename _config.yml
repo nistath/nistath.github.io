@@ -22,12 +22,17 @@ url: "http://stathas.eu" # the base hostname & protocol for your site, e.g. http
 repository: nistath/nistath.github.io
 github_username:  nistath
 github: [metadata]
+permalink: pretty
 
 # Build settings
 sass:
   sass_dir: _sass
   style: compressed
 markdown: kramdown
+plugins:
+  - jekyll-redirect-from
+
+include: ['_pages']
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
