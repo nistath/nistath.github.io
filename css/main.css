@@ -7,7 +7,6 @@ img {
 	padding-bottom: auto;
 	padding-left: 5%;
 	padding-right: auto;
-
 	overflow-y: auto;
 }
 
@@ -28,25 +27,50 @@ img {
 	-o-animation: 10s linear 0s normal none infinite animate;
 	animation: 10s linear 0s normal none infinite animate;
 }
+
 @-webkit-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
 }
+
 @-moz-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
 }
+
 @-ms-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
 }
+
 @-o-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
 }
+
 @keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: 500px 0;
+	}
 }
 
 .bio {
@@ -55,7 +79,7 @@ img {
 }
 
 .container-fluid {
-  height: 100%;
+	height: 100%;
 }
 
 .mainrow {
@@ -81,8 +105,8 @@ img {
 .profgrid {
 	width: 80%;
 	display: flex;
-  flex-direction: column;
-  justify-content: center;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .social {
@@ -94,7 +118,7 @@ img {
 }
 
 .nametext h1 {
-	font-family: "Trebuchet MS";
+	font-family: 'Lato', sans-serif;
 	font-size: 6vh;
 }
 
@@ -119,6 +143,7 @@ img {
 	-webkit-animation: shade 0.5s;
 	animation: shade 0.5s;
 }
+
 @-webkit-keyframes flash {
 	0% {
 		opacity: .4;
@@ -127,6 +152,7 @@ img {
 		opacity: 1;
 	}
 }
+
 @keyframes flash {
 	0% {
 		opacity: .4;
@@ -138,23 +164,24 @@ img {
 
 .slink i {
 	height: 100%;
-  display: inline-block;
-  font-size: 2vw;
-  text-align: center;
-  vertical-align: middle;
+	display: inline-block;
+	font-size: 2vw;
+	text-align: center;
+	vertical-align: middle;
 }
 
 img {
 	width: 100%;
 }
 
-html, body {
+html,
+body {
 	height: 100%;
-	background:gray;
+	background: gray;
 }
 
 .btn {
-  border-radius: 0;
+	border-radius: 0;
 }
 
 #email {
