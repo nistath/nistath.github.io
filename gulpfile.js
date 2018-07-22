@@ -6,7 +6,10 @@ const logger = require("eazy-logger").Logger({
   useLevelPrefixes: false
 });
 
-const jekyll = (process.platform == 'win32')? 'jekyll.bat' : 'jekyll';
+function spawnJekyll(args) {
+  const jekyll = (process.platform == 'win32')? 'jekyll.bat' : 'jekyll';
+  return spawn(jekyll, args, {stdio: ['ignore', 1, 2]});
+}
 
 const siteDir = '_site/';
 function jpath(opath) {
@@ -30,26 +33,18 @@ function browsersync() {
 
 	bs.init(bsOpts);
 }
-browsersync.description = "Watch and serve " + siteDir + " through BrowserSync.";
+browsersync.description = `Watch and serve ${siteDir} through BrowserSync.`;
 
-// TODO: Generalize jekyll commands.
-// TODO: Properly log stdout and stderr.
-gulp.task('serve', () =>
-  spawn(jekyll, ['serve'], {stdio: 'inherit'})
-);
-gulp.task('serve').description = "Watch, build, and serve site with jekyll.";
+gulp.task('serve', () => spawnJekyll(['serve']));
+gulp.task('serve').description = "Watch, build, and serve site with Jekyll.";
 
-// TODO: Properly log stdout and stderr.
-gulp.task('build', () =>
-	spawn(jekyll, ['build', '--incremental'], {stdio: 'inherit'})
-);
-gulp.task('build').description = "Incrementally build with jekyll to " + siteDir + ".";
+gulp.task('build', () => spawnJekyll(['build', '--incremental']));
+gulp.task('build').description = `Incrementally build with Jekyll to ${siteDir}.`;
 
-// TODO: Properly log stdout and stderr.
 gulp.task('build-watch', () =>
-	spawn(jekyll, ['build', '--incremental', '--watch'], {stdio: 'inherit'})
+	spawnJekyll(['build', '--incremental', '--watch'])
 );
-gulp.task('build-watch').description = "Watch and incrementally build with jekyll to " + siteDir + ".";
+gulp.task('build-watch').description = `Watch and incrementally build with Jekyll to ${siteDir}.`;
 
 // TODO: Add watcher for _config.yml.
 gulp.task('watch', gulp.series('build', gulp.parallel('build-watch', browsersync)));
