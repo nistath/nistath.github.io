@@ -52,3 +52,5 @@ exclude:
  - vendor/gems/
  - vendor/ruby/
  - LICENSE.txt
+ - README.md
+ - CNAME

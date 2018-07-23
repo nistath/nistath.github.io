@@ -33,7 +33,9 @@ title: Home
 								<h1>Nick<br />Stathas</h1>
 							</div>
 							<div class="row namecol">
-								<a id="email"><button type="button" class="btn btn-primary"><i class="fa fa-envelope"></i> Turn on JavaScript!</button></a>
+								<a id="email" class="btn btn-primary">
+									<i class="fa fa-envelope"></i> Turn on JavaScript!
+								</a>
 							</div>
 						</div>
 					</div>
@@ -63,7 +65,10 @@ title: Home
 			</div>
 
 			<div class="col-md-7 bio">
-				{% include bio.html %}
+				<div class="biotxt">
+					{% capture bio_include %}{% include bio.md %}{% endcapture %}
+					{{ bio_include | markdownify }}
+				</div>
 			</div>
 		</div>
 	</div>
