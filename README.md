@@ -1,12 +1,15 @@
 # Nick's Personal Website
 
-## Installation
+This repository now hosts a plain static site served directly by GitHub Pages. There is no build pipeline, Bundler, or Node tooling required.
 
-1. Get `ruby`, `ruby-dev`, and `node` however you do that in your OS.
-2. `gem install bundle` and `npm i -g gulp@^4.0.0`
-3. `bundle install` and `npm i`
-4. Get mad at native Ruby packages. Get mad at GitHub for liking Ruby. Repeat until `bundle` succeeds.
-4. To use this you can:
-    - `gulp watch` to incrementally build and sync changes in real time
-    - `gulp serve` to painfuly rebuild all changes and view them after refreshing
-    - `gulp build` to build your website into the `_site` directory
+## Local development
+
+Open `index.html` in a browser, or run a simple static server (for example, `python3 -m http.server`) from the project root if you need proper routing for the redirect pages.
+
+## Deployment
+
+Commit your changes to the `main` branch and push. GitHub Pages automatically serves the contents of this repository.
+
+## Next steps
+
+With the Ruby and Gulp dependencies removed, the repository is ready for a static site generator such as [Kaihan](https://github.com/Mononofu/kaihan). Generate your blog into a folder (for example `blog/`) and publish the resulting static files alongside the rest of the site.
