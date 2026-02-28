@@ -5,75 +5,58 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Nick Stathas</title>
   <meta name="description" content="Nick Stathas's Personal Website and Portfolio">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="manifest" href="site.webmanifest">
   <link rel="apple-touch-icon" href="icon.png">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Raleway:wght@700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row mainrow">
-      <div class="col-md profile">
-        <div class="container-fluid profgrid">
-          <div class="row">
-            <div class="col-lg">
-              <img id="profpic" src="https://github.com/nistath.png" alt="Profile Picture" />
-            </div>
-            <div class="col-lg">
-              <div class="row nametext namecol">
-                <h1>Nick<br />Stathas</h1>
-              </div>
-              <div class="row namecol">
-                <a id="email" class="btn btn-primary">
-                  <i class="fa fa-envelope"></i> Turn on JavaScript!
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="row social">
-            <div class="col slink" id="github">
-              <a href="https://github.com/nistath" target="_blank">
-                <img src="img/github_light.png" title="GitHub" data-toggle="tooltip" data-placement="bottom" />
-              </a>
-            </div>
-            <div class="col slink" id="linkedin">
-              <a href="https://www.linkedin.com/in/nistath" target="_blank">
-                <img src="img/linkedin.png" title="LinkedIn" data-toggle="tooltip" data-placement="bottom" />
-              </a>
-            </div>
-            <div class="col slink" id="portfolio">
-              <a href="/portfolio" target="_blank">
-                <img src="img/portfolio.png" title="Portfolio" data-toggle="tooltip" data-placement="bottom" />
-              </a>
-            </div>
-            <div class="col slink" id="resume">
-              <a href="/resume" target="_blank">
-                <img src="img/resume.png" title="Resume" data-toggle="tooltip" data-placement="bottom" />
-              </a>
-            </div>
-          </div>
-        </div>
+  <div class="layout">
+
+    <!-- ── Left: Profile panel ── -->
+    <aside class="profile-panel">
+      <div class="profile-content">
+        <img id="profpic" class="profile-pic" src="https://github.com/nistath.png" alt="Nick Stathas" />
+        <h1 class="profile-name">Nick<br>Stathas</h1>
+        <a id="email" class="email-btn" href="#">
+          <i class="fa-solid fa-envelope"></i>
+          <span>Turn on JavaScript!</span>
+        </a>
+        <nav class="social-links" aria-label="Social links">
+          <a href="https://github.com/nistath" target="_blank" rel="noopener" class="social-link" aria-label="GitHub" title="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/nistath" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn" title="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a href="/portfolio" target="_blank" rel="noopener" class="social-link" aria-label="Portfolio" title="Portfolio">
+            <i class="fa-solid fa-briefcase"></i>
+          </a>
+          <a href="/resume" target="_blank" rel="noopener" class="social-link" aria-label="Resume" title="Resume">
+            <i class="fa-solid fa-file-lines"></i>
+          </a>
+        </nav>
       </div>
-      <div class="col-md-7 bio">
-        <div class="biotxt">
-          <h1>Hello!</h1>
-          <p>I am Nick — a maker, technology enthusiast, and an EECS student at MIT.</p>
-          <p>I am actively involved in MIT Motorsports, a team that annually builds an electric racecar and competes in Formula SAE.</p>
-          <p>In the past, I have built several cool projects, usually for the fun of it. You can read more about them in my <a href="/portfolio">portfolio</a> or while stalking me on <a href="https://github.com/nistath">GitHub</a>.</p>
-          <p>I enjoy collaboratively architecting large systems, optimizing workflow through better tooling, and creating elegant frameworks that solve problems better.</p>
-          <p>Enough about my ramblings; feel free to email me with any questions or propositions you have.</p>
-          <h3>Have a nice day!</h3>
-        </div>
+    </aside>
+
+    <!-- ── Right: Bio panel ── -->
+    <main class="bio-panel">
+      <div class="bio-content">
+        <h2>Hello!</h2>
+        <p>I am Nick — a maker, technology enthusiast, and an EECS student at MIT.</p>
+        <p>I am actively involved in MIT Motorsports, a team that annually builds an electric racecar and competes in Formula SAE.</p>
+        <p>In the past, I have built several cool projects, usually for the fun of it. You can read more about them in my <a href="/portfolio">portfolio</a> or while stalking me on <a href="https://github.com/nistath">GitHub</a>.</p>
+        <p>I enjoy collaboratively architecting large systems, optimizing workflow through better tooling, and creating elegant frameworks that solve problems better.</p>
+        <p>Enough about my ramblings; feel free to email me with any questions or propositions you have.</p>
+        <p class="sign-off">Have a nice day!</p>
       </div>
-    </div>
+    </main>
+
   </div>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha256-gL1ibrbVcRIHKlCO5OXOPC/lZz/gpdApgQAzskqqXp8=" crossorigin="anonymous"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
 </body>
