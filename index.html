@@ -15,48 +15,125 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-  <div class="layout">
+  <div id="app" class="app">
 
-    <!-- ── Left: Profile panel ── -->
-    <aside class="profile-panel">
-      <div class="profile-content">
-        <img id="profpic" class="profile-pic" src="https://github.com/nistath.png" alt="Nick Stathas" />
-        <h1 class="profile-name">Nick<br>Stathas</h1>
+    <!-- ── Compact browsing header (hidden on landing) ── -->
+    <header id="header" class="header">
+      <button class="header-home" id="header-home" title="Home">
+        <img class="header-pic" src="https://github.com/nistath.png" alt="Nick Stathas">
+        <span class="header-name">Nick Stathas</span>
+      </button>
+      <div class="header-sep"></div>
+      <nav class="header-tabs" role="navigation" aria-label="Main navigation">
+        <button class="tab" data-page="about">About</button>
+        <button class="tab" data-page="github">GitHub</button>
+        <button class="tab" data-page="portfolio">Portfolio</button>
+        <button class="tab" data-page="resume">Resume</button>
+      </nav>
+    </header>
+
+    <!-- ── Landing: profile hero (left panel) ── -->
+    <section id="hero" class="hero">
+      <div class="hero-inner">
+        <img class="hero-pic" src="https://github.com/nistath.png" alt="Nick Stathas">
+        <h1 class="hero-name">Nick<br>Stathas</h1>
         <a id="email" class="email-btn" href="#">
           <i class="fa-solid fa-envelope"></i>
           <span>Turn on JavaScript!</span>
         </a>
-        <nav class="social-links" aria-label="Social links">
-          <a href="https://github.com/nistath" target="_blank" rel="noopener" class="social-link" aria-label="GitHub" title="GitHub">
+        <nav class="hero-tabs" role="navigation" aria-label="Main navigation">
+          <button class="hero-tab" data-page="about">
+            <i class="fa-solid fa-user"></i>
+            <span>About</span>
+          </button>
+          <button class="hero-tab" data-page="github">
             <i class="fa-brands fa-github"></i>
-          </a>
-          <a href="https://www.linkedin.com/in/nistath" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn" title="LinkedIn">
-            <i class="fa-brands fa-linkedin-in"></i>
-          </a>
-          <a href="/portfolio" target="_blank" rel="noopener" class="social-link" aria-label="Portfolio" title="Portfolio">
+            <span>GitHub</span>
+          </button>
+          <button class="hero-tab" data-page="portfolio">
             <i class="fa-solid fa-briefcase"></i>
-          </a>
-          <a href="/resume" target="_blank" rel="noopener" class="social-link" aria-label="Resume" title="Resume">
+            <span>Portfolio</span>
+          </button>
+          <button class="hero-tab" data-page="resume">
             <i class="fa-solid fa-file-lines"></i>
-          </a>
+            <span>Resume</span>
+          </button>
         </nav>
       </div>
-    </aside>
+    </section>
 
-    <!-- ── Right: Bio panel ── -->
-    <main class="bio-panel">
+    <!-- ── Landing: bio panel (right panel) ── -->
+    <section id="bio-panel" class="bio-panel">
       <div class="bio-content">
         <h2>Hello!</h2>
         <p>I am Nick — a maker, technology enthusiast, and an EECS student at MIT.</p>
         <p>I am actively involved in MIT Motorsports, a team that annually builds an electric racecar and competes in Formula SAE.</p>
-        <p>In the past, I have built several cool projects, usually for the fun of it. You can read more about them in my <a href="/portfolio">portfolio</a> or while stalking me on <a href="https://github.com/nistath">GitHub</a>.</p>
+        <p>In the past, I have built several cool projects, usually for the fun of it. You can read more about them in my <a href="#" data-page="portfolio">portfolio</a> or while stalking me on <a href="#" data-page="github">GitHub</a>.</p>
         <p>I enjoy collaboratively architecting large systems, optimizing workflow through better tooling, and creating elegant frameworks that solve problems better.</p>
-        <p>Enough about my ramblings; feel free to email me with any questions or propositions you have.</p>
+        <p>Enough about my ramblings; feel free to <a id="email2" href="#">email me</a> with any questions or propositions you have.</p>
         <p class="sign-off">Have a nice day!</p>
       </div>
-    </main>
+    </section>
 
+    <!-- ── Browsing: full-width content area ── -->
+    <main id="content" class="content" aria-live="polite">
+
+      <!-- About -->
+      <div class="page" id="page-about">
+        <div class="page-inner">
+          <h2>About</h2>
+          <p>I am Nick — a maker, technology enthusiast, and an EECS student at MIT.</p>
+          <p>I am actively involved in MIT Motorsports, a team that annually builds an electric racecar and competes in Formula SAE.</p>
+          <p>In the past, I have built several cool projects, usually for the fun of it. You can read more about them in my <a href="#" data-page="portfolio">portfolio</a> or while stalking me on <a href="#" data-page="github">GitHub</a>.</p>
+          <p>I enjoy collaboratively architecting large systems, optimizing workflow through better tooling, and creating elegant frameworks that solve problems better.</p>
+          <p>Enough about my ramblings; feel free to <a id="email3" href="#">email me</a> with any questions or propositions you have.</p>
+          <p class="sign-off">Have a nice day!</p>
+        </div>
+      </div>
+
+      <!-- GitHub -->
+      <div class="page" id="page-github">
+        <div class="page-header">
+          <h2>GitHub</h2>
+          <p class="page-sub">
+            <a href="https://github.com/nistath" target="_blank" rel="noopener">github.com/nistath <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+          </p>
+        </div>
+        <div id="github-repos" class="repos-grid">
+          <div class="repos-loading">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            Loading repositories…
+          </div>
+        </div>
+      </div>
+
+      <!-- Portfolio -->
+      <div class="page embed-page" id="page-portfolio">
+        <embed src="/files/portfolio.pdf" type="application/pdf">
+        <div class="embed-footer">
+          <a href="/files/portfolio.pdf" target="_blank" rel="noopener">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+          </a>
+        </div>
+      </div>
+
+      <!-- Resume -->
+      <div class="page embed-page" id="page-resume">
+        <iframe
+          src="https://docs.google.com/document/d/1laF3-6U_Qb9IZg-Kt0Fy5vEcHzpPh40Wrx5-JizYUpc/preview"
+          allowfullscreen
+          title="Resume">
+        </iframe>
+        <div class="embed-footer">
+          <a href="https://docs.google.com/document/d/1laF3-6U_Qb9IZg-Kt0Fy5vEcHzpPh40Wrx5-JizYUpc/preview" target="_blank" rel="noopener">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in new tab
+          </a>
+        </div>
+      </div>
+
+    </main>
   </div>
+
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
 </body>
