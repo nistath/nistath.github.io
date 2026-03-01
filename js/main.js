@@ -8,11 +8,21 @@ function rot13(s) {
 }
 
 var email = rot13('avfgngu@zvg.rqh');
+
+/* Sidebar email (desktop) */
 var emailEl   = document.getElementById('email');
 var emailText = document.getElementById('email-text');
 if (emailEl && emailText) {
   emailText.textContent = email;
   emailEl.setAttribute('href', 'mailto:' + email);
+}
+
+/* Mobile about-page email */
+var emailMobile     = document.getElementById('email-mobile');
+var emailTextMobile = document.getElementById('email-text-mobile');
+if (emailMobile && emailTextMobile) {
+  emailTextMobile.textContent = email;
+  emailMobile.setAttribute('href', 'mailto:' + email);
 }
 
 /* ── Navigation state ── */

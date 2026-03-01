@@ -63,13 +63,25 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
 }
 
-/* When browsing (non-about section), sidebar collapses to top bar */
+/* Browsing mode: sidebar collapses to topbar (mobile only — see media query override) */
 .app--browsing {
   grid-template-columns: 1fr;
   grid-template-rows: var(--bar-h) 1fr;
   grid-template-areas:
     "topbar"
     "content";
+}
+
+/* ── Desktop: sidebar always visible, topbar never shown ── */
+@media (min-width: 768px) {
+  .app--browsing {
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "sidebar content";
+  }
+
+  .app--browsing .sidebar { display: block; }
+  .app--browsing .topbar  { display: none; }
 }
 
 /* =====================================================
@@ -776,10 +788,32 @@ a.repo-card:hover {
   padding-top: 0;
 }
 
+/* ── Mobile-only profile header inside About section ── */
+.mobile-id {
+  display: none;
+}
+
 /* =====================================================
    RESPONSIVE — MOBILE
    ===================================================== */
 @media (max-width: 767px) {
+  .mobile-id {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .mobile-id-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1.1;
+  }
+
   .app {
     /* Force topbar layout on mobile regardless of state */
     grid-template-columns: 1fr !important;
