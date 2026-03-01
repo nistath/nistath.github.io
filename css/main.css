@@ -210,12 +210,29 @@ a:hover { text-decoration: underline; }
   align-items: center;
   gap: 0;
   padding: 0;
-  background: rgba(10, 18, 30, 0.97);
-  border-bottom: 1px solid var(--clr-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+  background: var(--clr-accent) url('/img/background.png') repeat 0 0;
+  animation: bgscroll 12s linear infinite;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   z-index: 10;
   overflow: hidden;
+}
+
+.topbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sidebar-overlay);
+  pointer-events: none;
+}
+
+.topbar-hero-wrap,
+.topbar-compact-wrap,
+.topbar-left,
+.topbar-nav,
+.topbar-social {
+  position: relative;
+  z-index: 1;
 }
 
 
@@ -251,12 +268,12 @@ a:hover { text-decoration: underline; }
   white-space: nowrap;
 }
 
-/* Topbar navigation tabs */
+/* Topbar navigation tabs — hidden by default (desktop uses sidebar nav).
+   On mobile this element lives outside #topbar as a direct .app child so
+   position:sticky works across the full unified scroll. */
 .topbar-nav {
-  display: flex;
+  display: none;
   align-items: stretch;
-  height: 100%;
-  flex: 1;
 }
 
 .tab {
@@ -762,59 +779,181 @@ a.repo-card:hover {
   padding-top: 0;
 }
 
-/* ── Mobile-only profile header inside About section ── */
-.mobile-id {
-  display: none;
+/* ── Mobile-only topbar hero elements (desktop: topbar is hidden, so these are never seen) ── */
+.topbar-hero-wrap,
+.topbar-compact-wrap { display: none; }
+
+.sticky-header { display: none; }
+
+.avatar-hero {
+  display: block;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
 }
 
 /* =====================================================
    RESPONSIVE — MOBILE
    ===================================================== */
 @media (max-width: 767px) {
-  .mobile-id {
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--clr-border);
-  }
 
-  .mobile-id-name {
-    font-size: 1.6rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: #fff;
-    line-height: 1.1;
-  }
-
+  /* ── App: fixed-height flex column; #content is the scroll container ── */
   .app {
-    /* Force topbar layout on mobile regardless of state */
-    grid-template-columns: 1fr !important;
-    grid-template-rows: var(--bar-h) 1fr !important;
-    grid-template-areas: "topbar" "content" !important;
+    display: flex !important;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .sidebar { display: none !important; }
-  .topbar  { display: flex !important; }
 
-  /* Compact topbar on mobile */
+  /* ── Topbar: vertical flex column, shrinks to 0 when hero collapses ── */
+  .topbar {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    flex-shrink: 0;
+    height: auto;
+    overflow: hidden;
+    border-bottom: none;
+  }
+
+  /* ── Hero: expanded state ── */
+  .topbar-hero-wrap {
+    display: block;
+    height: clamp(160px, 33vh, 300px);
+    overflow: hidden;
+    transition: height 0.35s ease, min-height 0.35s ease;
+    flex-shrink: 0;
+  }
+
+  .topbar.is-collapsed .topbar-hero-wrap {
+    height: 0;
+    min-height: 0;
+  }
+
+  .topbar-hero {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1.25rem 1.5rem;
+    gap: 1.25rem;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  .topbar.is-collapsed .topbar-hero {
+    opacity: 0;
+  }
+
+  .avatar-hero {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+
+  .hero-name {
+    flex: 1;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.05;
+    text-align: left;
+  }
+
+  /* ── Compact identity row: collapsed state ── */
+  .topbar-compact-wrap {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease;
+    flex-shrink: 0;
+  }
+
+  .sticky-header.is-collapsed .topbar-compact-wrap {
+    height: var(--bar-h);
+  }
+
+  .topbar-left {
+    height: var(--bar-h);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 1rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
+  /* ── Sticky header wrapper: compact identity row + nav tabs ── */
+  /* No position:sticky needed — .app is overflow:hidden so this flex item
+     is always fully visible above the scrollable #content below it.       */
+  .sticky-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 20;
+    background: var(--clr-accent) url('/img/background.png') repeat 0 0;
+    animation: bgscroll 12s linear infinite;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sticky-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--sidebar-overlay);
+    pointer-events: none;
+  }
+
   .topbar-social { display: none; }
 
+  .topbar-nav {
+    display: flex;
+    flex: none;
+    height: var(--bar-h);
+    width: 100%;
+  }
+
   .tab {
+    position: relative;
+    z-index: 1;
     padding: 0 0.65rem;
     font-size: 0.8rem;
   }
 
-  .topbar-left {
-    padding: 0 0.75rem;
+  /* ── Content: the actual scroll container on mobile ── */
+  .content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background: var(--clr-bg);
   }
 
-  .topbar-name {
+  /* ── Sections: fill at least the visible content area ── */
+  .section {
+    position: static;
     display: none;
+    opacity: 1;
+    pointer-events: auto;
+    min-height: 100%;
   }
 
-  /* Tighter content padding */
+  .section.active {
+    display: block;
+  }
+
+  /* Resume iframe fills the content viewport */
+  .resume-wrap {
+    height: 100%;
+  }
+
+  /* ── Content padding ── */
   .section-inner {
     padding: 2rem 1.25rem 3rem;
   }
@@ -850,6 +989,8 @@ a.repo-card:hover {
 
 @media (max-width: 400px) {
   .tab {
+    position: relative;
+    z-index: 1;
     padding: 0 0.45rem;
     font-size: 0.75rem;
   }

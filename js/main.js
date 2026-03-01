@@ -17,12 +17,12 @@ if (emailEl && emailText) {
   emailEl.setAttribute('href', 'mailto:' + email);
 }
 
-/* Mobile about-page email */
-var emailMobile     = document.getElementById('email-mobile');
-var emailTextMobile = document.getElementById('email-text-mobile');
-if (emailMobile && emailTextMobile) {
-  emailTextMobile.textContent = email;
-  emailMobile.setAttribute('href', 'mailto:' + email);
+/* Mobile topbar hero email */
+var emailTopbar     = document.getElementById('email-topbar');
+var emailTextTopbar = document.getElementById('email-text-topbar');
+if (emailTopbar && emailTextTopbar) {
+  emailTextTopbar.textContent = email;
+  emailTopbar.setAttribute('href', 'mailto:' + email);
 }
 
 /* ── Navigation state ── */
@@ -70,6 +70,15 @@ function navigate(section) {
   if (section === 'portfolio') {
     renderPortfolio();
   }
+
+  /* On mobile: scroll content back to top so the hero re-expands for each new section */
+  if (window.innerWidth <= 767) {
+    var contentScrollEl = document.getElementById('content');
+    if (contentScrollEl) {
+      contentScrollEl.scrollTop = 0;
+      updateHeaderCollapse(0);
+    }
+  }
 }
 
 /* ── Wire up sidebar nav buttons ── */
@@ -87,6 +96,51 @@ var topbarHome = document.getElementById('topbar-home');
 if (topbarHome) {
   topbarHome.addEventListener('click', function() { navigate('about'); });
 }
+
+/* ── Mobile header: collapse/expand on content scroll ── */
+var topbarEl    = document.getElementById('topbar');
+var stickyHeaderEl = document.querySelector('.sticky-header');
+var contentEl   = document.getElementById('content');
+
+/* Hysteresis thresholds — wide gap prevents jitter near the boundary */
+var COLLAPSE_THRESHOLD = 60;  /* scroll down past this → collapse  */
+var EXPAND_THRESHOLD   = 15;  /* scroll up past this  → expand     */
+var _headerCollapsed   = false;
+
+function updateHeaderCollapse(scrollTop) {
+  if (!topbarEl) return;
+  var next = _headerCollapsed
+    ? scrollTop > EXPAND_THRESHOLD          /* stay collapsed unless well above */
+    : scrollTop > COLLAPSE_THRESHOLD;       /* only collapse when far enough down */
+  if (next === _headerCollapsed) return;
+  _headerCollapsed = next;
+  topbarEl.classList.toggle('is-collapsed', next);
+  if (stickyHeaderEl) stickyHeaderEl.classList.toggle('is-collapsed', next);
+}
+
+/* #content is now the scroll container on mobile */
+contentEl.addEventListener('scroll', function() {
+  if (window.innerWidth > 767) return;
+  updateHeaderCollapse(this.scrollTop);
+}, { passive: true });
+
+/* Forward wheel events from hero to content (needed in desktop/DevTools) */
+topbarEl.addEventListener('wheel', function(e) {
+  if (window.innerWidth > 767) return;
+  contentEl.scrollTop += e.deltaY;
+}, { passive: true });
+
+/* Forward touch-swipe from hero to content (needed on real mobile) */
+var _heroTouchY = 0;
+topbarEl.addEventListener('touchstart', function(e) {
+  _heroTouchY = e.touches[0].clientY;
+}, { passive: true });
+topbarEl.addEventListener('touchmove', function(e) {
+  if (window.innerWidth > 767) return;
+  var dy = _heroTouchY - e.touches[0].clientY;
+  contentEl.scrollTop += dy;
+  _heroTouchY = e.touches[0].clientY;
+}, { passive: true });
 
 /* ── Handle internal section links inside content (e.g. in about text) ── */
 document.getElementById('content').addEventListener('click', function(e) {
