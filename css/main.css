@@ -490,73 +490,290 @@ a.repo-card:hover {
   display: block;
 }
 
-/* ── Portfolio coming soon ── */
-.coming-soon {
+/* =====================================================
+   PORTFOLIO CARDS
+   ===================================================== */
+.portfolio-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 4rem;
+}
+
+.portfolio-intro {
+  margin-bottom: 1.75rem;
+}
+
+.portfolio-intro h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.35rem;
+  color: #fff;
+}
+
+.portfolio-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 2rem 2rem 1.75rem;
-  background: var(--clr-surface);
   border: 1px solid var(--clr-border);
-  border-left: 3px solid var(--clr-accent2);
-  margin-top: 0.5rem;
-  max-width: 520px;
 }
 
-.coming-soon svg {
-  color: var(--clr-muted);
+/* ── Project card ── */
+.pcard {
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
 }
 
-.coming-soon h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #fff;
+.pcard:last-child {
+  border-bottom: none;
 }
 
-.coming-soon p {
-  font-size: 0.92rem !important;
-  color: var(--clr-muted) !important;
-  line-height: 1.6 !important;
-  margin-bottom: 0 !important;
-}
-
-.coming-soon-links {
+.pcard-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 0.25rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--t);
 }
 
-.btn-primary {
-  display: inline-block;
-  padding: 0.5rem 1.1rem;
-  background: var(--clr-accent);
+.pcard-header:hover,
+.pcard.is-open .pcard-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Colored left accent bar */
+.pcard-accent {
+  width: 4px;
+  align-self: stretch;
+  background: var(--card-color);
+  flex-shrink: 0;
+}
+
+/* Pixel-art icon tile */
+.pcard-icon {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.pcard-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Title / subtitle / tags */
+.pcard-info {
+  flex: 1;
+  min-width: 0;
+  padding: 0.85rem 0.75rem;
+}
+
+.pcard-title {
+  font-size: 1.05rem;
+  font-weight: 700;
   color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border: 1px solid var(--clr-accent);
-  transition: background var(--t), border-color var(--t);
+  margin-bottom: 0.2rem;
+  line-height: 1.3;
 }
 
-.btn-primary:hover {
-  background: var(--clr-accent2);
-  border-color: var(--clr-accent2);
-  text-decoration: none;
-}
-
-.btn-ghost {
-  display: inline-block;
-  padding: 0.5rem 0;
+.pcard-subtitle {
+  font-size: 0.8rem;
+  font-style: italic;
   color: var(--clr-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color var(--t);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
-.btn-ghost:hover {
-  color: var(--clr-link);
+.pcard-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.ptag {
+  font-size: 0.67rem;
+  font-weight: 500;
+  padding: 0.1rem 0.4rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--clr-muted);
+  border: 1px solid var(--clr-border);
+  letter-spacing: 0.02em;
+}
+
+/* Org + period (right-aligned) */
+.pcard-meta {
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.pcard-org {
+  font-size: 0.77rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.pcard-period {
+  font-size: 0.72rem;
+  color: var(--clr-muted);
+  margin-top: 0.2rem;
+  white-space: nowrap;
+}
+
+/* Expand / collapse chevron */
+.pcard-chevron {
+  padding: 0 0.85rem;
+  color: var(--clr-muted);
+  flex-shrink: 0;
+  transition: transform var(--t), color var(--t);
+}
+
+.pcard.is-open .pcard-chevron {
+  transform: rotate(180deg);
+  color: var(--card-color, var(--clr-accent2));
+}
+
+/* Expandable body — CSS grid 0fr → 1fr trick */
+.pcard-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.pcard.is-open .pcard-body {
+  grid-template-rows: 1fr;
+}
+
+.pcard-body-inner {
+  overflow: hidden;
+}
+
+.pcard-content {
+  padding: 1.25rem 1.25rem 1.5rem 4.75rem;
+  border-top: 1px solid var(--clr-border);
+}
+
+/* Bullet list */
+.pcard-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pcard-bullets li {
+  font-size: 0.875rem;
+  color: #c9d1d9;
+  line-height: 1.68;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.pcard-bullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--card-color, var(--clr-accent2));
+  font-weight: 600;
+}
+
+/* External links row */
+.pcard-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.1rem;
+}
+
+.pcard-link {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--card-color, var(--clr-link));
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.pcard-link:hover {
+  border-bottom-color: var(--card-color, var(--clr-link));
   text-decoration: none;
+}
+
+/* ── Sub-items (nested collapsibles inside a card) ── */
+.sub-items {
+  margin-top: 1.25rem;
+  border: 1px solid var(--clr-border);
+  border-left: 3px solid var(--card-color, var(--clr-accent));
+}
+
+.sub-item {
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.sub-item:last-child {
+  border-bottom: none;
+}
+
+.sub-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255, 255, 255, 0.02);
+  transition: background 0.2s;
+}
+
+.sub-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sub-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sub-chevron {
+  color: var(--clr-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.sub-item.is-open .sub-chevron {
+  transform: rotate(90deg);
+}
+
+.sub-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.sub-item.is-open .sub-body {
+  grid-template-rows: 1fr;
+}
+
+.sub-body-inner {
+  overflow: hidden;
+}
+
+.sub-body-inner p {
+  font-size: 0.845rem;
+  color: var(--clr-muted);
+  line-height: 1.65;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0;
+}
+
+.sub-body-inner p + p {
+  padding-top: 0;
 }
 
 /* =====================================================
@@ -602,8 +819,24 @@ a.repo-card:hover {
     grid-template-columns: 1fr;
   }
 
-  .coming-soon {
-    max-width: 100%;
+  /* Portfolio cards on mobile */
+  .portfolio-wrap {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .portfolio-intro {
+    padding: 0 1.25rem;
+  }
+
+  .pcard-meta { display: none; }
+
+  .pcard-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .pcard-content {
+    padding: 1rem 1rem 1.25rem 1rem;
   }
 }
 

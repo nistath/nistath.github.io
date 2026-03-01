@@ -150,22 +150,13 @@
       </section>
 
       <section id="section-portfolio" class="section">
-        <div class="section-inner">
-          <h2>Portfolio</h2>
-          <p class="section-sub">Projects and selected work</p>
-          <div class="coming-soon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="butt" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-            </svg>
-            <h3>Coming Soon</h3>
-            <p>A fully web-based portfolio is in development. Check back soon to explore my projects without leaving the page.</p>
-            <div class="coming-soon-links">
-              <a href="/files/portfolio.pdf" class="btn-primary" target="_blank" rel="noopener">View PDF Portfolio</a>
-              <a href="#github" data-section="github" class="btn-ghost">Browse GitHub →</a>
-            </div>
+        <div class="portfolio-wrap">
+          <div class="portfolio-intro">
+            <h2>Portfolio</h2>
+            <p class="section-sub">Selected projects and work &mdash; click any row to expand</p>
+          </div>
+          <div id="portfolio-cards" class="portfolio-list">
+            <!-- populated by js/main.js -->
           </div>
         </div>
       </section>
