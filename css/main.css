@@ -855,7 +855,6 @@ a.repo-card:hover {
   }
 
   .hero-name {
-    flex: 1;
     font-size: 2.4rem;
     font-weight: 700;
     letter-spacing: -0.03em;
@@ -895,6 +894,7 @@ a.repo-card:hover {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
+    position: relative; /* required so ::before overlay is contained here, not the viewport */
     z-index: 20;
     background: var(--clr-accent) url('/img/background.png') repeat 0 0;
     animation: bgscroll 12s linear infinite;
