@@ -63,26 +63,6 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
 }
 
-/* Browsing mode: sidebar collapses to topbar (mobile only — see media query override) */
-.app--browsing {
-  grid-template-columns: 1fr;
-  grid-template-rows: var(--bar-h) 1fr;
-  grid-template-areas:
-    "topbar"
-    "content";
-}
-
-/* ── Desktop: sidebar always visible, topbar never shown ── */
-@media (min-width: 768px) {
-  .app--browsing {
-    grid-template-columns: var(--sidebar-w) 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: "sidebar content";
-  }
-
-  .app--browsing .sidebar { display: block; }
-  .app--browsing .topbar  { display: none; }
-}
 
 /* =====================================================
    SIDEBAR
@@ -100,9 +80,6 @@ a:hover { text-decoration: underline; }
   to   { background-position: 500px 0; }
 }
 
-.app--browsing .sidebar {
-  display: none;
-}
 
 .sidebar-inner {
   display: flex;
@@ -241,9 +218,6 @@ a:hover { text-decoration: underline; }
   overflow: hidden;
 }
 
-.app--browsing .topbar {
-  display: flex;
-}
 
 /* Profile button in topbar */
 .topbar-left {
