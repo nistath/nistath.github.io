@@ -313,3 +313,45 @@ and the nav tabs in the sticky header. Not yet complained about by the user but
 visible in screenshots. Fix would be to collapse this gap when hero is visible,
 while keeping the layout constant during scroll (perhaps with a CSS grid trick or
 absolute positioning for the compact row inside the sticky header).
+
+---
+
+## TODO — Mobile About Default Hint Visibility
+
+### Problem
+
+On some mobile reload/open paths, the "Scroll down" hint in the hero is not
+visible by default on the About page, even though it should be visible before
+the user scrolls.
+
+### What Is In Place Now
+
+- The hint now lives in the hero (`#topbar`), not in the compact sticky row.
+- Hero collapse state is driven by one scroll listener on `#content`.
+- The sticky compact row and hero hint are toggled by the same `hero-hidden`
+  state class.
+- JS snap remains directional and ratio-based (`HERO_SNAP`) so it scales with
+  future hero-height changes.
+
+### What Was Tried (Did Not Reliably Solve It)
+
+- Force `contentEl.scrollTop = 0` on mobile init.
+- Set `history.scrollRestoration = 'manual'`.
+- Re-run "normalize about state" on `load`, `pageshow`, `requestAnimationFrame`,
+  and `setTimeout`.
+- Recompute visibility with a `ResizeObserver` tied to `#topbar`.
+
+These approaches added complexity but still did not reliably fix the issue on
+all mobile/browser paths, so they were removed.
+
+### Suggested Next Fixes
+
+1. Decouple hint visibility from `hero-hidden` class and derive it from actual
+   hero geometry (`topbar.getBoundingClientRect().bottom > stickyTop`) so the
+   hint follows rendered layout rather than restored state flags.
+2. Introduce an explicit mobile startup state machine (single source of truth):
+   `INIT -> ABOUT_EXPANDED -> USER_SCROLLED`, and only allow collapse/hint-hide
+   transitions after first real user scroll input.
+3. Add on-device verification matrix (iOS Safari, Android Chrome, PWA standalone,
+   normal tab restore) because desktop DevTools emulation is not sufficient for
+   this startup-state bug.

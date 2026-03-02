@@ -122,11 +122,29 @@ if (topbarEl && stickyHeaderEl && contentEl) {
   var _prevST = 0;
   var _scrollDir = 1; /* 1 = down, -1 = up */
   var _snapTimer = null;
+  var HERO_SNAP = {
+    /* Percentage of hero progress needed to commit to collapse/expand.
+       Kept ratio-based so behavior scales when hero height changes. */
+    downCommitRatio: 0.20,
+    upCommitRatio: 0.72,
+    minCommitPx: 48,
+    settleDelayMs: 120
+  };
 
   function updateHeroVisibility() {
+    if (window.innerWidth > 767) {
+      stickyHeaderEl.classList.remove('hero-hidden');
+      topbarEl.classList.remove('hero-hidden');
+      return;
+    }
+
     var st = contentEl.scrollTop;
     var topbarH = topbarEl.offsetHeight;
-    stickyHeaderEl.classList.toggle('hero-hidden', st >= topbarH - 1);
+    if (!topbarH) return;
+
+    var isHidden = st >= topbarH - 1;
+    stickyHeaderEl.classList.toggle('hero-hidden', isHidden);
+    topbarEl.classList.toggle('hero-hidden', isHidden);
   }
 
   function snapHeroIfNeeded() {
@@ -139,13 +157,14 @@ if (topbarEl && stickyHeaderEl && contentEl) {
        scrolling must remain free for normal reading. */
     if (st <= 0 || st >= topbarH) return;
 
-    var mid = topbarH / 2;
-    var target = st < mid ? 0 : topbarH;
+    var downCommit = Math.max(HERO_SNAP.minCommitPx, topbarH * HERO_SNAP.downCommitRatio);
+    var upCommit = Math.min(topbarH - 1, Math.max(downCommit + 1, topbarH * HERO_SNAP.upCommitRatio));
+    var target = 0;
 
-    /* Bias ambiguous middle states by scroll direction for more predictable
-       touch-flick behavior. */
-    if (Math.abs(st - mid) < 24) {
-      target = _scrollDir >= 0 ? topbarH : 0;
+    if (_scrollDir >= 0) {
+      target = st >= downCommit ? topbarH : 0;
+    } else {
+      target = st <= upCommit ? 0 : topbarH;
     }
 
     if (Math.abs(st - target) < 1) return;
@@ -161,7 +180,7 @@ if (topbarEl && stickyHeaderEl && contentEl) {
     updateHeroVisibility();
 
     clearTimeout(_snapTimer);
-    _snapTimer = setTimeout(snapHeroIfNeeded, 120);
+    _snapTimer = setTimeout(snapHeroIfNeeded, HERO_SNAP.settleDelayMs);
   }, { passive: true });
 
   if ('onscrollend' in HTMLElement.prototype || 'onscrollend' in window) {

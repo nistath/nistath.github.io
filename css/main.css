@@ -80,6 +80,11 @@ a:hover { text-decoration: underline; }
   to   { background-position: 500px var(--bg-y, 0px); }
 }
 
+@keyframes hint-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
 
 .sidebar-inner {
   display: flex;
@@ -798,7 +803,7 @@ a.repo-card:hover {
    ===================================================== */
 @media (max-width: 767px) {
   :root {
-    --mobile-hero-h: clamp(170px, 35vh, 320px);
+    --mobile-hero-h: clamp(150px, 30vh, 260px);
   }
 
   /* ── App: flex column; only #content fills the remaining space ── */
@@ -835,6 +840,7 @@ a.repo-card:hover {
   .topbar-hero-wrap {
     display: block;
     height: var(--mobile-hero-h);
+    position: relative;
     overflow: hidden;
   }
 
@@ -884,19 +890,61 @@ a.repo-card:hover {
     pointer-events: none;
   }
 
-  /* Compact identity row: always occupies var(--bar-h) so sticky-header
-     is a constant height (no layout shift → no momentum overshoot).
-     Avatar/name fade in via opacity when hero scrolls away. */
+  /* Compact row always occupies var(--bar-h). While hero is visible it shows
+     a gentle "scroll down" hint; once collapsed it fades to mini identity. */
   .topbar-compact-wrap {
     display: block;
     height: var(--bar-h);
+    position: relative;
     overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   }
 
-  .sticky-header.hero-hidden .topbar-compact-wrap {
+  .topbar-left {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .topbar-scroll-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 0.55rem;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.38rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    color: rgba(255, 255, 255, 0.58);
+    pointer-events: none;
+    opacity: 0.84;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .topbar-scroll-arrow {
+    display: inline-block;
+    font-size: 1.08rem;
+    line-height: 1;
+    transform: translateY(0);
+    color: rgba(255, 255, 255, 0.5);
+    animation: hint-bounce 2.05s ease-in-out infinite;
+  }
+
+  .topbar-left {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .topbar.hero-hidden .topbar-scroll-hint {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+
+  .sticky-header.hero-hidden .topbar-left {
     opacity: 1;
     pointer-events: auto;
   }
@@ -909,7 +957,7 @@ a.repo-card:hover {
     gap: 0.55rem;
     padding: 0 1rem;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    border-bottom: none;
   }
 
   .topbar-social { display: none; }
@@ -980,6 +1028,12 @@ a.repo-card:hover {
 
   .pcard-content {
     padding: 1rem 1rem 1.25rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar-scroll-arrow {
+    animation: none;
   }
 }
 
