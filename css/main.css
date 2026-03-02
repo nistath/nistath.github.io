@@ -80,12 +80,6 @@ a:hover { text-decoration: underline; }
   to   { background-position: 500px var(--bg-y, 0px); }
 }
 
-@keyframes hint-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
-}
-
-
 .sidebar-inner {
   display: flex;
   flex-direction: column;
@@ -803,7 +797,7 @@ a.repo-card:hover {
    ===================================================== */
 @media (max-width: 767px) {
   :root {
-    --mobile-hero-h: clamp(150px, 30vh, 260px);
+    --mobile-hero-h: auto;
   }
 
   /* ── App: flex column; only #content fills the remaining space ── */
@@ -839,34 +833,77 @@ a.repo-card:hover {
 
   .topbar-hero-wrap {
     display: block;
-    height: var(--mobile-hero-h);
+    height: auto;
     position: relative;
     overflow: hidden;
   }
 
   .topbar-hero {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 90px max-content;
+    grid-template-areas:
+      "avatar name"
+      "social social";
     align-items: center;
     justify-content: center;
-    height: 100%;
-    padding: 1.3rem 1.5rem calc(1.15rem + var(--bar-h) * 0.42);
-    gap: 1.25rem;
+    align-content: start;
+    column-gap: 1.05rem;
+    row-gap: 0.58rem;
+    height: auto;
+    width: 100%;
+    padding: 1.08rem 1.25rem 0.92rem;
   }
 
   .avatar-hero {
+    grid-area: avatar;
     width: 90px;
     height: 90px;
     flex-shrink: 0;
   }
 
   .hero-name {
-    font-size: 2.4rem;
+    grid-area: name;
+    font-size: 2.05rem;
     font-weight: 700;
     letter-spacing: -0.03em;
     color: #fff;
     line-height: 1.05;
     text-align: left;
+    min-width: 165px;
+  }
+
+  .hero-social-row {
+    grid-area: social;
+    justify-self: stretch;
+    width: auto;
+  }
+
+  .hero-social-row.social-links {
+    margin-top: 0.1rem;
+    padding-top: 0;
+    border-top: none;
+    gap: 0.52rem;
+    align-items: center;
+  }
+
+  .hero-social-row.social-links .social-link {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero-social-row .hero-email-inline {
+    flex: 1;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .hero-social-row .hero-email-inline #email-text-topbar {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* ── Sticky nav: pins at the top once the hero scrolls past ── */
@@ -876,9 +913,10 @@ a.repo-card:hover {
     position: sticky;
     top: 0;
     z-index: 20;
-    --bg-y: calc(var(--mobile-hero-h) * -1);
+    --bg-y: 0px;
     background: var(--clr-accent) url('/img/background.png') repeat 0 0;
     animation: bgscroll 12s linear infinite;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
@@ -890,74 +928,78 @@ a.repo-card:hover {
     pointer-events: none;
   }
 
-  /* Compact row always occupies var(--bar-h). While hero is visible it shows
-     a gentle "scroll down" hint; once collapsed it fades to mini identity. */
   .topbar-compact-wrap {
-    display: block;
-    height: var(--bar-h);
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-  }
-
-  .topbar-left {
-    position: absolute;
-    inset: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .topbar-scroll-hint {
-    position: absolute;
-    left: 50%;
-    bottom: 0.55rem;
-    transform: translateX(-50%);
-    z-index: 1;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.38rem;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.005em;
-    color: rgba(255, 255, 255, 0.58);
-    pointer-events: none;
-    opacity: 0.84;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .topbar-scroll-arrow {
-    display: inline-block;
-    font-size: 1.08rem;
-    line-height: 1;
-    transform: translateY(0);
-    color: rgba(255, 255, 255, 0.5);
-    animation: hint-bounce 2.05s ease-in-out infinite;
-  }
-
-  .topbar-left {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .topbar.hero-hidden .topbar-scroll-hint {
-    opacity: 0;
-    transform: translate(-50%, -6px);
-  }
-
-  .sticky-header.hero-hidden .topbar-left {
-    opacity: 1;
-    pointer-events: auto;
+    gap: 0.45rem;
+    padding: 0 0.62rem;
+    height: calc(var(--bar-h) * var(--compact-progress, 0));
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, calc(0.10 * var(--compact-progress, 0)));
   }
 
   .topbar-left {
     height: var(--bar-h);
-    width: 100%;
+    width: auto;
+    min-width: 0;
+    flex: 1 1 auto;
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    padding: 0 1rem;
+    padding: 0 0.35rem;
     border-right: none;
     border-bottom: none;
+    opacity: var(--compact-progress, 0);
+    transform: translateY(calc((1 - var(--compact-progress, 0)) * -6px));
+    transition: opacity 0.16s linear, transform 0.16s ease-out;
+    pointer-events: none;
+  }
+
+  .avatar-mini {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .topbar-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar-compact-social {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    opacity: var(--compact-progress, 0);
+    transform: translateY(calc((1 - var(--compact-progress, 0)) * -6px));
+    transition: opacity 0.16s linear, transform 0.16s ease-out;
+    pointer-events: none;
+  }
+
+  .topbar-compact-social .topbar-compact-social-link {
+    width: 30px;
+    height: 30px;
+  }
+
+  .topbar-compact-social .topbar-compact-social-link svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .sticky-header.hero-hidden .topbar-left {
+    pointer-events: auto;
+  }
+
+  .sticky-header.hero-hidden .topbar-compact-social {
+    pointer-events: auto;
   }
 
   .topbar-social { display: none; }
@@ -994,7 +1036,7 @@ a.repo-card:hover {
 
   /* Resume: explicit height so the iframe fills the viewport below the nav ── */
   #section-resume {
-    height: calc(100dvh - var(--bar-h) * 2);
+    height: calc(100dvh - var(--bar-h));
   }
 
   /* ── Content padding ── */
@@ -1031,17 +1073,31 @@ a.repo-card:hover {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .topbar-scroll-arrow {
-    animation: none;
-  }
-}
-
 @media (max-width: 400px) {
   .tab {
     position: relative;
     z-index: 1;
     padding: 0 0.45rem;
     font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-social-row .hero-email-inline {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    max-width: 34px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    gap: 0;
+    line-height: 1;
+  }
+
+  .hero-social-row .hero-email-inline #email-text-topbar {
+    display: none;
   }
 }

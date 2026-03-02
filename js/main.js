@@ -25,6 +25,12 @@ if (emailTopbar && emailTextTopbar) {
   emailTopbar.setAttribute('href', 'mailto:' + email);
 }
 
+/* Mobile compact sticky row email */
+var emailTopbarCompact = document.getElementById('email-topbar-compact');
+if (emailTopbarCompact) {
+  emailTopbarCompact.setAttribute('href', 'mailto:' + email);
+}
+
 /* ── Navigation state ── */
 var githubLoaded = false;
 
@@ -78,9 +84,7 @@ function navigate(section) {
     renderPortfolio();
   }
 
-  /* On mobile: reset scroll position.
-     For resume, skip the hero (scroll it away) so the iframe gets full height.
-     For everything else, go back to the top so the hero is visible. */
+  /* On mobile: preserve collapsed/expanded hero state across tab switches. */
   if (window.innerWidth <= 767 && contentScrollEl) {
     if (section === 'resume') {
       contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
@@ -89,6 +93,7 @@ function navigate(section) {
     } else {
       contentScrollEl.scrollTop = 0;
     }
+    contentScrollEl.dispatchEvent(new Event('scroll'));
   }
 }
 
@@ -108,85 +113,39 @@ if (topbarHome) {
   topbarHome.addEventListener('click', function() { navigate('about'); });
 }
 
-/* ── Mobile: compact identity row via scroll on #content ──
-   When the hero (#topbar) scrolls fully out of view, add .hero-hidden to
-   .sticky-header so CSS expands the compact identity row.
-   IntersectionObserver cannot be used here because html/body/.app all have
-   overflow:hidden, which prevents IO from ever firing. A scroll listener on
-   #content is simpler and works correctly with this layout. */
+/* ── Mobile: progressively reveal compact sticky identity row while hero scrolls out ── */
 var stickyHeaderEl = document.querySelector('.sticky-header');
-var topbarEl       = document.getElementById('topbar');
-var contentEl      = document.getElementById('content');
+var topbarEl = document.getElementById('topbar');
+var contentEl = document.getElementById('content');
+var MOBILE_BREAKPOINT = 767;
+var COMPACT_REVEAL_SPAN_RATIO = 0.55;
+var COMPACT_REVEAL_MIN_SPAN_PX = 88;
+var HERO_HIDDEN_PROGRESS = 0.995;
 
-if (topbarEl && stickyHeaderEl && contentEl) {
-  var _prevST = 0;
-  var _scrollDir = 1; /* 1 = down, -1 = up */
-  var _snapTimer = null;
-  var HERO_SNAP = {
-    /* Percentage of hero progress needed to commit to collapse/expand.
-       Kept ratio-based so behavior scales when hero height changes. */
-    downCommitRatio: 0.20,
-    upCommitRatio: 0.72,
-    minCommitPx: 48,
-    settleDelayMs: 120
-  };
+function clamp01(num) {
+  return Math.min(1, Math.max(0, num));
+}
 
+if (stickyHeaderEl && topbarEl && contentEl) {
   function updateHeroVisibility() {
-    if (window.innerWidth > 767) {
+    if (window.innerWidth > MOBILE_BREAKPOINT) {
+      stickyHeaderEl.style.setProperty('--compact-progress', '0');
       stickyHeaderEl.classList.remove('hero-hidden');
-      topbarEl.classList.remove('hero-hidden');
       return;
     }
 
-    var st = contentEl.scrollTop;
-    var topbarH = topbarEl.offsetHeight;
-    if (!topbarH) return;
+    var heroHeight = topbarEl.offsetHeight;
+    if (!heroHeight) return;
 
-    var isHidden = st >= topbarH - 1;
-    stickyHeaderEl.classList.toggle('hero-hidden', isHidden);
-    topbarEl.classList.toggle('hero-hidden', isHidden);
+    var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, heroHeight * COMPACT_REVEAL_SPAN_RATIO);
+    var revealStart = Math.max(0, heroHeight - revealSpan);
+    var progress = clamp01((contentEl.scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
+
+    stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
+    stickyHeaderEl.classList.toggle('hero-hidden', progress >= HERO_HIDDEN_PROGRESS);
   }
 
-  function snapHeroIfNeeded() {
-    if (window.innerWidth > 767) return;
-
-    var st = contentEl.scrollTop;
-    var topbarH = topbarEl.offsetHeight;
-
-    /* Only snap while traversing the hero zone. Once below it, section
-       scrolling must remain free for normal reading. */
-    if (st <= 0 || st >= topbarH) return;
-
-    var downCommit = Math.max(HERO_SNAP.minCommitPx, topbarH * HERO_SNAP.downCommitRatio);
-    var upCommit = Math.min(topbarH - 1, Math.max(downCommit + 1, topbarH * HERO_SNAP.upCommitRatio));
-    var target = 0;
-
-    if (_scrollDir >= 0) {
-      target = st >= downCommit ? topbarH : 0;
-    } else {
-      target = st <= upCommit ? 0 : topbarH;
-    }
-
-    if (Math.abs(st - target) < 1) return;
-    contentEl.scrollTo({ top: target, behavior: 'smooth' });
-  }
-
-  contentEl.addEventListener('scroll', function() {
-    var st = contentEl.scrollTop;
-    if (st !== _prevST) {
-      _scrollDir = st > _prevST ? 1 : -1;
-      _prevST = st;
-    }
-    updateHeroVisibility();
-
-    clearTimeout(_snapTimer);
-    _snapTimer = setTimeout(snapHeroIfNeeded, HERO_SNAP.settleDelayMs);
-  }, { passive: true });
-
-  if ('onscrollend' in HTMLElement.prototype || 'onscrollend' in window) {
-    contentEl.addEventListener('scrollend', snapHeroIfNeeded, { passive: true });
-  }
-
+  contentEl.addEventListener('scroll', updateHeroVisibility, { passive: true });
   window.addEventListener('resize', updateHeroVisibility, { passive: true });
   updateHeroVisibility();
 }
