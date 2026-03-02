@@ -109,9 +109,9 @@ var topbarEl    = document.getElementById('topbar');
 var stickyHeaderEl = document.querySelector('.sticky-header');
 var contentEl   = document.getElementById('content');
 
-/* Hysteresis thresholds — wide gap prevents jitter near the boundary */
-var COLLAPSE_THRESHOLD = 60;  /* scroll down past this → collapse  */
-var EXPAND_THRESHOLD   = 15;  /* scroll up past this  → expand     */
+/* Hysteresis thresholds: collapse nearly immediately, expand only near the top */
+var COLLAPSE_THRESHOLD = 10;  /* scroll down past this → collapse  */
+var EXPAND_THRESHOLD   =  5;  /* scroll up past this  → expand     */
 var _headerCollapsed   = false;
 
 function updateHeaderCollapse(scrollTop) {
@@ -157,25 +157,28 @@ document.querySelectorAll('.section').forEach(function(sec) {
   }, { passive: true });
 });
 
-/* Forward wheel events from hero to active section */
-topbarEl.addEventListener('wheel', function(e) {
+/* Forward wheel + touch from the header area (hero + nav bar) to active section */
+function _forwardWheel(e) {
   if (window.innerWidth > 767) return;
   var activeSec = document.querySelector('.section.active');
   if (activeSec) activeSec.scrollTop += e.deltaY;
-}, { passive: true });
-
-/* Forward touch-swipe from hero to active section */
-var _heroTouchY = 0;
-topbarEl.addEventListener('touchstart', function(e) {
-  _heroTouchY = e.touches[0].clientY;
-}, { passive: true });
-topbarEl.addEventListener('touchmove', function(e) {
+}
+var _headerTouchY = 0;
+function _forwardTouchStart(e) { _headerTouchY = e.touches[0].clientY; }
+function _forwardTouchMove(e) {
   if (window.innerWidth > 767) return;
-  var dy = _heroTouchY - e.touches[0].clientY;
+  var dy = _headerTouchY - e.touches[0].clientY;
   var activeSec = document.querySelector('.section.active');
   if (activeSec) activeSec.scrollTop += dy;
-  _heroTouchY = e.touches[0].clientY;
-}, { passive: true });
+  _headerTouchY = e.touches[0].clientY;
+}
+
+[topbarEl, stickyHeaderEl].forEach(function(el) {
+  if (!el) return;
+  el.addEventListener('wheel',       _forwardWheel,      { passive: true });
+  el.addEventListener('touchstart',  _forwardTouchStart, { passive: true });
+  el.addEventListener('touchmove',   _forwardTouchMove,  { passive: true });
+});
 
 /* ── Handle internal section links inside content (e.g. in about text) ── */
 document.getElementById('content').addEventListener('click', function(e) {
