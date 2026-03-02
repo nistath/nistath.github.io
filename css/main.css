@@ -926,33 +926,9 @@ a.repo-card:hover {
     font-size: 0.8rem;
   }
 
-  /* ── Content: the actual scroll container on mobile ── */
+  /* ── Content: flex child that fills remaining space; sections scroll themselves ── */
   .content {
     flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    background: var(--clr-bg);
-  }
-
-  /* ── Sections: fill at least the visible content area ── */
-  .section {
-    position: static;
-    display: none;
-    opacity: 1;
-    pointer-events: auto;
-    min-height: 100%;
-  }
-
-  .section.active {
-    display: block;
-  }
-
-  /* Resume: the section must have a definite height so .resume-wrap's height:100%
-     resolves correctly and the iframe fills the full content viewport. */
-  #section-resume {
-    height: 100%;
     min-height: 0;
   }
 

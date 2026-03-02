@@ -71,21 +71,19 @@ function navigate(section) {
     renderPortfolio();
   }
 
-  /* On mobile: scroll content back to top, then manage hero state */
+  /* On mobile: scroll new section to top, then manage hero state */
   if (window.innerWidth <= 767) {
-    var contentScrollEl = document.getElementById('content');
-    if (contentScrollEl) {
-      contentScrollEl.scrollTop = 0;
-      if (section === 'resume') {
-        /* Auto-collapse the hero so the iframe gets the full content viewport.
-           rAF defers until after the scrollTop=0 scroll event fires (which would
-           otherwise re-expand the header). */
-        requestAnimationFrame(function() {
-          updateHeaderCollapse(COLLAPSE_THRESHOLD + 1);
-        });
-      } else {
-        updateHeaderCollapse(0);
-      }
+    var newSec = document.getElementById('section-' + section);
+    if (newSec) newSec.scrollTop = 0;
+    if (section === 'resume') {
+      /* Auto-collapse the hero so the iframe gets the full content viewport.
+         rAF defers until after the scrollTop=0 scroll event fires (which would
+         otherwise re-expand the header). */
+      requestAnimationFrame(function() {
+        updateHeaderCollapse(COLLAPSE_THRESHOLD + 1);
+      });
+    } else {
+      updateHeaderCollapse(0);
     }
   }
 }
@@ -132,35 +130,41 @@ function updateHeaderCollapse(scrollTop) {
      transition eliminates the problem entirely.
      Pre-collapse stickyHeader height = 1×barH (nav only).
      Post-collapse stickyHeader height = 2×barH (compact + nav). */
-  if (next && contentEl && stickyHeaderEl) {
+  if (next && stickyHeaderEl) {
     var appEl = document.getElementById('app');
-    var barH = stickyHeaderEl.offsetHeight;            /* pre-collapse = 1×barH */
-    var newContentH = appEl.clientHeight - 2 * barH;  /* post-collapse: app − 2×barH */
-    var newMax = Math.max(0, contentEl.scrollHeight - newContentH);
-    var _deadline = Date.now() + 400;                  /* slightly longer than 350 ms CSS transition */
-    (function _clampLoop() {
-      if (contentEl.scrollTop > newMax) contentEl.scrollTop = newMax;
-      if (Date.now() < _deadline) requestAnimationFrame(_clampLoop);
-    })();
+    var activeSec = document.querySelector('.section.active');
+    if (activeSec) {
+      var barH = stickyHeaderEl.offsetHeight;            /* pre-collapse = 1×barH */
+      var newContentH = appEl.clientHeight - 2 * barH;  /* post-collapse: app − 2×barH */
+      var newMax = Math.max(0, activeSec.scrollHeight - newContentH);
+      var _deadline = Date.now() + 400;                  /* slightly longer than 350 ms CSS transition */
+      (function _clampLoop() {
+        if (activeSec.scrollTop > newMax) activeSec.scrollTop = newMax;
+        if (Date.now() < _deadline) requestAnimationFrame(_clampLoop);
+      })();
+    }
   }
 
   topbarEl.classList.toggle('is-collapsed', next);
   if (stickyHeaderEl) stickyHeaderEl.classList.toggle('is-collapsed', next);
 }
 
-/* #content is now the scroll container on mobile */
-contentEl.addEventListener('scroll', function() {
-  if (window.innerWidth > 767) return;
-  updateHeaderCollapse(this.scrollTop);
-}, { passive: true });
+/* On mobile, each section scrolls itself — listen on all sections */
+document.querySelectorAll('.section').forEach(function(sec) {
+  sec.addEventListener('scroll', function() {
+    if (window.innerWidth > 767) return;
+    updateHeaderCollapse(this.scrollTop);
+  }, { passive: true });
+});
 
-/* Forward wheel events from hero to content (needed in desktop/DevTools) */
+/* Forward wheel events from hero to active section */
 topbarEl.addEventListener('wheel', function(e) {
   if (window.innerWidth > 767) return;
-  contentEl.scrollTop += e.deltaY;
+  var activeSec = document.querySelector('.section.active');
+  if (activeSec) activeSec.scrollTop += e.deltaY;
 }, { passive: true });
 
-/* Forward touch-swipe from hero to content (needed on real mobile) */
+/* Forward touch-swipe from hero to active section */
 var _heroTouchY = 0;
 topbarEl.addEventListener('touchstart', function(e) {
   _heroTouchY = e.touches[0].clientY;
@@ -168,7 +172,8 @@ topbarEl.addEventListener('touchstart', function(e) {
 topbarEl.addEventListener('touchmove', function(e) {
   if (window.innerWidth > 767) return;
   var dy = _heroTouchY - e.touches[0].clientY;
-  contentEl.scrollTop += dy;
+  var activeSec = document.querySelector('.section.active');
+  if (activeSec) activeSec.scrollTop += dy;
   _heroTouchY = e.touches[0].clientY;
 }, { passive: true });
 
