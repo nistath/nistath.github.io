@@ -37,6 +37,13 @@ var PAGE_TITLES = {
 
 function navigate(section) {
   var app = document.getElementById('app');
+  var contentScrollEl = document.getElementById('content');
+  var heroEl = document.getElementById('topbar');
+  var wasHeroCollapsed = false;
+
+  if (window.innerWidth <= 767 && contentScrollEl && heroEl) {
+    wasHeroCollapsed = contentScrollEl.scrollTop >= heroEl.offsetHeight - 1;
+  }
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
   if (section === 'about') {
@@ -74,15 +81,13 @@ function navigate(section) {
   /* On mobile: reset scroll position.
      For resume, skip the hero (scroll it away) so the iframe gets full height.
      For everything else, go back to the top so the hero is visible. */
-  if (window.innerWidth <= 767) {
-    var contentScrollEl = document.getElementById('content');
-    if (contentScrollEl) {
-      if (section === 'resume') {
-        var heroEl = document.getElementById('topbar');
-        contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
-      } else {
-        contentScrollEl.scrollTop = 0;
-      }
+  if (window.innerWidth <= 767 && contentScrollEl) {
+    if (section === 'resume') {
+      contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
+    } else if (heroEl) {
+      contentScrollEl.scrollTop = wasHeroCollapsed ? heroEl.offsetHeight : 0;
+    } else {
+      contentScrollEl.scrollTop = 0;
     }
   }
 }
@@ -114,52 +119,37 @@ var topbarEl       = document.getElementById('topbar');
 var contentEl      = document.getElementById('content');
 
 if (topbarEl && stickyHeaderEl && contentEl) {
-  /* Track scroll direction so snapHero knows which end to snap to when the
-     user stops partway through the hero (scrolling down → snap to hidden,
-     scrolling up → snap to visible). */
+  var _prevST = 0;
   var _scrollDir = 1; /* 1 = down, -1 = up */
-  var _prevST    = 0;
+  var _snapTimer = null;
 
   function updateHeroVisibility() {
-    var st      = contentEl.scrollTop;
-    var topbarH = topbarEl.offsetHeight;
-    var heroHidden = st >= topbarH;
-    var wasHidden  = stickyHeaderEl.classList.contains('hero-hidden');
-    if (heroHidden !== wasHidden) {
-      stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
-    }
-    /* Cap on EVERY frame above topbarH, not just the transition frame.
-       During touch momentum the browser fires scroll events each rAF;
-       setting scrollTop here interrupts inertia and holds position at
-       topbarH so section content never scrolls under the sticky nav.
-       Safe because stickyH is constant (opacity-only toggle = no layout
-       shift = no extra room for momentum to exploit). */
-    if (heroHidden && st > topbarH) {
-      contentEl.scrollTop = topbarH;
-    }
-  }
-
-  /* Snap to either hero-visible (0) or hero-hidden (topbarH) when scroll
-     settles while the hero is only partially out of view.
-     Uses scrollend where available, falls back to a debounced setTimeout.
-     The compact row uses opacity (not height) so no layout shift occurs —
-     contentScrollH is constant and momentum cannot overshoot. */
-  function snapHero() {
     var st = contentEl.scrollTop;
-    var h  = topbarEl.offsetHeight;
-    if (st > 0 && st < h) {
-      contentEl.scrollTo({ top: _scrollDir >= 0 ? h : 0, behavior: 'smooth' });
-    }
+    var topbarH = topbarEl.offsetHeight;
+    stickyHeaderEl.classList.toggle('hero-hidden', st >= topbarH - 1);
   }
 
-  var _snapTimer = null;
-  if ('onscrollend' in HTMLElement.prototype || 'onscrollend' in window) {
-    contentEl.addEventListener('scrollend', snapHero, { passive: true });
-  } else {
-    contentEl.addEventListener('scroll', function() {
-      clearTimeout(_snapTimer);
-      _snapTimer = setTimeout(snapHero, 120);
-    }, { passive: true });
+  function snapHeroIfNeeded() {
+    if (window.innerWidth > 767) return;
+
+    var st = contentEl.scrollTop;
+    var topbarH = topbarEl.offsetHeight;
+
+    /* Only snap while traversing the hero zone. Once below it, section
+       scrolling must remain free for normal reading. */
+    if (st <= 0 || st >= topbarH) return;
+
+    var mid = topbarH / 2;
+    var target = st < mid ? 0 : topbarH;
+
+    /* Bias ambiguous middle states by scroll direction for more predictable
+       touch-flick behavior. */
+    if (Math.abs(st - mid) < 24) {
+      target = _scrollDir >= 0 ? topbarH : 0;
+    }
+
+    if (Math.abs(st - target) < 1) return;
+    contentEl.scrollTo({ top: target, behavior: 'smooth' });
   }
 
   contentEl.addEventListener('scroll', function() {
@@ -169,8 +159,16 @@ if (topbarEl && stickyHeaderEl && contentEl) {
       _prevST = st;
     }
     updateHeroVisibility();
+
+    clearTimeout(_snapTimer);
+    _snapTimer = setTimeout(snapHeroIfNeeded, 120);
   }, { passive: true });
 
+  if ('onscrollend' in HTMLElement.prototype || 'onscrollend' in window) {
+    contentEl.addEventListener('scrollend', snapHeroIfNeeded, { passive: true });
+  }
+
+  window.addEventListener('resize', updateHeroVisibility, { passive: true });
   updateHeroVisibility();
 }
 

@@ -76,8 +76,8 @@ a:hover { text-decoration: underline; }
 }
 
 @keyframes bgscroll {
-  from { background-position: 0 0; }
-  to   { background-position: 500px 0; }
+  from { background-position: 0 var(--bg-y, 0px); }
+  to   { background-position: 500px var(--bg-y, 0px); }
 }
 
 
@@ -797,6 +797,9 @@ a.repo-card:hover {
    RESPONSIVE — MOBILE
    ===================================================== */
 @media (max-width: 767px) {
+  :root {
+    --mobile-hero-h: clamp(170px, 35vh, 320px);
+  }
 
   /* ── App: flex column; only #content fills the remaining space ── */
   .app {
@@ -826,11 +829,12 @@ a.repo-card:hover {
     align-items: stretch;
     overflow: hidden;
     border-bottom: none;
+    --bg-y: 0px;
   }
 
   .topbar-hero-wrap {
     display: block;
-    height: clamp(160px, 33vh, 300px);
+    height: var(--mobile-hero-h);
     overflow: hidden;
   }
 
@@ -840,7 +844,7 @@ a.repo-card:hover {
     align-items: center;
     justify-content: center;
     height: 100%;
-    padding: 1.25rem 1.5rem;
+    padding: 1.3rem 1.5rem calc(1.15rem + var(--bar-h) * 0.42);
     gap: 1.25rem;
   }
 
@@ -866,6 +870,7 @@ a.repo-card:hover {
     position: sticky;
     top: 0;
     z-index: 20;
+    --bg-y: calc(var(--mobile-hero-h) * -1);
     background: var(--clr-accent) url('/img/background.png') repeat 0 0;
     animation: bgscroll 12s linear infinite;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -932,7 +937,7 @@ a.repo-card:hover {
     display: none;
     opacity: 1;
     pointer-events: auto;
-    min-height: calc(100dvh - var(--bar-h) * 2);
+    min-height: calc(100dvh - var(--bar-h));
   }
 
   .section.active {
