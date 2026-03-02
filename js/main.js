@@ -71,12 +71,21 @@ function navigate(section) {
     renderPortfolio();
   }
 
-  /* On mobile: scroll content back to top so the hero re-expands for each new section */
+  /* On mobile: scroll content back to top, then manage hero state */
   if (window.innerWidth <= 767) {
     var contentScrollEl = document.getElementById('content');
     if (contentScrollEl) {
       contentScrollEl.scrollTop = 0;
-      updateHeaderCollapse(0);
+      if (section === 'resume') {
+        /* Auto-collapse the hero so the iframe gets the full content viewport.
+           rAF defers until after the scrollTop=0 scroll event fires (which would
+           otherwise re-expand the header). */
+        requestAnimationFrame(function() {
+          updateHeaderCollapse(COLLAPSE_THRESHOLD + 1);
+        });
+      } else {
+        updateHeaderCollapse(0);
+      }
     }
   }
 }
