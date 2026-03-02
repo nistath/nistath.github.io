@@ -114,10 +114,63 @@ var topbarEl       = document.getElementById('topbar');
 var contentEl      = document.getElementById('content');
 
 if (topbarEl && stickyHeaderEl && contentEl) {
+  /* Track scroll direction so snapHero knows which end to snap to when the
+     user stops partway through the hero (scrolling down → snap to hidden,
+     scrolling up → snap to visible). */
+  var _scrollDir = 1; /* 1 = down, -1 = up */
+  var _prevST    = 0;
+
   function updateHeroVisibility() {
-    stickyHeaderEl.classList.toggle('hero-hidden', contentEl.scrollTop >= topbarEl.offsetHeight);
+    var st      = contentEl.scrollTop;
+    var topbarH = topbarEl.offsetHeight;
+    var heroHidden = st >= topbarH;
+    var wasHidden  = stickyHeaderEl.classList.contains('hero-hidden');
+    if (heroHidden !== wasHidden) {
+      stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
+    }
+    /* Cap on EVERY frame above topbarH, not just the transition frame.
+       During touch momentum the browser fires scroll events each rAF;
+       setting scrollTop here interrupts inertia and holds position at
+       topbarH so section content never scrolls under the sticky nav.
+       Safe because stickyH is constant (opacity-only toggle = no layout
+       shift = no extra room for momentum to exploit). */
+    if (heroHidden && st > topbarH) {
+      contentEl.scrollTop = topbarH;
+    }
   }
-  contentEl.addEventListener('scroll', updateHeroVisibility, { passive: true });
+
+  /* Snap to either hero-visible (0) or hero-hidden (topbarH) when scroll
+     settles while the hero is only partially out of view.
+     Uses scrollend where available, falls back to a debounced setTimeout.
+     The compact row uses opacity (not height) so no layout shift occurs —
+     contentScrollH is constant and momentum cannot overshoot. */
+  function snapHero() {
+    var st = contentEl.scrollTop;
+    var h  = topbarEl.offsetHeight;
+    if (st > 0 && st < h) {
+      contentEl.scrollTo({ top: _scrollDir >= 0 ? h : 0, behavior: 'smooth' });
+    }
+  }
+
+  var _snapTimer = null;
+  if ('onscrollend' in HTMLElement.prototype || 'onscrollend' in window) {
+    contentEl.addEventListener('scrollend', snapHero, { passive: true });
+  } else {
+    contentEl.addEventListener('scroll', function() {
+      clearTimeout(_snapTimer);
+      _snapTimer = setTimeout(snapHero, 120);
+    }, { passive: true });
+  }
+
+  contentEl.addEventListener('scroll', function() {
+    var st = contentEl.scrollTop;
+    if (st !== _prevST) {
+      _scrollDir = st > _prevST ? 1 : -1;
+      _prevST = st;
+    }
+    updateHeroVisibility();
+  }, { passive: true });
+
   updateHeroVisibility();
 }
 

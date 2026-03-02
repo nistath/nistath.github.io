@@ -159,3 +159,157 @@ clipping correct.
       which prevents IO from ever firing its initial or subsequent callbacks)
 - [x] JS: `navigate()` — reset `content.scrollTop` + handle resume
 - [x] JS: remove wheel/touch forwarding (no longer needed; sections don't scroll)
+
+---
+
+## Problems Discovered During Implementation
+
+### P1 — About page hero never collapsed
+
+Short sections (About) don't have enough content to scroll `topbarH` (~244 px) worth.
+`maxScrollTop = scrollHeight − clientHeight` was only ~49 px, so the hero threshold
+was unreachable.
+
+**Fix:** `min-height: calc(100dvh - var(--bar-h) * 2)` on `.section` guarantees
+`maxScrollTop ≥ topbarH` on all sections regardless of content height.
+
+### P2 — IntersectionObserver never fires
+
+IO requires an ancestor with a scrollable overflow context. Every ancestor up the
+chain (`html`, `body`, `.app`) has `overflow: hidden`. IO ignores `#content`'s own
+scroll and its initial callback never fires.
+
+**Fix:** Replaced IO with a passive `scroll` listener on `#content` in
+`updateHeroVisibility()`.
+
+### P3 — CSS scroll-snap overshot due to layout shift
+
+`scroll-snap-type: y proximity` was added as H4 suggested. Snapping worked, but
+landed at `scrollTop = 301` instead of `topbarH = 244`. Root cause: the compact row
+(`topbar-compact-wrap`) animated from `height: 0` to `height: 56px` while momentum
+was still carrying the scroll. The layout shift added 57 px of extra
+`contentScrollHeight` mid-scroll, and momentum used that extra room — giving the
+snap point an inflated target.
+
+**Fix:** `.topbar-compact-wrap` is now always `height: var(--bar-h)` (56 px) in
+the layout. Visibility is toggled via `opacity: 0 → 1` only. No layout shift means
+`contentScrollHeight` is constant and momentum cannot exploit extra room.
+CSS `scroll-snap` was then removed (JS snap replaced it — see P4).
+
+### P4 — Partial-hero stop left hero half-scrolled
+
+With snap removed, a light flick stopped at e.g. `scrollTop = 120` with the hero
+half off screen and the compact row invisible — an awkward intermediate state.
+
+**Fix:** Direction-aware JS snap (`snapHero`). Tracks `_scrollDir` (1 = down, −1 = up)
+in the scroll listener. On `scrollend` (Chrome 114+) or a 120 ms debounce fallback,
+if `0 < scrollTop < topbarH` the function snaps to `topbarH` (hero gone) when
+scrolling down, or `0` (hero visible) when scrolling up.
+
+### P5 — First hero-dismiss still clipped content
+
+Even after constant-height compact row and JS snap, a hard swipe routinely reached
+`scrollTop = maxScrollTop = 293 px`. `snapHero` only acts when `0 < st < topbarH`;
+at `st = 293 = maxScrollTop` the snap never fires, leaving the "Hello!" heading
+several dozen pixels above the sticky nav.
+
+**Failed attempt:** Setting `contentEl.scrollTop = topbarEl.offsetHeight` inside
+the `heroHidden !== wasHidden` transition condition. This only fires once (at the
+first threshold crossing). On subsequent frames, `wasHidden` is already `true` so
+the cap is never re-applied; momentum continues to overshoot.
+
+**Confirmed:** Programmatic `element.scrollTop = N` does not fire `scroll` events
+in Chrome (tested: zero scroll events fired after `scrollTop = 999`). During real
+touch scrolling the browser fires `scroll` events each animation frame — so the
+scroll listener IS called during momentum, but the cap must fire on every frame
+above the threshold, not just once.
+
+**Fix:** Move the cap outside the `heroHidden !== wasHidden` guard so it fires on
+**every scroll frame** where `heroHidden && st > topbarH`:
+
+```javascript
+if (heroHidden && st > topbarH) {
+  contentEl.scrollTop = topbarH;
+}
+```
+
+During touch inertia, Chrome fires `scroll` events every rAF. Setting `scrollTop`
+in those handlers does interrupt momentum. The cap holds position at exactly
+`topbarH` for as long as momentum would push it higher.
+
+---
+
+## Current Architecture
+
+```
+.app  [flex column on mobile]
+ ├── .sidebar                    ← display: none on mobile
+ └── #content .content           ← THE scroll container
+      │                             overflow-y: auto (mobile)
+      │                             NO scroll-snap (removed — P3)
+      ├── #topbar .topbar         ← block element, natural height (≈244 px)
+      │                             scrolls away naturally
+      ├── .sticky-header          ← position: sticky; top: 0; z-index: 20
+      │   ├── .topbar-compact-wrap   height: var(--bar-h) ALWAYS (opacity toggle)
+      │   └── .topbar-nav            tab buttons
+      └── .section.active         ← position: static; display: block
+                                     min-height: calc(100dvh - var(--bar-h)*2)
+                                     NOT a scroll container
+```
+
+**JS hero logic in `js/main.js`:**
+
+```javascript
+function updateHeroVisibility() {
+  var st      = contentEl.scrollTop;
+  var topbarH = topbarEl.offsetHeight;
+  var heroHidden = st >= topbarH;
+  var wasHidden  = stickyHeaderEl.classList.contains('hero-hidden');
+  if (heroHidden !== wasHidden) {
+    stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
+  }
+  // Cap on EVERY frame above topbarH (not just the transition).
+  // During touch momentum Chrome fires scroll events each rAF;
+  // setting scrollTop here interrupts inertia and holds at topbarH.
+  if (heroHidden && st > topbarH) {
+    contentEl.scrollTop = topbarH;
+  }
+}
+
+function snapHero() {
+  var st = contentEl.scrollTop;
+  var h  = topbarEl.offsetHeight;
+  if (st > 0 && st < h) {
+    contentEl.scrollTo({ top: _scrollDir >= 0 ? h : 0, behavior: 'smooth' });
+  }
+}
+// scrollend (Chrome 114+) or 120 ms debounce fallback
+```
+
+---
+
+## Pending Validation
+
+The scroll cap (P5 fix) was just revised to fire on every frame above `topbarH`
+instead of only on the transition. This has NOT yet been tested against real touch
+scroll momentum in Chrome mobile DevTools or on-device. The key question:
+
+> Does setting `element.scrollTop` inside a `scroll` event handler actually
+> interrupt touch inertia momentum in Chrome for Android / Chrome DevTools mobile
+> simulation?
+
+**If yes (expected):** "Hello!" heading stays at the top of the viewport after a
+hard swipe; hero dismisses cleanly on all sections.
+
+**If no:** Need to escalate to a `requestAnimationFrame` loop that continuously
+resets `scrollTop` until momentum dies (or investigate CSS `scroll-snap`
+re-enablement now that layout shift is eliminated).
+
+### Known cosmetic issue
+
+`.topbar-compact-wrap` always occupies `var(--bar-h)` = 56 px even when invisible
+(hero visible state). This creates a 56 px empty space between the hero content
+and the nav tabs in the sticky header. Not yet complained about by the user but
+visible in screenshots. Fix would be to collapse this gap when hero is visible,
+while keeping the layout constant during scroll (perhaps with a CSS grid trick or
+absolute positioning for the compact row inside the sticky header).

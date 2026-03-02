@@ -86,38 +86,35 @@
       </div>
     </aside>
 
-    <!-- ── TOP BAR (always mobile; sidebar handles desktop) ── -->
-    <header id="topbar" class="topbar">
-
-      <!-- Hero: large profile block — expanded state (mobile only) -->
-      <div class="topbar-hero-wrap">
-        <div class="topbar-hero">
-          <img class="avatar-hero" src="https://github.com/nistath.png" alt="Nick Stathas" width="90" height="90">
-          <div class="hero-name">Nick<br>Stathas</div>
-        </div>
-      </div>
-
-    </header>
-
-    <!-- Sticky collapsed header: sits outside #topbar as a direct .app child so sticky works.
-         Contains the compact identity row (shown when hero is collapsed) + nav tabs (always). -->
-    <div class="sticky-header">
-      <div class="topbar-compact-wrap">
-        <button id="topbar-home" class="topbar-left" aria-label="Go to about">
-          <img class="avatar-mini" src="https://github.com/nistath.png" alt="" width="32" height="32" aria-hidden="true">
-          <span class="topbar-name">Nick Stathas</span>
-        </button>
-      </div>
-      <nav class="topbar-nav" aria-label="Sections">
-        <button class="tab active" data-section="about">About</button>
-        <button class="tab" data-section="github">GitHub</button>
-        <button class="tab" data-section="resume">Resume</button>
-        <button class="tab" data-section="portfolio">Portfolio</button>
-      </nav>
-    </div>
-
     <!-- ── CONTENT ── -->
     <main id="content" class="content">
+
+      <!-- Hero + sticky nav live INSIDE #content on mobile so they scroll
+           as a single unit. The hero scrolls away naturally; the nav sticks.
+           Both are display:none on desktop (sidebar handles that layout). -->
+      <header id="topbar" class="topbar">
+        <div class="topbar-hero-wrap">
+          <div class="topbar-hero">
+            <img class="avatar-hero" src="https://github.com/nistath.png" alt="Nick Stathas" width="90" height="90">
+            <div class="hero-name">Nick<br>Stathas</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="sticky-header">
+        <div class="topbar-compact-wrap">
+          <button id="topbar-home" class="topbar-left" aria-label="Go to about">
+            <img class="avatar-mini" src="https://github.com/nistath.png" alt="" width="32" height="32" aria-hidden="true">
+            <span class="topbar-name">Nick Stathas</span>
+          </button>
+        </div>
+        <nav class="topbar-nav" aria-label="Sections">
+          <button class="tab active" data-section="about">About</button>
+          <button class="tab" data-section="github">GitHub</button>
+          <button class="tab" data-section="resume">Resume</button>
+          <button class="tab" data-section="portfolio">Portfolio</button>
+        </nav>
+      </div>
 
       <section id="section-about" class="section active">
         <div class="section-inner">

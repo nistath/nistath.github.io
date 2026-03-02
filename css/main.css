@@ -798,7 +798,7 @@ a.repo-card:hover {
    ===================================================== */
 @media (max-width: 767px) {
 
-  /* ── App: fixed-height flex column; #content is the scroll container ── */
+  /* ── App: flex column; only #content fills the remaining space ── */
   .app {
     display: flex !important;
     flex-direction: column;
@@ -808,29 +808,30 @@ a.repo-card:hover {
 
   .sidebar { display: none !important; }
 
-  /* ── Topbar: vertical flex column, shrinks to 0 when hero collapses ── */
+  /* ── Content: THE single scroll container on mobile.
+     The hero (#topbar) and sticky nav (.sticky-header) live inside it as
+     its first two children, so they scroll as part of the same document. ── */
+  .content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Hero (topbar): block element, scrolls away naturally ── */
   .topbar {
     display: flex !important;
     flex-direction: column;
     align-items: stretch;
-    flex-shrink: 0;
-    height: auto;
     overflow: hidden;
     border-bottom: none;
   }
 
-  /* ── Hero: expanded state ── */
   .topbar-hero-wrap {
     display: block;
     height: clamp(160px, 33vh, 300px);
     overflow: hidden;
-    transition: height 0.35s ease, min-height 0.35s ease;
-    flex-shrink: 0;
-  }
-
-  .topbar.is-collapsed .topbar-hero-wrap {
-    height: 0;
-    min-height: 0;
   }
 
   .topbar-hero {
@@ -841,12 +842,6 @@ a.repo-card:hover {
     height: 100%;
     padding: 1.25rem 1.5rem;
     gap: 1.25rem;
-    opacity: 1;
-    transition: opacity 0.2s ease;
-  }
-
-  .topbar.is-collapsed .topbar-hero {
-    opacity: 0;
   }
 
   .avatar-hero {
@@ -864,38 +859,12 @@ a.repo-card:hover {
     text-align: left;
   }
 
-  /* ── Compact identity row: collapsed state ── */
-  .topbar-compact-wrap {
-    display: block;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.35s ease;
-    flex-shrink: 0;
-  }
-
-  .sticky-header.is-collapsed .topbar-compact-wrap {
-    height: var(--bar-h);
-  }
-
-  .topbar-left {
-    height: var(--bar-h);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0 1rem;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-  }
-
-  /* ── Sticky header wrapper: compact identity row + nav tabs ── */
-  /* No position:sticky needed — .app is overflow:hidden so this flex item
-     is always fully visible above the scrollable #content below it.       */
+  /* ── Sticky nav: pins at the top once the hero scrolls past ── */
   .sticky-header {
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
-    position: relative; /* required so ::before overlay is contained here, not the viewport */
+    position: sticky;
+    top: 0;
     z-index: 20;
     background: var(--clr-accent) url('/img/background.png') repeat 0 0;
     animation: bgscroll 12s linear infinite;
@@ -908,6 +877,34 @@ a.repo-card:hover {
     inset: 0;
     background: var(--sidebar-overlay);
     pointer-events: none;
+  }
+
+  /* Compact identity row: always occupies var(--bar-h) so sticky-header
+     is a constant height (no layout shift → no momentum overshoot).
+     Avatar/name fade in via opacity when hero scrolls away. */
+  .topbar-compact-wrap {
+    display: block;
+    height: var(--bar-h);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .sticky-header.hero-hidden .topbar-compact-wrap {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .topbar-left {
+    height: var(--bar-h);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 1rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   }
 
   .topbar-social { display: none; }
@@ -926,10 +923,25 @@ a.repo-card:hover {
     font-size: 0.8rem;
   }
 
-  /* ── Content: flex child that fills remaining space; sections scroll themselves ── */
-  .content {
-    flex: 1;
-    min-height: 0;
+  /* ── Sections: static block elements flowing below the sticky nav.
+     min-height ensures short-content sections (e.g. About) always have enough
+     height for #content to scroll by topbar.offsetHeight so the hero can be
+     dismissed even when the text is brief. ── */
+  .section {
+    position: static;
+    display: none;
+    opacity: 1;
+    pointer-events: auto;
+    min-height: calc(100dvh - var(--bar-h) * 2);
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  /* Resume: explicit height so the iframe fills the viewport below the nav ── */
+  #section-resume {
+    height: calc(100dvh - var(--bar-h) * 2);
   }
 
   /* ── Content padding ── */
