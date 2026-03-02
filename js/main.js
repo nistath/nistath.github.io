@@ -71,19 +71,18 @@ function navigate(section) {
     renderPortfolio();
   }
 
-  /* On mobile: scroll new section to top, then manage hero state */
+  /* On mobile: reset scroll position.
+     For resume, skip the hero (scroll it away) so the iframe gets full height.
+     For everything else, go back to the top so the hero is visible. */
   if (window.innerWidth <= 767) {
-    var newSec = document.getElementById('section-' + section);
-    if (newSec) newSec.scrollTop = 0;
-    if (section === 'resume') {
-      /* Auto-collapse the hero so the iframe gets the full content viewport.
-         rAF defers until after the scrollTop=0 scroll event fires (which would
-         otherwise re-expand the header). */
-      requestAnimationFrame(function() {
-        updateHeaderCollapse(COLLAPSE_THRESHOLD + 1);
-      });
-    } else {
-      updateHeaderCollapse(0);
+    var contentScrollEl = document.getElementById('content');
+    if (contentScrollEl) {
+      if (section === 'resume') {
+        var heroEl = document.getElementById('topbar');
+        contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
+      } else {
+        contentScrollEl.scrollTop = 0;
+      }
     }
   }
 }
@@ -104,81 +103,23 @@ if (topbarHome) {
   topbarHome.addEventListener('click', function() { navigate('about'); });
 }
 
-/* ── Mobile header: collapse/expand on content scroll ── */
-var topbarEl    = document.getElementById('topbar');
+/* ── Mobile: compact identity row via scroll on #content ──
+   When the hero (#topbar) scrolls fully out of view, add .hero-hidden to
+   .sticky-header so CSS expands the compact identity row.
+   IntersectionObserver cannot be used here because html/body/.app all have
+   overflow:hidden, which prevents IO from ever firing. A scroll listener on
+   #content is simpler and works correctly with this layout. */
 var stickyHeaderEl = document.querySelector('.sticky-header');
-var contentEl   = document.getElementById('content');
+var topbarEl       = document.getElementById('topbar');
+var contentEl      = document.getElementById('content');
 
-/* Hysteresis thresholds: collapse nearly immediately, expand only near the top */
-var COLLAPSE_THRESHOLD = 10;  /* scroll down past this → collapse  */
-var EXPAND_THRESHOLD   =  5;  /* scroll up past this  → expand     */
-var _headerCollapsed   = false;
-
-function updateHeaderCollapse(scrollTop) {
-  if (!topbarEl) return;
-  var next = _headerCollapsed
-    ? scrollTop > EXPAND_THRESHOLD          /* stay collapsed unless well above */
-    : scrollTop > COLLAPSE_THRESHOLD;       /* only collapse when far enough down */
-  if (next === _headerCollapsed) return;
-  _headerCollapsed = next;
-
-  /* When collapsing: cap scrollTop at the post-collapse max for the entire 0.35 s
-     transition. As the hero shrinks the content element grows, so maxScroll shrinks
-     from ~289 px to ~127 px. User momentum can push scrollTop past the new max
-     *during* the animation; the browser then continuously clamps it backward —
-     visible as a bounce. Running an rAF loop that enforces the cap throughout the
-     transition eliminates the problem entirely.
-     Pre-collapse stickyHeader height = 1×barH (nav only).
-     Post-collapse stickyHeader height = 2×barH (compact + nav). */
-  if (next && stickyHeaderEl) {
-    var appEl = document.getElementById('app');
-    var activeSec = document.querySelector('.section.active');
-    if (activeSec) {
-      var barH = stickyHeaderEl.offsetHeight;            /* pre-collapse = 1×barH */
-      var newContentH = appEl.clientHeight - 2 * barH;  /* post-collapse: app − 2×barH */
-      var newMax = Math.max(0, activeSec.scrollHeight - newContentH);
-      var _deadline = Date.now() + 400;                  /* slightly longer than 350 ms CSS transition */
-      (function _clampLoop() {
-        if (activeSec.scrollTop > newMax) activeSec.scrollTop = newMax;
-        if (Date.now() < _deadline) requestAnimationFrame(_clampLoop);
-      })();
-    }
+if (topbarEl && stickyHeaderEl && contentEl) {
+  function updateHeroVisibility() {
+    stickyHeaderEl.classList.toggle('hero-hidden', contentEl.scrollTop >= topbarEl.offsetHeight);
   }
-
-  topbarEl.classList.toggle('is-collapsed', next);
-  if (stickyHeaderEl) stickyHeaderEl.classList.toggle('is-collapsed', next);
+  contentEl.addEventListener('scroll', updateHeroVisibility, { passive: true });
+  updateHeroVisibility();
 }
-
-/* On mobile, each section scrolls itself — listen on all sections */
-document.querySelectorAll('.section').forEach(function(sec) {
-  sec.addEventListener('scroll', function() {
-    if (window.innerWidth > 767) return;
-    updateHeaderCollapse(this.scrollTop);
-  }, { passive: true });
-});
-
-/* Forward wheel + touch from the header area (hero + nav bar) to active section */
-function _forwardWheel(e) {
-  if (window.innerWidth > 767) return;
-  var activeSec = document.querySelector('.section.active');
-  if (activeSec) activeSec.scrollTop += e.deltaY;
-}
-var _headerTouchY = 0;
-function _forwardTouchStart(e) { _headerTouchY = e.touches[0].clientY; }
-function _forwardTouchMove(e) {
-  if (window.innerWidth > 767) return;
-  var dy = _headerTouchY - e.touches[0].clientY;
-  var activeSec = document.querySelector('.section.active');
-  if (activeSec) activeSec.scrollTop += dy;
-  _headerTouchY = e.touches[0].clientY;
-}
-
-[topbarEl, stickyHeaderEl].forEach(function(el) {
-  if (!el) return;
-  el.addEventListener('wheel',       _forwardWheel,      { passive: true });
-  el.addEventListener('touchstart',  _forwardTouchStart, { passive: true });
-  el.addEventListener('touchmove',   _forwardTouchMove,  { passive: true });
-});
 
 /* ── Handle internal section links inside content (e.g. in about text) ── */
 document.getElementById('content').addEventListener('click', function(e) {

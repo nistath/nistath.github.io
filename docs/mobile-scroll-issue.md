@@ -147,13 +147,15 @@ clipping correct.
 
 ## Implementation Status
 
-- [ ] DOM: move `#topbar` + `.sticky-header` inside `#content`
-- [ ] CSS: `#content` mobile — `overflow-y: auto; scroll-snap-type: y proximity`
-- [ ] CSS: `#topbar` mobile — block element, remove flex-child rules
-- [ ] CSS: `.sticky-header` mobile — `position: sticky; top: 0; scroll-snap-align: start`
-- [ ] CSS: sections mobile — `position: static; display: block/none`
-- [ ] CSS: resume section — explicit `height: calc(100dvh - …)` for iframe
-- [ ] JS: remove `updateHeaderCollapse` + scroll listener + rAF clamp
-- [ ] JS: IntersectionObserver on `#topbar` for compact-row toggle
-- [ ] JS: `navigate()` — reset `content.scrollTop` + handle resume
-- [ ] JS: remove wheel/touch forwarding (no longer needed; sections don't scroll)
+- [x] DOM: move `#topbar` + `.sticky-header` inside `#content`
+- [x] CSS: `#content` mobile — `overflow-y: auto`
+- [x] CSS: `#topbar` mobile — block element, remove flex-child rules
+- [x] CSS: `.sticky-header` mobile — `position: sticky; top: 0`
+- [x] CSS: sections mobile — `position: static; display: block/none`
+- [x] CSS: resume section — explicit `height: calc(100dvh - var(--bar-h) * 2)` for iframe
+- [x] JS: remove `updateHeaderCollapse` + old scroll listener + rAF clamp
+- [x] JS: scroll listener on `#content` for compact-row toggle (IntersectionObserver
+      was considered but cannot be used: `html/body/.app` all have `overflow:hidden`,
+      which prevents IO from ever firing its initial or subsequent callbacks)
+- [x] JS: `navigate()` — reset `content.scrollTop` + handle resume
+- [x] JS: remove wheel/touch forwarding (no longer needed; sections don't scroll)
