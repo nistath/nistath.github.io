@@ -114,6 +114,27 @@ function updateHeaderCollapse(scrollTop) {
     : scrollTop > COLLAPSE_THRESHOLD;       /* only collapse when far enough down */
   if (next === _headerCollapsed) return;
   _headerCollapsed = next;
+
+  /* When collapsing: cap scrollTop at the post-collapse max for the entire 0.35 s
+     transition. As the hero shrinks the content element grows, so maxScroll shrinks
+     from ~289 px to ~127 px. User momentum can push scrollTop past the new max
+     *during* the animation; the browser then continuously clamps it backward —
+     visible as a bounce. Running an rAF loop that enforces the cap throughout the
+     transition eliminates the problem entirely.
+     Pre-collapse stickyHeader height = 1×barH (nav only).
+     Post-collapse stickyHeader height = 2×barH (compact + nav). */
+  if (next && contentEl && stickyHeaderEl) {
+    var appEl = document.getElementById('app');
+    var barH = stickyHeaderEl.offsetHeight;            /* pre-collapse = 1×barH */
+    var newContentH = appEl.clientHeight - 2 * barH;  /* post-collapse: app − 2×barH */
+    var newMax = Math.max(0, contentEl.scrollHeight - newContentH);
+    var _deadline = Date.now() + 400;                  /* slightly longer than 350 ms CSS transition */
+    (function _clampLoop() {
+      if (contentEl.scrollTop > newMax) contentEl.scrollTop = newMax;
+      if (Date.now() < _deadline) requestAnimationFrame(_clampLoop);
+    })();
+  }
+
   topbarEl.classList.toggle('is-collapsed', next);
   if (stickyHeaderEl) stickyHeaderEl.classList.toggle('is-collapsed', next);
 }
