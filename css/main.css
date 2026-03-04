@@ -848,10 +848,10 @@ a.repo-card:hover {
     justify-content: center;
     align-content: start;
     column-gap: 1.05rem;
-    row-gap: 0.58rem;
+    row-gap: 0.5rem;
     height: auto;
     width: 100%;
-    padding: 1.08rem 1.25rem 0.92rem;
+    padding: 0.98rem 1.25rem 0.82rem;
   }
 
   .avatar-hero {
@@ -863,13 +863,15 @@ a.repo-card:hover {
 
   .hero-name {
     grid-area: name;
-    font-size: 2.05rem;
+    font-size: 2.2rem;
     font-weight: 700;
     letter-spacing: -0.03em;
     color: #fff;
-    line-height: 1.05;
+    line-height: 1.01;
     text-align: left;
-    min-width: 165px;
+    width: max-content;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hero-social-row {
@@ -1083,18 +1085,26 @@ a.repo-card:hover {
 }
 
 @media (max-width: 360px) {
+  .hero-social-row.social-links {
+    justify-content: flex-start;
+  }
+
   .hero-social-row .hero-email-inline {
-    flex: 0 0 34px;
-    width: 34px;
+    flex: 1 1 auto;
+    width: auto;
     height: 34px;
-    min-width: 34px;
+    min-width: 0;
     min-height: 34px;
-    max-width: 34px;
+    max-width: none;
     justify-content: center;
     align-items: center;
     padding: 0;
     gap: 0;
     line-height: 1;
+  }
+
+  .hero-social-row .hero-email-inline svg {
+    display: block;
   }
 
   .hero-social-row .hero-email-inline #email-text-topbar {
