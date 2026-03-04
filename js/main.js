@@ -25,6 +25,32 @@ if (emailTopbar && emailTextTopbar) {
   emailTopbar.setAttribute('href', 'mailto:' + email);
 }
 
+/* Mobile hero email: switch to icon-only only when its actual width is too small. */
+var HERO_EMAIL_ICON_ONLY_WIDTH_PX = 120;
+
+function updateHeroEmailMode() {
+  if (!emailTopbar) return;
+
+  var isMobile = window.innerWidth <= 767;
+  if (!isMobile) {
+    emailTopbar.classList.remove('hero-email-inline--icon-only');
+    return;
+  }
+
+  var buttonWidth = emailTopbar.clientWidth || 0;
+  var shouldBeIconOnly = buttonWidth > 0 && buttonWidth < HERO_EMAIL_ICON_ONLY_WIDTH_PX;
+  emailTopbar.classList.toggle('hero-email-inline--icon-only', shouldBeIconOnly);
+}
+
+if (emailTopbar) {
+  window.addEventListener('resize', updateHeroEmailMode, { passive: true });
+  if ('ResizeObserver' in window) {
+    var heroEmailResizeObserver = new ResizeObserver(updateHeroEmailMode);
+    heroEmailResizeObserver.observe(emailTopbar);
+  }
+  requestAnimationFrame(updateHeroEmailMode);
+}
+
 /* Mobile compact sticky row email */
 var emailTopbarCompact = document.getElementById('email-topbar-compact');
 if (emailTopbarCompact) {
@@ -179,6 +205,13 @@ var LANG_COLORS = {
   'Verilog':         '#b2b7f8'
 };
 
+/* Keep this list in the same order as the profile's pinned repos. */
+var PINNED_REPO_NAMES = [
+  'arpp',
+  'o2p2_vizdoom',
+  'lidar_raycaster'
+];
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -190,7 +223,7 @@ function escapeHtml(str) {
 function loadGitHubRepos() {
   var container = document.getElementById('github-repos');
 
-  fetch('https://api.github.com/users/nistath/repos?sort=updated&per_page=20&type=owner')
+  fetch('https://api.github.com/users/nistath/repos?sort=updated&per_page=100&type=owner')
     .then(function(res) { return res.json(); })
     .then(function(repos) {
       if (!Array.isArray(repos)) {
@@ -198,8 +231,21 @@ function loadGitHubRepos() {
         return;
       }
 
-      var cards = repos
-        .filter(function(r) { return !r.fork; })
+      var repoByName = {};
+      repos.forEach(function(repo) {
+        repoByName[repo.name.toLowerCase()] = repo;
+      });
+
+      var pinnedRepos = PINNED_REPO_NAMES
+        .map(function(name) { return repoByName[name.toLowerCase()]; })
+        .filter(Boolean);
+
+      /* Fallback: if pinned names are out of date, avoid rendering empty state. */
+      var displayRepos = pinnedRepos.length
+        ? pinnedRepos
+        : repos.filter(function(r) { return !r.fork; }).slice(0, 6);
+
+      var cards = displayRepos
         .map(function(repo) {
           var langColor = LANG_COLORS[repo.language] || '#8b949e';
 

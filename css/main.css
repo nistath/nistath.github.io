@@ -908,6 +908,16 @@ a.repo-card:hover {
     white-space: nowrap;
   }
 
+  .hero-social-row .hero-email-inline.hero-email-inline--icon-only {
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+  }
+
+  .hero-social-row .hero-email-inline.hero-email-inline--icon-only #email-text-topbar {
+    display: none;
+  }
+
   /* ── Sticky nav: pins at the top once the hero scrolls past ── */
   .sticky-header {
     display: flex;
@@ -1081,33 +1091,5 @@ a.repo-card:hover {
     z-index: 1;
     padding: 0 0.45rem;
     font-size: 0.75rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .hero-social-row.social-links {
-    justify-content: flex-start;
-  }
-
-  .hero-social-row .hero-email-inline {
-    flex: 1 1 auto;
-    width: auto;
-    height: 34px;
-    min-width: 0;
-    min-height: 34px;
-    max-width: none;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    gap: 0;
-    line-height: 1;
-  }
-
-  .hero-social-row .hero-email-inline svg {
-    display: block;
-  }
-
-  .hero-social-row .hero-email-inline #email-text-topbar {
-    display: none;
   }
 }
