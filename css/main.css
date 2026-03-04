@@ -798,6 +798,13 @@ a.repo-card:hover {
 @media (max-width: 767px) {
   :root {
     --mobile-hero-h: auto;
+    --hero-pad-x: clamp(1rem, 4.2vw, 1.5rem);
+    --hero-pad-top: clamp(1rem, 3.8vw, 1.35rem);
+    --hero-pad-bottom: clamp(0.78rem, 2.5vw, 0.98rem);
+    --hero-avatar-size: clamp(90px, 25.5vw, 114px);
+    --hero-gap-x: clamp(0.92rem, 2.7vw, 1.26rem);
+    --hero-gap-y: clamp(0.44rem, 1.9vw, 0.72rem);
+    --hero-name-size: clamp(2.1rem, 9vw, 2.5rem);
   }
 
   /* ── App: flex column; only #content fills the remaining space ── */
@@ -840,30 +847,30 @@ a.repo-card:hover {
 
   .topbar-hero {
     display: grid;
-    grid-template-columns: 90px max-content;
+    grid-template-columns: var(--hero-avatar-size) max-content;
     grid-template-areas:
       "avatar name"
       "social social";
     align-items: center;
     justify-content: center;
     align-content: start;
-    column-gap: 1.05rem;
-    row-gap: 0.5rem;
+    column-gap: var(--hero-gap-x);
+    row-gap: var(--hero-gap-y);
     height: auto;
     width: 100%;
-    padding: 0.98rem 1.25rem 0.82rem;
+    padding: var(--hero-pad-top) var(--hero-pad-x) var(--hero-pad-bottom);
   }
 
   .avatar-hero {
     grid-area: avatar;
-    width: 90px;
-    height: 90px;
+    width: var(--hero-avatar-size);
+    height: var(--hero-avatar-size);
     flex-shrink: 0;
   }
 
   .hero-name {
     grid-area: name;
-    font-size: 2.2rem;
+    font-size: var(--hero-name-size);
     font-weight: 700;
     letter-spacing: -0.03em;
     color: #fff;
