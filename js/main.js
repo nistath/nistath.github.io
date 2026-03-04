@@ -206,10 +206,13 @@ var LANG_COLORS = {
 };
 
 /* Keep this list in the same order as the profile's pinned repos. */
-var PINNED_REPO_NAMES = [
-  'arpp',
-  'o2p2_vizdoom',
-  'lidar_raycaster'
+var PINNED_REPOS = [
+  'MITIBMxGraph/SALIENT',
+  'nistath/arpp',
+  'nistath/o2p2_vizdoom',
+  'MITMotorsports/MY18',
+  'MITMotorsports/ParseCAN',
+  'nistath/lidar_raycaster'
 ];
 
 function escapeHtml(str) {
@@ -223,29 +226,27 @@ function escapeHtml(str) {
 function loadGitHubRepos() {
   var container = document.getElementById('github-repos');
 
-  fetch('https://api.github.com/users/nistath/repos?sort=updated&per_page=100&type=owner')
-    .then(function(res) { return res.json(); })
+  Promise.all(
+    PINNED_REPOS.map(function(fullName) {
+      return fetch('https://api.github.com/repos/' + fullName)
+        .then(function(res) {
+          if (!res.ok) throw new Error('Failed to load ' + fullName);
+          return res.json();
+        })
+        .catch(function() {
+          return {
+            full_name: fullName,
+            name: fullName.split('/')[1] || fullName,
+            html_url: 'https://github.com/' + fullName,
+            description: 'Pinned repository (metadata temporarily unavailable)',
+            language: null,
+            stargazers_count: 0
+          };
+        });
+    })
+  )
     .then(function(repos) {
-      if (!Array.isArray(repos)) {
-        container.innerHTML = '<p class="status-msg">Could not load repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
-        return;
-      }
-
-      var repoByName = {};
-      repos.forEach(function(repo) {
-        repoByName[repo.name.toLowerCase()] = repo;
-      });
-
-      var pinnedRepos = PINNED_REPO_NAMES
-        .map(function(name) { return repoByName[name.toLowerCase()]; })
-        .filter(Boolean);
-
-      /* Fallback: if pinned names are out of date, avoid rendering empty state. */
-      var displayRepos = pinnedRepos.length
-        ? pinnedRepos
-        : repos.filter(function(r) { return !r.fork; }).slice(0, 6);
-
-      var cards = displayRepos
+      var cards = repos
         .map(function(repo) {
           var langColor = LANG_COLORS[repo.language] || '#8b949e';
 
@@ -262,17 +263,17 @@ function loadGitHubRepos() {
             : '<span style="opacity:0.35">No description</span>';
 
           return '<a class="repo-card" href="' + escapeHtml(repo.html_url) + '" target="_blank" rel="noopener noreferrer">'
-            + '<div class="repo-name">' + escapeHtml(repo.name) + '</div>'
+            + '<div class="repo-name">' + escapeHtml(repo.full_name) + '</div>'
             + '<div class="repo-desc">' + desc + '</div>'
             + '<div class="repo-meta">' + langHtml + starsHtml + '</div>'
             + '</a>';
         })
         .join('');
 
-      container.innerHTML = cards || '<p class="status-msg">No repositories found.</p>';
+      container.innerHTML = cards || '<p class="status-msg">Could not load pinned repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
     })
     .catch(function() {
-      container.innerHTML = '<p class="status-msg">Could not load repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
+      container.innerHTML = '<p class="status-msg">Could not load pinned repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
     });
 }
 
