@@ -10,6 +10,8 @@
 :root {
   --sidebar-w:   300px;
   --bar-h:       56px;
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 
   /* Brand */
   --clr-accent:  #2980b9;
@@ -825,6 +827,7 @@ a.repo-card:hover {
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: var(--safe-bottom);
     -webkit-overflow-scrolling: touch;
   }
 
@@ -834,6 +837,7 @@ a.repo-card:hover {
     flex-direction: column;
     align-items: stretch;
     overflow: hidden;
+    padding-top: var(--safe-top);
     border-bottom: none;
     --bg-y: 0px;
   }
@@ -932,6 +936,7 @@ a.repo-card:hover {
     position: sticky;
     top: 0;
     z-index: 20;
+    padding-top: calc(var(--safe-top) * var(--compact-progress, 0));
     --bg-y: 0px;
     background: var(--clr-accent) url('/img/background.png') repeat 0 0;
     animation: bgscroll 12s linear infinite;
