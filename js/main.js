@@ -126,16 +126,23 @@ function navigate(section) {
     renderPortfolio();
   }
 
-  /* On mobile: preserve collapsed/expanded hero state across tab switches. */
+  /* On mobile: preserve collapsed/expanded hero state across tab switches.
+     Directly set the visual state BEFORE setting scrollTop so the layout is
+     stable and the scroll position sticks on the first try. */
   if (window.innerWidth <= 767 && contentScrollEl) {
-    if (section === 'resume') {
-      contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
-    } else if (heroEl) {
-      contentScrollEl.scrollTop = wasHeroCollapsed ? heroEl.offsetHeight : 0;
+    var targetCollapsed = (section === 'resume') || wasHeroCollapsed;
+    var targetProgress = targetCollapsed ? 1 : 0;
+
+    contentScrollEl.style.setProperty('--compact-progress', targetProgress.toFixed(4));
+    if (stickyHeaderEl) {
+      stickyHeaderEl.classList.toggle('hero-hidden', targetCollapsed);
+    }
+
+    if (heroEl) {
+      contentScrollEl.scrollTop = targetCollapsed ? heroEl.offsetHeight : 0;
     } else {
       contentScrollEl.scrollTop = 0;
     }
-    contentScrollEl.dispatchEvent(new Event('scroll'));
   }
 }
 
@@ -171,7 +178,7 @@ function clamp01(num) {
 if (stickyHeaderEl && topbarEl && contentEl) {
   function updateHeroVisibility() {
     if (window.innerWidth > MOBILE_BREAKPOINT) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '0');
+      contentEl.style.setProperty('--compact-progress', '0');
       stickyHeaderEl.classList.remove('hero-hidden');
       return;
     }
@@ -183,7 +190,7 @@ if (stickyHeaderEl && topbarEl && contentEl) {
     var revealStart = Math.max(0, heroHeight - revealSpan);
     var progress = clamp01((contentEl.scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
 
-    stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
+    contentEl.style.setProperty('--compact-progress', progress.toFixed(4));
     stickyHeaderEl.classList.toggle('hero-hidden', progress >= HERO_HIDDEN_PROGRESS);
   }
 

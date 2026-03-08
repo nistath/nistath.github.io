@@ -1057,7 +1057,7 @@ a.repo-card:hover {
     display: none;
     opacity: 1;
     pointer-events: auto;
-    min-height: calc(100dvh - var(--bar-h));
+    min-height: calc(100dvh - var(--bar-h) * (1 + var(--compact-progress, 0)));
     background: var(--clr-bg);
   }
 
@@ -1067,7 +1067,7 @@ a.repo-card:hover {
 
   /* Resume: explicit height so the iframe fills the viewport below the nav ── */
   #section-resume {
-    height: calc(100dvh - var(--bar-h));
+    height: calc(100dvh - var(--bar-h) * (1 + var(--compact-progress, 0)));
     padding-bottom: var(--safe-bottom);
   }
 
