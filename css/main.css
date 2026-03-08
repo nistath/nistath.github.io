@@ -827,8 +827,14 @@ a.repo-card:hover {
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: var(--safe-bottom);
+    padding-bottom: 0;
     -webkit-overflow-scrolling: touch;
+    /* Green pattern behind everything — visible during top overscroll
+       (rubber-band) and matches the hero / sticky-header seamlessly. */
+    background:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--clr-accent) url('/img/background.png') repeat 0 0;
+    animation: bgscroll 12s linear infinite;
   }
 
   /* ── Hero (topbar): block element, scrolls away naturally ── */
@@ -1052,6 +1058,7 @@ a.repo-card:hover {
     opacity: 1;
     pointer-events: auto;
     min-height: calc(100dvh - var(--bar-h));
+    background: var(--clr-bg);
   }
 
   .section.active {
@@ -1061,11 +1068,12 @@ a.repo-card:hover {
   /* Resume: explicit height so the iframe fills the viewport below the nav ── */
   #section-resume {
     height: calc(100dvh - var(--bar-h));
+    padding-bottom: var(--safe-bottom);
   }
 
   /* ── Content padding ── */
   .section-inner {
-    padding: 2rem 1.25rem 3rem;
+    padding: 2rem 1.25rem calc(3rem + var(--safe-bottom));
   }
 
   .section-inner h1 { font-size: 1.75rem; }
@@ -1078,7 +1086,7 @@ a.repo-card:hover {
 
   /* Portfolio cards on mobile */
   .portfolio-wrap {
-    padding: 1.5rem 0 3rem;
+    padding: 1.5rem 0 calc(3rem + var(--safe-bottom));
   }
 
   .portfolio-intro {
