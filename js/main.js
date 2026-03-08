@@ -67,11 +67,27 @@ var PAGE_TITLES = {
   'portfolio': 'Portfolio — Nick Stathas'
 };
 
+/* ── Viewport meta: disable page zoom on the resume so iOS passes pinch
+   gestures to the PDF renderer instead of zooming the whole page ── */
+var viewportMeta = document.querySelector('meta[name="viewport"]');
+var viewportDefault = viewportMeta ? viewportMeta.getAttribute('content') : null;
+
+function setViewportForSection(section) {
+  if (!viewportMeta || !viewportDefault) return;
+  if (section === 'resume') {
+    viewportMeta.setAttribute('content', viewportDefault.replace(/(,\s*)?maximum-scale=[^,]*/i, '') + ', maximum-scale=1');
+  } else {
+    viewportMeta.setAttribute('content', viewportDefault);
+  }
+}
+
 function navigate(section) {
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
   var heroEl = document.getElementById('topbar');
   var wasHeroCollapsed = false;
+
+  setViewportForSection(section);
 
   if (window.innerWidth <= 767 && contentScrollEl && heroEl) {
     wasHeroCollapsed = contentScrollEl.scrollTop >= heroEl.offsetHeight - 1;
