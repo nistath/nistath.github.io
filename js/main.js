@@ -728,9 +728,13 @@ function greeceNavInit() {
       btn.classList.toggle('active', btn.dataset.gr === key);
     });
 
-    /* Scroll active button into view within the nav strip */
+    /* Scroll active button into view within the nav strip (horizontal only) */
     var activeBtn = nav.querySelector('.gr-nav-btn.active');
-    if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    if (activeBtn) {
+      var navRect = nav.getBoundingClientRect();
+      var btnRect = activeBtn.getBoundingClientRect();
+      nav.scrollLeft += btnRect.left - navRect.left - (navRect.width - btnRect.width) / 2;
+    }
   }, { rootMargin: '-80px 0px -60% 0px', threshold: 0.1 });
 
   targets.forEach(function(el) { obs.observe(el); });
