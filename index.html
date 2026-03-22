@@ -37,20 +37,20 @@
         </div>
 
         <nav class="sidebar-nav" aria-label="Sections">
-          <button class="nav-btn active" data-section="about" aria-current="page">
+          <a class="nav-btn active" href="/about" data-section="about" aria-current="page">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <rect x="8" y="2" width="8" height="9"/>
             </svg>
             About
-          </button>
-          <button class="nav-btn" data-section="github">
+          </a>
+          <a class="nav-btn" href="/github" data-section="github">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
             </svg>
             GitHub
-          </button>
-          <button class="nav-btn" data-section="resume">
+          </a>
+          <a class="nav-btn" href="/resume" data-section="resume">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
@@ -59,8 +59,8 @@
               <line x1="10" y1="9" x2="8" y2="9"/>
             </svg>
             Resume
-          </button>
-          <button class="nav-btn" data-section="portfolio">
+          </a>
+          <a class="nav-btn" href="/portfolio" data-section="portfolio">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
               <rect x="3" y="3" width="7" height="7"/>
               <rect x="14" y="3" width="7" height="7"/>
@@ -68,8 +68,8 @@
               <rect x="14" y="14" width="7" height="7"/>
             </svg>
             Portfolio
-          </button>
-          <button class="nav-btn" data-section="greece">
+          </a>
+          <a class="nav-btn" href="/greece" data-section="greece">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
               <circle cx="12" cy="12" r="4"/>
               <line x1="12" y1="2" x2="12" y2="5"/>
@@ -82,7 +82,7 @@
               <line x1="17" y1="7" x2="19.1" y2="4.9"/>
             </svg>
             Greece
-          </button>
+          </a>
         </nav>
 
         <div class="social-links">
@@ -137,10 +137,10 @@
 
       <div class="sticky-header">
         <div class="topbar-compact-wrap">
-          <button id="topbar-home" class="topbar-left" aria-label="Go to about">
+          <a id="topbar-home" class="topbar-left" href="/about" aria-label="Go to about">
             <img class="avatar-mini" src="https://github.com/nistath.png" alt="" width="32" height="32" aria-hidden="true">
             <span class="topbar-name">Nick Stathas</span>
-          </button>
+          </a>
           <div class="topbar-compact-social" aria-label="Contact links">
             <a id="email-topbar-compact" class="social-link topbar-compact-social-link" href="#" aria-label="Email Nick">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">
@@ -161,11 +161,11 @@
           </div>
         </div>
         <nav class="topbar-nav" aria-label="Sections">
-          <button class="tab active" data-section="about">About</button>
-          <button class="tab" data-section="github">GitHub</button>
-          <button class="tab" data-section="resume">Resume</button>
-          <button class="tab" data-section="portfolio">Portfolio</button>
-          <button class="tab" data-section="greece">Greece</button>
+          <a class="tab active" href="/about" data-section="about">About</a>
+          <a class="tab" href="/github" data-section="github">GitHub</a>
+          <a class="tab" href="/resume" data-section="resume">Resume</a>
+          <a class="tab" href="/portfolio" data-section="portfolio">Portfolio</a>
+          <a class="tab" href="/greece" data-section="greece">Greece</a>
         </nav>
       </div>
 

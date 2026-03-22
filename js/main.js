@@ -59,6 +59,14 @@ if (emailTopbarCompact) {
 
 /* ── Navigation state ── */
 var githubLoaded = false;
+var DEFAULT_SECTION = 'about';
+var SECTION_PATHS = {
+  'about':     '/about',
+  'github':    '/github',
+  'resume':    '/resume',
+  'portfolio': '/portfolio',
+  'greece':    '/greece'
+};
 
 var PAGE_TITLES = {
   'about':     'Nick Stathas',
@@ -81,8 +89,64 @@ function setViewportForSection(section) {
     viewportMeta.setAttribute('content', viewportDefault);
   }
 }
+function normalizeRoutePath(pathname) {
+  if (!pathname) return '/';
 
-function navigate(section) {
+  var normalized = pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
+  return normalized || '/';
+}
+
+function getSectionFromPath(pathname) {
+  var normalized = normalizeRoutePath(pathname);
+  if (normalized === '/') return DEFAULT_SECTION;
+
+  var section = normalized.slice(1);
+  return PAGE_TITLES[section] ? section : DEFAULT_SECTION;
+}
+
+function getRouteForSection(section) {
+  return SECTION_PATHS[section] || SECTION_PATHS[DEFAULT_SECTION];
+}
+
+function restoreSectionRoute() {
+  var params = new URLSearchParams(window.location.search);
+  var requestedRoute = params.get('route');
+
+  if (!requestedRoute || normalizeRoutePath(window.location.pathname) !== '/') return;
+
+  var requestedUrl;
+  try {
+    requestedUrl = new URL(requestedRoute, window.location.origin);
+  } catch (err) {
+    return;
+  }
+
+  if (requestedUrl.origin !== window.location.origin) return;
+
+  var nextUrl = normalizeRoutePath(requestedUrl.pathname) + requestedUrl.search + requestedUrl.hash;
+  window.history.replaceState(
+    { section: getSectionFromPath(requestedUrl.pathname) },
+    '',
+    nextUrl
+  );
+}
+
+function navigate(section, options) {
+  options = options || {};
+  section = PAGE_TITLES[section] ? section : DEFAULT_SECTION;
+
+  if (options.updateHistory !== false) {
+    var nextRoute = getRouteForSection(section);
+    var currentRoute = normalizeRoutePath(window.location.pathname);
+
+    if (currentRoute !== nextRoute || window.location.search || window.location.hash) {
+      window.history[options.replaceHistory ? 'replaceState' : 'pushState'](
+        { section: section },
+        '',
+        nextRoute
+      );
+    }
+  }
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
   var heroEl = document.getElementById('topbar');
@@ -147,19 +211,32 @@ function navigate(section) {
 
 /* ── Wire up sidebar nav buttons ── */
 document.querySelectorAll('.sidebar-nav .nav-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() { navigate(btn.dataset.section); });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    navigate(btn.dataset.section);
+  });
 });
 
 /* ── Wire up topbar tabs ── */
 document.querySelectorAll('.topbar-nav .tab').forEach(function(btn) {
-  btn.addEventListener('click', function() { navigate(btn.dataset.section); });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    navigate(btn.dataset.section);
+  });
 });
 
 /* ── Topbar home button → back to about / expanded sidebar ── */
 var topbarHome = document.getElementById('topbar-home');
 if (topbarHome) {
-  topbarHome.addEventListener('click', function() { navigate('about'); });
+  topbarHome.addEventListener('click', function(e) {
+    e.preventDefault();
+    navigate('about');
+  });
 }
+
+window.addEventListener('popstate', function() {
+  navigate(getSectionFromPath(window.location.pathname), { updateHistory: false });
+});
 
 /* ── Mobile: progressively reveal compact sticky identity row while hero scrolls out ── */
 var stickyHeaderEl = document.querySelector('.sticky-header');
@@ -671,4 +748,32 @@ function greeceNavInit() {
   }, { rootMargin: '-80px 0px -60% 0px', threshold: 0.1 });
 
   targets.forEach(function(el) { obs.observe(el); });
+
+  /* Collapsible tip cards (visible on mobile, always-open on desktop via CSS) */
+  document.querySelectorAll('#section-greece .gr-aside .gr-tip').forEach(function(tip) {
+    var title = tip.querySelector('.gr-tip-title');
+    if (!title) return;
+
+    /* Wrap all non-title children in a collapsible body div */
+    var body = document.createElement('div');
+    body.className = 'gr-tip-body';
+    Array.from(tip.children).forEach(function(child) {
+      if (child !== title) body.appendChild(child);
+    });
+    tip.appendChild(body);
+
+    /* Chevron indicator */
+    var chevron = document.createElement('span');
+    chevron.className = 'gr-tip-chevron';
+    chevron.textContent = '›';
+    title.appendChild(chevron);
+
+    /* Toggle open/closed */
+    title.addEventListener('click', function() {
+      tip.classList.toggle('gr-tip--open');
+    });
+  });
 }
+
+restoreSectionRoute();
+navigate(getSectionFromPath(window.location.pathname), { updateHistory: false });
