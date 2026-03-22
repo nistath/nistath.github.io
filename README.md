@@ -4,7 +4,7 @@ This repository now hosts a plain static site served directly by GitHub Pages. T
 
 ## Local development
 
-Open `index.html` in a browser, or run a simple static server (for example, `python3 -m http.server`) from the project root if you need proper routing for the redirect pages.
+Open `index.html` in a browser, or run a simple static server (for example, `python3 -m http.server`) from the project root if you want to test direct section routes such as `/about`, `/github`, `/resume`, `/portfolio`, and `/greece`.
 
 ## Deployment
 
