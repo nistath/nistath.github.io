@@ -11,20 +11,11 @@
 /* ── Hero ── */
 .gr-hero {
   background:
-    linear-gradient(160deg, rgba(26,74,106,0.94) 0%, rgba(44,110,138,0.90) 40%, rgba(74,154,181,0.84) 70%, rgba(139,196,214,0.78) 100%),
+    linear-gradient(150deg, rgba(0,60,150,0.96) 0%, rgba(0,105,195,0.91) 45%, rgba(0,168,232,0.84) 100%),
     url('https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg') center 60% / cover no-repeat;
-  padding: 56px 24px 80px;
+  padding: 36px 24px 60px;
   position: relative;
   overflow: hidden;
-}
-
-.gr-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  background: repeating-linear-gradient(120deg, transparent, transparent 30px, #fff 30px, #fff 31px);
-  pointer-events: none;
 }
 
 .gr-hero-eyebrow {
@@ -52,18 +43,8 @@
 .gr-hero h1 em {
   font-style: italic;
   font-weight: 400;
-  font-size: 40px;
+  font-size: 0.78em;
   opacity: 0.88;
-}
-
-.gr-hero p {
-  color: rgba(255,255,255,0.72);
-  font-size: 15px;
-  line-height: 1.6;
-  margin-top: 18px;
-  max-width: 360px;
-  margin-bottom: 0;
-  position: relative;
 }
 
 .gr-hero-curve {
@@ -628,20 +609,11 @@
 
   /* Hero: taller, bigger type */
   .gr-hero {
-    padding: 96px 48px 116px;
+    padding: 56px 48px 80px;
   }
 
   .gr-hero h1 {
     font-size: 72px;
-  }
-
-  .gr-hero h1 em {
-    font-size: 56px;
-  }
-
-  .gr-hero p {
-    font-size: 16px;
-    max-width: 460px;
   }
 
   .gr-hero-curve {
