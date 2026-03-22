@@ -66,10 +66,10 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(44,95,122,0.10);
-  padding: 8px 12px;
+  padding: 4px 8px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  gap: 4px;
 }
 
 .gr-nav-btn {
@@ -84,8 +84,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 7px 4px;
+  gap: 2px;
+  padding: 5px 4px;
   touch-action: manipulation;
 }
 
