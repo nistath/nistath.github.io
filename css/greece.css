@@ -128,7 +128,8 @@
 .gr-body { /* no special mobile styles needed */ }
 
 .gr-aside {
-  display: none; /* hidden on mobile — content is covered by inline chips/cards */
+  /* visible on mobile — flows below body content as collapsible cards */
+  margin-top: 8px;
 }
 
 /* ── Section scroll targets ── */
@@ -460,8 +461,40 @@
   font-size: 15px;
   font-weight: 700;
   color: #1a3a4a;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   line-height: 1.3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gr-tip--open .gr-tip-title {
+  margin-bottom: 12px;
+}
+
+.gr-tip-chevron {
+  font-size: 16px;
+  color: #2c5f7a;
+  font-weight: 700;
+  transition: transform 0.22s;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.gr-tip--open .gr-tip-chevron {
+  transform: rotate(90deg);
+}
+
+.gr-tip-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.gr-tip--open .gr-tip-body {
+  max-height: 800px;
 }
 
 .gr-fact-list {
@@ -616,11 +649,26 @@
     align-items: start;
   }
 
-  /* Show aside on desktop */
+  /* Aside: sticky on desktop */
   .gr-aside {
     display: block;
     position: sticky;
     top: 70px; /* height of .gr-nav */
+    margin-top: 0;
+  }
+
+  /* Desktop: tip bodies always open, no chevron, title not clickable */
+  .gr-tip-title {
+    cursor: default;
+    user-select: auto;
+    margin-bottom: 12px;
+  }
+
+  .gr-tip-chevron { display: none; }
+
+  .gr-tip-body {
+    max-height: none !important;
+    overflow: visible;
   }
 
   /* Section headings — add decorative rule */
