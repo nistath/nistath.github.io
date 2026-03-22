@@ -13,7 +13,7 @@
   background:
     linear-gradient(150deg, rgba(0,60,150,0.96) 0%, rgba(0,105,195,0.91) 45%, rgba(0,168,232,0.84) 100%),
     url('https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg') center 60% / cover no-repeat;
-  padding: 36px 24px 60px;
+  padding: 36px 24px 28px;
   position: relative;
   overflow: hidden;
 }
@@ -52,9 +52,9 @@
   bottom: -1px;
   left: 0;
   right: 0;
-  height: 44px;
+  height: 28px;
   background: #f5f0e8;
-  border-radius: 28px 28px 0 0;
+  border-radius: 20px 20px 0 0;
 }
 
 /* ── Internal sticky nav ── */
@@ -609,7 +609,7 @@
 
   /* Hero: taller, bigger type */
   .gr-hero {
-    padding: 56px 48px 80px;
+    padding: 56px 48px 36px;
   }
 
   .gr-hero h1 {
@@ -617,8 +617,8 @@
   }
 
   .gr-hero-curve {
-    height: 56px;
-    border-radius: 36px 36px 0 0;
+    height: 36px;
+    border-radius: 24px 24px 0 0;
   }
 
   /* Internal nav: switch to single flex row with inline icon+label */
