@@ -444,6 +444,8 @@
   margin-bottom: 14px;
   box-shadow: 0 1px 4px rgba(44,95,122,0.07);
   border-top: 3px solid #2c5f7a;
+  cursor: pointer;
+  touch-action: manipulation; /* eliminates 300ms tap delay */
 }
 
 .gr-tip:last-child { margin-bottom: 0; }
@@ -466,7 +468,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
   user-select: none;
 }
 
@@ -657,9 +658,13 @@
     margin-top: 0;
   }
 
-  /* Desktop: tip bodies always open, no chevron, title not clickable */
-  .gr-tip-title {
+  /* Desktop: tip bodies always open, no chevron, card not clickable */
+  .gr-tip {
     cursor: default;
+    touch-action: auto;
+  }
+
+  .gr-tip-title {
     user-select: auto;
     margin-bottom: 12px;
   }

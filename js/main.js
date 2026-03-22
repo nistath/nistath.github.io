@@ -754,8 +754,10 @@ function greeceNavInit() {
     chevron.textContent = '›';
     title.appendChild(chevron);
 
-    /* Toggle open/closed */
-    title.addEventListener('click', function() {
+    /* Toggle open/closed — tap anywhere on the card header (full padding area),
+       but ignore taps inside the expanded body so links/text remain usable */
+    tip.addEventListener('click', function(e) {
+      if (body.contains(e.target)) return;
       tip.classList.toggle('gr-tip--open');
     });
   });
