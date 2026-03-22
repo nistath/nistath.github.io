@@ -64,7 +64,8 @@ var PAGE_TITLES = {
   'about':     'Nick Stathas',
   'github':    'GitHub — Nick Stathas',
   'resume':    'Resume — Nick Stathas',
-  'portfolio': 'Portfolio — Nick Stathas'
+  'portfolio': 'Portfolio — Nick Stathas',
+  'greece':    'Guide to Greece — Nick Stathas'
 };
 
 /* ── Viewport meta: disable page zoom on the resume so iOS passes pinch
@@ -124,6 +125,11 @@ function navigate(section) {
   /* Lazy-render portfolio cards */
   if (section === 'portfolio') {
     renderPortfolio();
+  }
+
+  /* Init Greece guide internal nav */
+  if (section === 'greece') {
+    greeceNavInit();
   }
 
   /* On mobile: preserve collapsed/expanded hero state across tab switches. */
@@ -622,4 +628,47 @@ function renderPortfolio() {
       }
     });
   });
+}
+
+/* =====================================================
+   GREECE GUIDE — internal sticky nav
+   ===================================================== */
+var greeceNavInitialized = false;
+
+function greeceNavInit() {
+  if (greeceNavInitialized) return;
+  greeceNavInitialized = true;
+
+  var nav = document.getElementById('gr-nav');
+  if (!nav) return;
+
+  var navBtns = nav.querySelectorAll('.gr-nav-btn');
+
+  /* Click: smooth-scroll to the target section */
+  navBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var el = document.getElementById('gr-' + btn.dataset.gr);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  /* IntersectionObserver: highlight the topmost visible section in the nav */
+  var targets = document.querySelectorAll('#section-greece .gr-section, #section-greece .gr-island');
+
+  var obs = new IntersectionObserver(function(entries) {
+    var visible = entries.filter(function(e) { return e.isIntersecting; });
+    if (!visible.length) return;
+    visible.sort(function(a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+
+    var key = visible[0].target.id.replace('gr-', '');
+    navBtns.forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.gr === key);
+    });
+
+    /* Scroll active button into view within the nav strip */
+    var activeBtn = nav.querySelector('.gr-nav-btn.active');
+    if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }, { rootMargin: '-80px 0px -60% 0px', threshold: 0.1 });
+
+  targets.forEach(function(el) { obs.observe(el); });
 }

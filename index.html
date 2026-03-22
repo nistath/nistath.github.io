@@ -11,8 +11,9 @@
   <link rel="icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/greece.css">
 </head>
 <body>
   <div id="app" class="app">
@@ -67,6 +68,20 @@
               <rect x="14" y="14" width="7" height="7"/>
             </svg>
             Portfolio
+          </button>
+          <button class="nav-btn" data-section="greece">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <line x1="12" y1="2" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+              <line x1="2" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="22" y2="12"/>
+              <line x1="4.9" y1="4.9" x2="7" y2="7"/>
+              <line x1="17" y1="17" x2="19.1" y2="19.1"/>
+              <line x1="4.9" y1="19.1" x2="7" y2="17"/>
+              <line x1="17" y1="7" x2="19.1" y2="4.9"/>
+            </svg>
+            Greece
           </button>
         </nav>
 
@@ -150,6 +165,7 @@
           <button class="tab" data-section="github">GitHub</button>
           <button class="tab" data-section="resume">Resume</button>
           <button class="tab" data-section="portfolio">Portfolio</button>
+          <button class="tab" data-section="greece">Greece</button>
         </nav>
       </div>
 
@@ -193,6 +209,698 @@
           <div id="portfolio-cards" class="portfolio-list">
             <!-- populated by js/main.js -->
           </div>
+        </div>
+      </section>
+
+      <section id="section-greece" class="section">
+        <div class="greece-wrap">
+
+          <!-- Hero -->
+          <header class="gr-hero">
+            <div class="gr-hero-eyebrow">Nick&#8217;s Guide to</div>
+            <h1>Athens<br><em>&amp; Beyond</em></h1>
+            <p>Getting around, what to see, where to eat, and island escapes.</p>
+            <div class="gr-hero-curve"></div>
+          </header>
+
+          <!-- Internal sticky nav -->
+          <nav class="gr-nav" id="gr-nav" aria-label="Guide sections">
+            <button class="gr-nav-btn active" data-gr="travel">Travel</button>
+            <button class="gr-nav-btn" data-gr="sights">Sights</button>
+            <button class="gr-nav-btn" data-gr="food">Eat &amp; Drink</button>
+            <button class="gr-nav-btn" data-gr="mykonos">Mykonos</button>
+            <button class="gr-nav-btn" data-gr="santorini">Santorini</button>
+            <button class="gr-nav-btn" data-gr="crete">Crete</button>
+            <button class="gr-nav-btn" data-gr="paros-naxos">Paros &amp; Naxos</button>
+            <button class="gr-nav-btn" data-gr="other-islands">More Islands</button>
+          </nav>
+
+          <main class="gr-main">
+
+
+            <!-- TRAVEL -->
+            <section id="gr-travel" class="gr-section">
+              <h2 class="gr-h2">Getting There &amp; Around</h2>
+              <div class="gr-grid">
+                <div class="gr-body">
+                  <div class="gr-img" style="aspect-ratio:16/8">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900" alt="Athens city view at sunset" loading="lazy" style="aspect-ratio:16/8">
+                  </div>
+                  <div class="gr-card">
+                    <h3 class="gr-h3">Getting In</h3>
+                    <p class="gr-p">Fly into <strong>Athens International Airport (ATH)</strong>. Taxi (~&euro;40 flat rate, ~40 min), metro Line 3 to Syntagma Square (~40 min), or private transfer.</p>
+                    <div class="gr-chips">
+                      <span class="gr-chip">&#x1F695; Taxi ~&euro;40</span>
+                      <span class="gr-chip">&#x1F687; Metro ~40 min</span>
+                      <span class="gr-chip">&#x1F4F1; Uber / FreeNow</span>
+                    </div>
+                    <h3 class="gr-h3">Getting Around</h3>
+                    <p class="gr-p">Athens is very walkable in the center. <strong>FreeNow</strong> has the best local driver availability. The metro is clean, cheap, and efficient. Google Maps works great for transit.</p>
+                    <h3 class="gr-h3">Where to Stay</h3>
+                    <p class="gr-p">We recommend <strong>Plaka</strong> (charming village feel, narrow streets) and <strong>Thiseio</strong> (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.</p>
+                    <div class="gr-chips" style="margin-bottom:0">
+                      <span class="gr-chip">&#x1F4CD; Plaka</span>
+                      <span class="gr-chip">&#x1F4CD; Thiseio</span>
+                    </div>
+                  </div>
+                </div>
+                <aside class="gr-aside">
+                  <div class="gr-tip gr-tip--facts">
+                    <div class="gr-tip-title">&#x1F6EC; Quick Facts</div>
+                    <dl class="gr-fact-list">
+                      <div><dt>Airport</dt><dd>ATH &mdash; Eleftherios Venizelos</dd></div>
+                      <div><dt>Metro to centre</dt><dd>~40 min</dd></div>
+                      <div><dt>Taxi flat rate</dt><dd>~&euro;40</dd></div>
+                      <div><dt>Currency</dt><dd>Euro (&euro;)</dd></div>
+                      <div><dt>Language</dt><dd>Greek</dd></div>
+                      <div><dt>SIM cards</dt><dd>At airport arrivals</dd></div>
+                    </dl>
+                  </div>
+                  <div class="gr-tip gr-tip--tips">
+                    <div class="gr-tip-title">&#x1F4A1; Pro Tips</div>
+                    <ul class="gr-tip-list">
+                      <li>Validate your metro ticket before boarding</li>
+                      <li>FreeNow usually beats Uber on price &amp; availability</li>
+                      <li>Hotels in Plaka are walkable to almost everything</li>
+                      <li>Most restaurants open for dinner at 8&ndash;9 PM</li>
+                    </ul>
+                  </div>
+                </aside>
+              </div>
+            </section>
+
+            <!-- SIGHTS -->
+            <section id="gr-sights" class="gr-section">
+              <h2 class="gr-h2">Things to Do in Athens</h2>
+              <div class="gr-grid">
+                <div class="gr-body">
+                  <div class="gr-img" style="aspect-ratio:16/9">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_of_Athens_on_January_30,_2022.jpg?width=900" alt="The Acropolis of Athens" loading="lazy">
+                  </div>
+                  <p class="gr-tagline">Ancient history and modern energy sit right on top of each other.</p>
+                  <div class="gr-card gr-card--flush">
+                    <div class="gr-sight">
+                      <div class="gr-sight-name">Acropolis</div>
+                      <div class="gr-sight-desc">The must-see. Go early to beat crowds and heat. Parthenon, Erechtheion, and Temple of Athena Nike.</div>
+                    </div>
+                    <div class="gr-sight">
+                      <div class="gr-sight-name">Acropolis Museum</div>
+                      <div class="gr-sight-desc">World-class collection at the base of the hill. Top-floor gallery with Parthenon views is unforgettable.</div>
+                    </div>
+                    <div class="gr-sight">
+                      <div class="gr-sight-name">National Garden</div>
+                      <div class="gr-sight-desc">Leafy escape next to the Parliament building. Great for a break from the sun.</div>
+                    </div>
+                    <div class="gr-sight">
+                      <div class="gr-sight-name">Vrachakia</div>
+                      <div class="gr-sight-desc">Lesser-known rocky area with a local feel. Worth exploring off the beaten path.</div>
+                    </div>
+                    <div class="gr-sight">
+                      <div class="gr-sight-name">Philopappos Monument</div>
+                      <div class="gr-sight-desc">Best panoramic views of the Acropolis and city. Especially beautiful at sunset.</div>
+                    </div>
+                  </div>
+                </div>
+                <aside class="gr-aside">
+                  <div class="gr-tip gr-tip--itinerary">
+                    <div class="gr-tip-title">&#x1F5D3; Suggested Order</div>
+                    <div class="gr-day-plan">
+                      <div>
+                        <span class="gr-day-label">Day 1</span>
+                        <ul class="gr-tip-list">
+                          <li>Acropolis &mdash; early morning</li>
+                          <li>Acropolis Museum</li>
+                          <li>Plaka stroll &amp; dinner with a view</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <span class="gr-day-label">Day 2</span>
+                        <ul class="gr-tip-list">
+                          <li>National Garden &amp; Parliament</li>
+                          <li>Philopappos Hill at sunset</li>
+                          <li>Vrachakia if you&#8217;re feeling adventurous</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="gr-tip gr-tip--tips">
+                    <div class="gr-tip-title">&#x23F0; Timing Tips</div>
+                    <ul class="gr-tip-list">
+                      <li>Book Acropolis tickets online in advance</li>
+                      <li>Go before 9 AM or after 5 PM to beat the heat</li>
+                      <li>Arrive 30 min before sunset for Philopappos</li>
+                      <li>Acropolis Museum closed Tuesdays &mdash; check ahead</li>
+                    </ul>
+                  </div>
+                </aside>
+              </div>
+            </section>
+
+            <!-- FOOD -->
+            <section id="gr-food" class="gr-section">
+              <h2 class="gr-h2">Nick&#8217;s Restaurants &amp; Bars</h2>
+              <div class="gr-grid">
+                <div class="gr-body">
+                  <p class="gr-p" style="margin-bottom:16px;margin-top:4px">Tried and true picks in Athens.</p>
+                  <h3 class="gr-h3">Restaurants</h3>
+                  <div class="gr-venue-list">
+                    <a class="gr-venue" href="https://maps.app.goo.gl/MmdW2hYJR4kPLk5V9" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F37D;&#xFE0F;</span>
+                        <div>
+                          <div class="gr-venue-name">Strofi Athenian Restaurant <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Refined traditional Greek with rooftop Acropolis views. Book a terrace table.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/TuuheUo7c9UeZJmS6" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F37D;&#xFE0F;</span>
+                        <div>
+                          <div class="gr-venue-name">Basegrill Athens <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">One of Athens&#8217; best steakhouses. Premium cuts, egg nest potatoes, great wine list.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/pMdBjwyFk8QpfxVz9" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F37D;&#xFE0F;</span>
+                        <div>
+                          <div class="gr-venue-name">Barbadimos <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Authentic, no-frills Greek cooking. The kind of place locals go.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F959;</span>
+                        <div>
+                          <div class="gr-venue-name">Gyristroula <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Solid souvlaki &mdash; quick, delicious, and cheap.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/dsEzw2CS7NDqNAva8" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F959;</span>
+                        <div>
+                          <div class="gr-venue-name">Street Souvlaki <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Another go-to for fast, excellent souvlaki.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/oLmuDNnoERDjQYA88" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F366;</span>
+                        <div>
+                          <div class="gr-venue-name">Lartecono Davinci Gelato <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">For when you need a gelato break (you will).</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/TmMjRhbJWTNM21aF6" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F366;</span>
+                        <div>
+                          <div class="gr-venue-name">Loukoumadaki Athens <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Greek donuts (loukoumades) with honey and cinnamon. A must-try.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/HVo2Ka9dJLPXXRLk8" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x2615;</span>
+                        <div>
+                          <div class="gr-venue-name">City ZEN <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Relaxed meal or drinks any time of day.</div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <h3 class="gr-h3">Bars &amp; Nightlife</h3>
+                  <div class="gr-venue-list">
+                    <a class="gr-venue" href="https://maps.app.goo.gl/yPNufsHcREnSA1C87" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F378;</span>
+                        <div>
+                          <div class="gr-venue-name">six d.o.g.s <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">All-day bar &amp; live music with a hidden garden. Cocktails, DJs, diverse crowd.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/i7qomXPkvD9t7DJ79" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F378;</span>
+                        <div>
+                          <div class="gr-venue-name">Bios <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Legendary rooftop bar on Pireos St. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.</div>
+                        </div>
+                      </div>
+                    </a>
+                    <a class="gr-venue" href="https://maps.app.goo.gl/dxBLrnwPHm3ZHs4k7" target="_blank" rel="noopener noreferrer">
+                      <div class="gr-venue-inner">
+                        <span class="gr-venue-icon">&#x1F378;</span>
+                        <div>
+                          <div class="gr-venue-name">Drachmi <span class="gr-venue-ext">&#x2197;</span></div>
+                          <div class="gr-venue-desc">Lively cocktail bar on Kolokotroni Square. Packed on weekends. Great drinks, funky music, young crowd.</div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <aside class="gr-aside">
+                  <div class="gr-tip gr-tip--eats">
+                    <div class="gr-tip-title">&#x1F34B; Must-Eat</div>
+                    <ul class="gr-tip-list">
+                      <li>Souvlaki &mdash; the Greek street staple</li>
+                      <li>Loukoumades &mdash; honey-drizzled donuts</li>
+                      <li>Spanakopita &mdash; spinach &amp; feta pastry</li>
+                      <li>Greek yogurt with thyme honey</li>
+                      <li>Fresh seafood near Piraeus</li>
+                    </ul>
+                  </div>
+                  <div class="gr-tip gr-tip--tips">
+                    <div class="gr-tip-title">&#x1F377; Drink Like a Local</div>
+                    <ul class="gr-tip-list">
+                      <li>Freddo espresso = iced espresso</li>
+                      <li>Tsipouro &mdash; the Greek grappa</li>
+                      <li>Ouzo with seafood meze</li>
+                      <li>Tipping ~10% is appreciated</li>
+                    </ul>
+                  </div>
+                  <div class="gr-tip gr-tip--facts">
+                    <div class="gr-tip-title">&#x1F4CD; Neighbourhoods</div>
+                    <dl class="gr-fact-list">
+                      <div><dt>Monastiraki</dt><dd>street food hub</dd></div>
+                      <div><dt>Psyrri</dt><dd>artsy bars &amp; mezedopolia</dd></div>
+                      <div><dt>Kolonaki</dt><dd>upscale dining</dd></div>
+                      <div><dt>Gazi</dt><dd>nightlife district</dd></div>
+                    </dl>
+                  </div>
+                </aside>
+              </div>
+            </section>
+
+            <!-- ISLANDS DIVIDER -->
+            <div class="gr-islands-intro">
+              <div class="gr-islands-eyebrow">Beyond Athens</div>
+              <h2 class="gr-islands-title">Island Escapes</h2>
+              <p class="gr-islands-sub">Each island has its own personality.</p>
+            </div>
+
+            <!-- MYKONOS -->
+            <div id="gr-mykonos" class="gr-island">
+              <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg" alt="Mykonos windmills" loading="lazy">
+              </div>
+              <div class="gr-island-card">
+                <div class="gr-island-card-inner">
+                  <h2 class="gr-island-name">Mykonos</h2>
+                  <p class="gr-island-tagline">Glamorous, loud, and unapologetically fun</p>
+                  <div class="gr-island-body">
+                    <div class="gr-grid">
+                      <div class="gr-body">
+                        <p class="gr-p">Beach clubs, DJs, late nights, and beautiful people. But old town Chora is genuinely charming, and there&#8217;s a real archaeological gem nearby.</p>
+                        <h3 class="gr-h3">Beaches</h3>
+                        <p class="gr-p">Good but below average by Greek island standards. You&#8217;re here for the scene. Paradise and Super Paradise are more party than swim.</p>
+                        <h3 class="gr-h3">Don&#8217;t Miss</h3>
+                        <div class="gr-card gr-card--flush">
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Delos</div>
+                            <div class="gr-sight-desc">Short boat ride &mdash; one of Greece&#8217;s most important archaeological sites. Birthplace of Apollo and Artemis. Visit with a guide.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">The Windmills</div>
+                            <div class="gr-sight-desc">Iconic row overlooking the harbor. Classic photo spot, beautiful at sunset.</div>
+                          </div>
+                        </div>
+                        <h3 class="gr-h3">Eat &amp; Drink</h3>
+                        <div class="gr-venue-list">
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F37D;&#xFE0F;</span>
+                              <div>
+                                <div class="gr-venue-name">Pelican</div>
+                                <div class="gr-venue-desc">Nick&#8217;s top pick for a meal on the island.</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F378;</span>
+                              <div>
+                                <div class="gr-venue-name">Caprice</div>
+                                <div class="gr-venue-desc">Sunset drinks on the water in Little Venice. Stunning views.</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F378;</span>
+                              <div>
+                                <div class="gr-venue-name">Skandinavian</div>
+                                <div class="gr-venue-desc">The go-to club for a big night out.</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <aside class="gr-aside">
+                        <div class="gr-tip gr-tip--essentials">
+                          <div class="gr-tip-title">&#x1F30A; Essentials</div>
+                          <ul class="gr-tip-list">
+                            <li>Stay in old town Chora, not beach hotels</li>
+                            <li>Visit Delos &mdash; don&#8217;t skip it</li>
+                            <li>Sunset drinks: Caprice in Little Venice</li>
+                            <li>Big night out: Skandinavian</li>
+                            <li>Best meal: Pelican</li>
+                          </ul>
+                        </div>
+                        <div class="gr-tip gr-tip--ferry">
+                          <div class="gr-tip-title">&#x1F6A2; Getting There</div>
+                          <ul class="gr-tip-list">
+                            <li>Ferry from Piraeus: ~2.5&ndash;5 hrs</li>
+                            <li>Flight: ~45 min from ATH</li>
+                            <li>Book at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a></li>
+                          </ul>
+                        </div>
+                      </aside>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SANTORINI -->
+            <div id="gr-santorini" class="gr-island">
+              <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900" alt="Oia blue domes at sunset, Santorini" loading="lazy">
+              </div>
+              <div class="gr-island-card">
+                <div class="gr-island-card-inner">
+                  <h2 class="gr-island-name">Santorini</h2>
+                  <p class="gr-island-tagline">Dramatic cliffs, legendary sunsets, real depth</p>
+                  <div class="gr-island-body">
+                    <div class="gr-grid">
+                      <div class="gr-body">
+                        <p class="gr-p">Built on a volcanic caldera &mdash; cliffs into deep blue water, white buildings stacked together. Romantic, photogenic, historically rich.</p>
+                        <h3 class="gr-h3">Where to Stay</h3>
+                        <p class="gr-p"><strong>Fira</strong> is lively. <strong>Oia</strong> is fancier with the iconic sunset. Stay along the caldera coast between them for a middle ground.</p>
+                        <h3 class="gr-h3">Things to Do</h3>
+                        <div class="gr-img" style="aspect-ratio:16/7;margin-bottom:12px">
+                          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900" alt="Fira to Oia caldera hike" loading="lazy">
+                        </div>
+                        <div class="gr-card gr-card--flush">
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Oia Castle (Agios Nikolaos)</div>
+                            <div class="gr-sight-desc">15th-century Venetian fortress ruins. The sunset spot &mdash; arrive early.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Fira to Oia Hike</div>
+                            <div class="gr-sight-desc">~10 km caldera rim trail. Very little shade &mdash; go early, bring water.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Akrotiri</div>
+                            <div class="gr-sight-desc">Bronze Age settlement &mdash; the &#8220;Pompeii of the Aegean.&#8221; Over 3,500 years old.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Ancient Thira</div>
+                            <div class="gr-sight-desc">Hellenistic ruins on a ridge between Kamari and Perissa beaches.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Museums in Fira</div>
+                            <div class="gr-sight-desc">Prehistoric Thera &amp; Archaeological Museum. Pair with Akrotiri.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Red &amp; White Beach</div>
+                            <div class="gr-sight-desc">Dramatic colored cliffs. Red Beach on foot, White Beach by boat.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Ammoudi Bay</div>
+                            <div class="gr-sight-desc">Hidden harbor below Oia. Hike or donkey down for swimming and seafood.</div>
+                          </div>
+                        </div>
+                        <h3 class="gr-h3">Eat &amp; Drink</h3>
+                        <div class="gr-venue-list">
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F959;</span>
+                              <div>
+                                <div class="gr-venue-name">Yogi Gyro</div>
+                                <div class="gr-venue-desc">In Fira &mdash; best gyros on the island.</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F378;</span>
+                              <div>
+                                <div class="gr-venue-name">PK Cocktail Bar</div>
+                                <div class="gr-venue-desc">The spot for sunset drinks.</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <aside class="gr-aside">
+                        <div class="gr-tip gr-tip--essentials">
+                          <div class="gr-tip-title">&#x1F305; Essentials</div>
+                          <ul class="gr-tip-list">
+                            <li>Stay in Oia for iconic sunset views</li>
+                            <li>Book caldera-view hotels early</li>
+                            <li>Hike Fira &rarr; Oia (10 km, go early)</li>
+                            <li>Visit Akrotiri archaeological site</li>
+                            <li>Sunset drinks: PK Cocktail Bar</li>
+                            <li>Best gyros: Yogi Gyro in Fira</li>
+                          </ul>
+                        </div>
+                        <div class="gr-tip gr-tip--ferry">
+                          <div class="gr-tip-title">&#x1F6A2; Getting There</div>
+                          <ul class="gr-tip-list">
+                            <li>Ferry from Piraeus: ~8 hrs (overnight)</li>
+                            <li>High-speed ferry: ~5 hrs</li>
+                            <li>Flight: ~45 min from ATH</li>
+                          </ul>
+                        </div>
+                      </aside>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CRETE -->
+            <div id="gr-crete" class="gr-island">
+              <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+                <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900" alt="Chania Venetian harbor, Crete" loading="lazy">
+              </div>
+              <div class="gr-island-card">
+                <div class="gr-island-card-inner">
+                  <h2 class="gr-island-name">Crete</h2>
+                  <p class="gr-island-tagline">The largest island &mdash; feels like its own country</p>
+                  <div class="gr-island-body">
+                    <div class="gr-grid">
+                      <div class="gr-body">
+                        <p class="gr-p">Gorges, beaches, Venetian harbors, ancient palaces, incredible food. Plan at least a full week.</p>
+                        <h3 class="gr-h3">Getting There</h3>
+                        <div class="gr-chips">
+                          <span class="gr-chip">&#x2708;&#xFE0F; Chania (CHQ)</span>
+                          <span class="gr-chip">&#x2708;&#xFE0F; Heraklion (HER)</span>
+                          <span class="gr-chip">&#x26F4; Overnight ferry</span>
+                        </div>
+                        <h3 class="gr-h3">Where to Stay</h3>
+                        <p class="gr-p"><strong>Chania</strong> &mdash; Lively harbor town. Try <strong>Riviera Suites</strong>. <strong>Elounda</strong> &mdash; Relaxed, upscale northeast coast.</p>
+                        <h3 class="gr-h3">Things to Do</h3>
+                        <div class="gr-img" style="aspect-ratio:16/7;margin-bottom:12px">
+                          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900" alt="Samaria Gorge" loading="lazy">
+                        </div>
+                        <div class="gr-card gr-card--flush">
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Samari&aacute; Gorge</div>
+                            <div class="gr-sight-desc">~16 km, one of Europe&#8217;s longest. Full day. Book a tour bus from Chania.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Elafonisi Beach</div>
+                            <div class="gr-sight-desc">Pink-sand lagoon. Almost tropical. Dedicate a full day.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Palace of Knossos</div>
+                            <div class="gr-sight-desc">Center of Minoan civilization, home of the labyrinth. Get a guide.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Heraklion Archaeological Museum</div>
+                            <div class="gr-sight-desc">Finest Minoan collection in the world.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Fortezza (Rethymno)</div>
+                            <div class="gr-sight-desc">Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Firka Fortress (Chania)</div>
+                            <div class="gr-sight-desc">At Chania&#8217;s old harbor entrance. Great views.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Spinalonga</div>
+                            <div class="gr-sight-desc">Fortified island near Elounda. Short boat trip to explore.</div>
+                          </div>
+                        </div>
+                        <h3 class="gr-h3">Eat &amp; Drink</h3>
+                        <div class="gr-venue-list">
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F366;</span>
+                              <div>
+                                <div class="gr-venue-name">Red Jane Bakery</div>
+                                <div class="gr-venue-desc">In Chania &mdash; don&#8217;t skip it.</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="gr-venue">
+                            <div class="gr-venue-inner">
+                              <span class="gr-venue-icon">&#x1F378;</span>
+                              <div>
+                                <div class="gr-venue-name">Sinagogi</div>
+                                <div class="gr-venue-desc">Best bar in Chania.</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="gr-note">
+                          <p>We&#8217;ve barely scratched the surface. Do your own research &mdash; or better yet, ask a local.</p>
+                        </div>
+                      </div>
+                      <aside class="gr-aside">
+                        <div class="gr-tip gr-tip--essentials">
+                          <div class="gr-tip-title">&#x1F3D4; Essentials</div>
+                          <ul class="gr-tip-list">
+                            <li>Plan at least a full week</li>
+                            <li>Base in Chania &mdash; try Riviera Suites</li>
+                            <li>Book Samari&aacute; Gorge tour the day before</li>
+                            <li>Red Jane Bakery &mdash; don&#8217;t skip it</li>
+                            <li>Best bar in Chania: Sinagogi</li>
+                          </ul>
+                        </div>
+                        <div class="gr-tip gr-tip--ferry">
+                          <div class="gr-tip-title">&#x1F6A2; Getting There</div>
+                          <ul class="gr-tip-list">
+                            <li>Fly to Chania (CHQ) or Heraklion (HER)</li>
+                            <li>Overnight ferry from Piraeus &mdash; get a cabin</li>
+                          </ul>
+                        </div>
+                        <div class="gr-tip gr-tip--logistics">
+                          <div class="gr-tip-title">&#x1F5FA; Logistics</div>
+                          <dl class="gr-fact-list">
+                            <div><dt>Car hire</dt><dd>essential to explore</dd></div>
+                            <div><dt>Chania &harr; Heraklion</dt><dd>2.5 hrs by car</dd></div>
+                            <div><dt>Elounda</dt><dd>1.5 hrs from Heraklion</dd></div>
+                          </dl>
+                        </div>
+                      </aside>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PAROS & NAXOS -->
+            <div id="gr-paros-naxos" class="gr-island">
+              <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg" alt="Portara, Temple of Apollo, Naxos" loading="lazy">
+              </div>
+              <div class="gr-island-card">
+                <div class="gr-island-card-inner">
+                  <h2 class="gr-island-name">Paros &amp; Naxos</h2>
+                  <p class="gr-island-tagline">Close neighbors, easy to visit together</p>
+                  <div class="gr-island-body">
+                    <div class="gr-grid">
+                      <div class="gr-body">
+                        <p class="gr-p">Ferries between them take 30&ndash;45 minutes. Either is great on its own.</p>
+                        <h3 class="gr-h3">Naxos</h3>
+                        <p class="gr-p">The most well-rounded island &mdash; beaches, history, mountain villages, great food, youthful energy.</p>
+                        <div class="gr-card gr-card--flush">
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Guided bus tour</div>
+                            <div class="gr-sight-desc">Hit the island&#8217;s major sights with a local guide.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Catamaran cruise</div>
+                            <div class="gr-sight-desc">Swimming in secluded coves with lunch on board.</div>
+                          </div>
+                          <div class="gr-sight">
+                            <div class="gr-sight-name">Portara (Temple of Apollo)</div>
+                            <div class="gr-sight-desc">Iconic marble gateway. Beautiful at sunset.</div>
+                          </div>
+                        </div>
+                        <h3 class="gr-h3">Paros &amp; Antiparos</h3>
+                        <p class="gr-p">Paros has charming Parikia and pretty Naoussa. Antiparos has a great secluded cliff beach hike. Ask around when you arrive.</p>
+                      </div>
+                      <aside class="gr-aside">
+                        <div class="gr-tip gr-tip--essentials">
+                          <div class="gr-tip-title">&#x2728; Naxos Essentials</div>
+                          <ul class="gr-tip-list">
+                            <li>Best all-around Cycladic island</li>
+                            <li>Book a guided bus tour</li>
+                            <li>Catamaran cruise: coves &amp; lunch on board</li>
+                            <li>Portara at sunset &mdash; unmissable</li>
+                            <li>Paros: Parikia &amp; Naoussa village</li>
+                          </ul>
+                        </div>
+                        <div class="gr-tip gr-tip--ferry">
+                          <div class="gr-tip-title">&#x1F6A2; Getting There</div>
+                          <ul class="gr-tip-list">
+                            <li>Ferry from Piraeus: ~5 hrs to Naxos</li>
+                            <li>Paros &harr; Naxos: 30&ndash;45 min</li>
+                            <li>Book at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a></li>
+                          </ul>
+                        </div>
+                      </aside>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- OTHER ISLANDS -->
+            <section id="gr-other-islands" class="gr-section">
+              <h2 class="gr-h2">Other Islands Worth Knowing</h2>
+              <div class="gr-other-list">
+                <div class="gr-other-card">
+                  <div class="gr-img" style="aspect-ratio:16/7">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG" alt="Sarakiniko Beach, Milos" loading="lazy">
+                  </div>
+                  <div class="gr-other-card-body">
+                    <h3 class="gr-other-name">Milos</h3>
+                    <p class="gr-other-desc">Volcanic coastline, sea caves, colorful beaches. Sarakiniko&#8217;s white lunar landscape is iconic. Quieter, rugged &mdash; great for couples.</p>
+                  </div>
+                </div>
+                <div class="gr-other-card">
+                  <div class="gr-img" style="aspect-ratio:16/7">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg" alt="Rhodes Old Town" loading="lazy">
+                  </div>
+                  <div class="gr-other-card-body">
+                    <h3 class="gr-other-name">Rhodes</h3>
+                    <p class="gr-other-desc">Medieval Old Town is a UNESCO site &mdash; a walled city for hours. Beaches, ancient Lindos, different vibe from the Cyclades.</p>
+                  </div>
+                </div>
+                <div class="gr-other-card">
+                  <div class="gr-img" style="aspect-ratio:16/7">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg" alt="Corfu Old Town" loading="lazy">
+                  </div>
+                  <div class="gr-other-card-body">
+                    <h3 class="gr-other-name">Corfu</h3>
+                    <p class="gr-other-desc">Northwest, closer to Italy. Venetian influence, lush green hills, elegant architecture. Longer journey but completely different.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <div class="gr-footer">
+              <div class="gr-footer-greek">&#x039A;&#x03B1;&#x03BB;&#x03CC; &#x03C4;&#x03B1;&#x03BE;&#x03AF;&#x03B4;&#x03B9;!</div>
+              <p class="gr-footer-sub">Have the best time &mdash; see you in Greece.</p>
+            </div>
+
+          </main>
         </div>
       </section>
 
