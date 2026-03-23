@@ -754,9 +754,12 @@ function greeceNavInit() {
     /* Wrap all non-title children in a collapsible body div */
     var body = document.createElement('div');
     body.className = 'gr-tip-body';
+    var bodyInner = document.createElement('div');
+    bodyInner.className = 'gr-tip-body-inner';
     Array.from(tip.children).forEach(function(child) {
-      if (child !== title) body.appendChild(child);
+      if (child !== title) bodyInner.appendChild(child);
     });
+    body.appendChild(bodyInner);
     tip.appendChild(body);
 
     /* Chevron indicator */
@@ -764,12 +767,14 @@ function greeceNavInit() {
     chevron.className = 'gr-tip-chevron';
     chevron.textContent = '›';
     title.appendChild(chevron);
+    title.setAttribute('aria-expanded', 'false');
 
     /* Toggle open/closed — tap anywhere on the card header (full padding area),
        but ignore taps inside the expanded body so links/text remain usable */
     tip.addEventListener('click', function(e) {
       if (body.contains(e.target)) return;
-      tip.classList.toggle('gr-tip--open');
+      var isOpen = tip.classList.toggle('gr-tip--open');
+      title.setAttribute('aria-expanded', String(isOpen));
     });
   });
 }
