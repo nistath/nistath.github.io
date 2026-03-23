@@ -834,6 +834,7 @@ a.repo-card:hover {
 
   :root {
     --mobile-hero-h: auto;
+    --mobile-fixed-header-h: calc(var(--safe-top) + (var(--bar-h) * 2) + 2px);
     --hero-pad-x: clamp(1rem, 4.2vw, 1.5rem);
     --hero-pad-top: clamp(1rem, 3.8vw, 1.35rem);
     --hero-pad-bottom: clamp(0.78rem, 2.5vw, 0.98rem);
@@ -967,12 +968,12 @@ a.repo-card:hover {
     display: none;
   }
 
-  /* ── Sticky nav: pins at the top once the hero scrolls past ── */
+  /* ── Mobile header: normal flow while the hero is visible, then fixed
+     once the compact state fully takes over. ── */
   .sticky-header {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 20;
     padding-top: calc(var(--safe-top) * var(--compact-progress, 0));
     --bg-y: 0px;
@@ -984,6 +985,12 @@ a.repo-card:hover {
     animation: bgscroll 12s linear infinite;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .app.app--mobile-header-fixed .sticky-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 30;
   }
 
   .sticky-header::before {
@@ -1128,6 +1135,10 @@ a.repo-card:hover {
     display: block;
   }
 
+  .app.app--mobile-header-fixed .section.active {
+    padding-top: var(--mobile-fixed-header-h);
+  }
+
   #section-greece {
     background: #f5f0e8;
   }
@@ -1137,6 +1148,17 @@ a.repo-card:hover {
     min-height: 0;
     height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom));
     padding-bottom: 0;
+  }
+
+  .app.app--mobile-header-fixed #section-resume {
+    padding-top: 0;
+    min-height: calc(100dvh - var(--safe-bottom));
+    height: auto;
+  }
+
+  .app.app--mobile-header-fixed #section-resume .resume-wrap {
+    margin-top: var(--mobile-fixed-header-h);
+    height: calc(100dvh - var(--mobile-fixed-header-h) - var(--safe-bottom));
   }
 
   /* ── Content padding ── */

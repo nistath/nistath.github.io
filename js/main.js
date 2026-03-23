@@ -252,16 +252,24 @@ function clamp01(num) {
 }
 
 if (stickyHeaderEl && topbarEl && contentEl) {
+  function setMobileHeaderFixed(isFixed) {
+    var appEl = document.getElementById('app');
+    if (!appEl) return;
+    appEl.classList.toggle('app--mobile-header-fixed', !!isFixed);
+  }
+
   function updateHeroVisibility() {
     if (window.innerWidth > MOBILE_BREAKPOINT) {
       stickyHeaderEl.style.setProperty('--compact-progress', '0');
       stickyHeaderEl.classList.remove('hero-hidden');
+      setMobileHeaderFixed(false);
       return;
     }
 
     if (document.getElementById('app').classList.contains('app--resume-compact')) {
       stickyHeaderEl.style.setProperty('--compact-progress', '1');
       stickyHeaderEl.classList.add('hero-hidden');
+      setMobileHeaderFixed(true);
       return;
     }
 
@@ -272,9 +280,11 @@ if (stickyHeaderEl && topbarEl && contentEl) {
     var revealStart = Math.max(0, heroHeight - revealSpan);
     var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
     var progress = clamp01((scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
+    var heroHidden = progress >= HERO_HIDDEN_PROGRESS;
 
     stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
-    stickyHeaderEl.classList.toggle('hero-hidden', progress >= HERO_HIDDEN_PROGRESS);
+    stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
+    setMobileHeaderFixed(heroHidden);
   }
 
   window.addEventListener('scroll', updateHeroVisibility, { passive: true });
