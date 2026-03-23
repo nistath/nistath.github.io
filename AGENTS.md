@@ -90,3 +90,12 @@ The shell and hero treatment are controlled by the shell theme variables:
 - `--shell-hero-tint-end`
 
 The sidebar, topbar, and sticky header use the moving `img/background.png` texture with a blue tint layered over it.
+
+### Greece Guide Link Patterns
+
+The Greece guide in `index.html` uses two different link patterns that should not be mixed:
+
+- `.gr-venue` and `a.gr-sight` are full-card anchors. Do not place another `<a>` anywhere inside them, including inside names or descriptions. Nested anchors are invalid HTML and browsers will reparse the markup in inconsistent ways.
+- `.gr-inline-link` is only for prose, list items, fact rows, and other non-clickable containers.
+- If one row needs multiple destination links, keep the row itself non-clickable and use the grouped pattern already in `css/greece.css`: `.gr-sight.gr-sight--grouped` with child `.gr-sight-links` and `.gr-sight-link` items.
+- When a card is already the link target, keep secondary place mentions in that card as plain text instead of adding more anchors.
