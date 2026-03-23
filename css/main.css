@@ -25,6 +25,7 @@
   --shell-bg-repeat:       repeat;
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
+  --mobile-page-bg:        #0d1117;
 
   /* Surface */
   --clr-bg:      #0d1117;
@@ -98,6 +99,11 @@ a:hover { text-decoration: underline; }
 @keyframes bgscroll {
   from { background-position: 0 var(--bg-y, 0px); }
   to   { background-position: 500px var(--bg-y, 0px); }
+}
+
+@keyframes bgscroll-overlay {
+  from { background-position: 0 0, 0 var(--bg-y, 0px); }
+  to   { background-position: 0 0, 500px var(--bg-y, 0px); }
 }
 
 .sidebar-inner {
@@ -830,11 +836,15 @@ a.repo-card:hover {
     min-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: var(--mobile-page-bg);
+    background-image: none;
+    animation: none;
   }
 
   :root {
     --mobile-hero-h: auto;
     --mobile-fixed-header-h: calc(var(--safe-top) + (var(--bar-h) * 2) + 2px);
+    --mobile-shell-spill-h: max(var(--mobile-fixed-header-h), 11rem);
     --hero-pad-x: clamp(1rem, 4.2vw, 1.5rem);
     --hero-pad-top: clamp(1rem, 3.8vw, 1.35rem);
     --hero-pad-bottom: clamp(0.78rem, 2.5vw, 0.98rem);
@@ -844,6 +854,27 @@ a.repo-card:hover {
     --hero-name-size: clamp(2.1rem, 9vw, 2.5rem);
   }
 
+  body {
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    height: var(--mobile-shell-spill-h);
+    background-color: var(--shell-hero-base);
+    background-image:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--shell-bg-image);
+    background-repeat: no-repeat, var(--shell-bg-repeat);
+    background-size: auto, var(--shell-bg-size);
+    background-position: 0 0, var(--shell-bg-position);
+    animation: bgscroll-overlay 12s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   /* ── App: plain block flow on mobile to keep sticky behavior reliable
      across iOS browsers. ── */
   .app {
@@ -851,6 +882,8 @@ a.repo-card:hover {
     min-height: 100svh;
     height: auto;
     overflow: visible;
+    position: relative;
+    z-index: 1;
   }
 
   .sidebar { display: none !important; }

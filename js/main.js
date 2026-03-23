@@ -76,6 +76,14 @@ var PAGE_TITLES = {
   'greece':    'Guide to Greece — Nick Stathas'
 };
 
+var MOBILE_PAGE_BACKGROUNDS = {
+  'about': '#0d1117',
+  'github': '#0d1117',
+  'resume': '#0d1117',
+  'portfolio': '#0d1117',
+  'greece': '#f5f0e8'
+};
+
 /* ── Viewport meta: keep one consistent viewport across sections.
    Mobile PDF viewers behave better when we do not override scaling on the
    resume route, especially on iOS where users may need to zoom back out. ── */
@@ -86,6 +94,12 @@ function setViewportForSection(section) {
   if (!viewportMeta || !viewportDefault) return;
   viewportMeta.setAttribute('content', viewportDefault);
 }
+
+function setMobilePageSurface(section) {
+  var surface = MOBILE_PAGE_BACKGROUNDS[section] || MOBILE_PAGE_BACKGROUNDS[DEFAULT_SECTION];
+  document.documentElement.style.setProperty('--mobile-page-bg', surface);
+}
+
 function normalizeRoutePath(pathname) {
   if (!pathname) return '/';
 
@@ -150,6 +164,7 @@ function navigate(section, options) {
   var shouldCollapseMobileHero = !!options.collapseMobileHero || section === 'resume';
 
   setViewportForSection(section);
+  setMobilePageSurface(section);
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
   if (section === 'about') {
