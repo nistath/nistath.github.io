@@ -21,7 +21,7 @@
   --shell-hero-base:       #2c678c;
   --shell-hero-accent:     #68a7cb;
   --shell-divider:         rgba(151, 191, 215, 0.34);
-  --shell-bg-image:        url('/img/background.png');
+  --shell-bg-image:        url('/img/background-blue.png');
   --shell-bg-repeat:       repeat;
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
@@ -843,10 +843,10 @@ a.repo-card:hover {
     --hero-name-size: clamp(2.1rem, 9vw, 2.5rem);
   }
 
-  /* ── App: flex column; only #content fills the remaining space ── */
+  /* ── App: plain block flow on mobile to keep sticky behavior reliable
+     across iOS browsers. ── */
   .app {
-    display: flex !important;
-    flex-direction: column;
+    display: block !important;
     min-height: 100svh;
     height: auto;
     overflow: visible;
@@ -871,8 +871,12 @@ a.repo-card:hover {
     overflow: hidden;
     padding-top: var(--safe-top);
     border-bottom: none;
-    background: transparent;
-    animation: none;
+    background-color: var(--shell-hero-base);
+    background-image: var(--shell-bg-image);
+    background-repeat: var(--shell-bg-repeat);
+    background-size: var(--shell-bg-size);
+    background-position: var(--shell-bg-position);
+    animation: bgscroll 12s linear infinite;
     --bg-y: 0px;
   }
 
@@ -972,7 +976,12 @@ a.repo-card:hover {
     z-index: 20;
     padding-top: calc(var(--safe-top) * var(--compact-progress, 0));
     --bg-y: 0px;
-    background: transparent;
+    background-color: var(--shell-hero-base);
+    background-image: var(--shell-bg-image);
+    background-repeat: var(--shell-bg-repeat);
+    background-size: var(--shell-bg-size);
+    background-position: var(--shell-bg-position);
+    animation: bgscroll 12s linear infinite;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
@@ -1113,11 +1122,14 @@ a.repo-card:hover {
     min-height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
     padding-bottom: var(--safe-bottom);
     background: var(--clr-bg);
-    background-clip: content-box;
   }
 
   .section.active {
     display: block;
+  }
+
+  #section-greece {
+    background: #f5f0e8;
   }
 
   /* Resume: explicit height so the iframe fills the viewport below the nav ── */
