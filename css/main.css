@@ -29,7 +29,7 @@
   /* --shell-hero-base composited through --sidebar-overlay.
      Used as background-color on mobile shell elements so iOS Safari's
      dynamic chrome-color sampling picks up the darkened value. */
-  --shell-hero-dark:       #142d43;
+  --shell-hero-dark:       #2b4557;
 
   /* Surface */
   --clr-bg:      #0d1117;
@@ -71,6 +71,7 @@ img     { display: block; user-select: none; }
 button  { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
 a       { color: var(--clr-link); text-decoration: none; }
 a:hover { text-decoration: underline; }
+#mobile-spill { display: none; }
 
 /* =====================================================
    APP GRID
@@ -884,6 +885,31 @@ a.repo-card:hover {
     animation: bgscroll-overlay 12s linear infinite;
     pointer-events: none;
     z-index: 0;
+  }
+
+  /* ── Mobile spill: real DOM element for iOS Safari chrome-color sampling.
+     Safari ignores pseudo-elements and non-fixed elements for dynamic
+     chrome tinting.  This thin fixed layer sits behind the status bar at
+     the highest z-index so Safari always samples --shell-hero-dark,
+     regardless of scroll position or active section.  It only covers the
+     safe-area inset so it never obscures page content. ── */
+  #mobile-spill {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 0px);
+    background-color: var(--shell-hero-dark);
+    background-image:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--shell-bg-image);
+    background-repeat: no-repeat, var(--shell-bg-repeat);
+    background-size: auto, var(--shell-bg-size);
+    background-position: 0 0, var(--shell-bg-position);
+    animation: bgscroll-overlay 12s linear infinite;
+    pointer-events: none;
+    z-index: 9999;
   }
 
   /* ── App: plain block flow on mobile to keep sticky behavior reliable
