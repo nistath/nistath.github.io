@@ -100,6 +100,15 @@ function setMobilePageSurface(section) {
   document.documentElement.style.setProperty('--mobile-page-bg', surface);
 }
 
+/* ── Sync <meta name="theme-color"> from the CSS variable so
+   --shell-hero-dark is the single source of truth. ── */
+var themeColorMeta = document.querySelector('meta[name="theme-color"]');
+if (themeColorMeta) {
+  var shellHeroDark = getComputedStyle(document.documentElement)
+    .getPropertyValue('--shell-hero-dark').trim();
+  if (shellHeroDark) themeColorMeta.setAttribute('content', shellHeroDark);
+}
+
 function normalizeRoutePath(pathname) {
   if (!pathname) return '/';
 
@@ -161,7 +170,10 @@ function navigate(section, options) {
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
   var heroEl = document.getElementById('topbar');
-  var shouldCollapseMobileHero = !!options.collapseMobileHero || section === 'resume';
+  /* Collapse the hero on mobile for all non-about sections.  This covers
+     explicit nav clicks (collapseMobileHero: true), popstate (back/forward),
+     direct-route entry, and the resume route. */
+  var shouldCollapseMobileHero = section !== 'about';
 
   setViewportForSection(section);
   setMobilePageSurface(section);

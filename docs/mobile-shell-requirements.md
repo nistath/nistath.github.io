@@ -120,9 +120,12 @@ These constraints drive the multi-layer approach below.
   and `.app` / `.content` use `overflow: visible` so the page participates in
   normal document-level scrolling, allowing Safari to collapse its browser
   chrome.
-- **Navigation collapse:** `navigate()` in `js/main.js` scrolls to
-  `topbarEl.offsetHeight` after a section switch so the hero is already
-  dismissed and the compact header is visible.
+- **Navigation collapse:** `navigate()` in `js/main.js` sets
+  `shouldCollapseMobileHero = (section !== 'about')` and scrolls to
+  `topbarEl.offsetHeight` for those sections so the hero is already dismissed
+  and the compact header is visible. This applies to all navigation paths:
+  explicit tab/sidebar clicks, `popstate` (browser back/forward), and
+  direct-route entry (initial bootstrap call).
 
 ## Resume Route
 
@@ -144,6 +147,18 @@ These constraints drive the multi-layer approach below.
 - **PDF sizing:** `#section-resume` uses
   `height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom))` (or the
   fixed-header variant) to fill the remaining viewport below the header.
+- **Fit mode:** The iframe `src` includes `#page=1&view=FitH` for the
+  browser's built-in PDF viewer. However, Dropbox's `raw=1` redirect returns
+  a `Location` header ending in `#` (empty fragment), which clears the hint
+  before the PDF viewer sees it. This cannot be fixed client-side: the
+  redirect URL has no CORS headers, so JavaScript cannot resolve it and
+  re-append the fragment. Switching away from Dropbox hosting would resolve
+  this.
+- **iOS pinch-to-zoom:** On iOS Safari, PDF content in an iframe does not
+  receive its own zoom context. Pinch-to-zoom affects the entire page
+  viewport rather than just the PDF. This is a Safari platform limitation
+  (Chrome desktop uses PDFium which handles zoom independently). No reliable
+  client-side workaround exists.
 
 ## Testing Notes
 
@@ -169,4 +184,5 @@ These constraints drive the multi-layer approach below.
   (`img/background-blue.png`) is significantly lighter than
   `--shell-hero-base`, so the blended result is lighter than a base-only
   calculation. Tweak on-device by adjusting the single `--shell-hero-dark`
-  variable in `:root` and the matching `<meta name="theme-color">` value.
+  variable in `:root`; `js/main.js` syncs `<meta name="theme-color">` from
+  the computed CSS variable at startup so there is only one value to change.
