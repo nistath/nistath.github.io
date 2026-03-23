@@ -199,12 +199,12 @@ function navigate(section, options) {
       targetScrollTop = heroEl.offsetHeight;
     }
 
-    contentScrollEl.scrollTop = targetScrollTop;
-    contentScrollEl.dispatchEvent(new Event('scroll'));
+    window.scrollTo(0, targetScrollTop);
+    window.dispatchEvent(new Event('scroll'));
 
     requestAnimationFrame(function() {
-      contentScrollEl.scrollTop = targetScrollTop;
-      contentScrollEl.dispatchEvent(new Event('scroll'));
+      window.scrollTo(0, targetScrollTop);
+      window.dispatchEvent(new Event('scroll'));
     });
   }
 }
@@ -270,13 +270,14 @@ if (stickyHeaderEl && topbarEl && contentEl) {
 
     var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, heroHeight * COMPACT_REVEAL_SPAN_RATIO);
     var revealStart = Math.max(0, heroHeight - revealSpan);
-    var progress = clamp01((contentEl.scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
+    var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    var progress = clamp01((scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
 
     stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
     stickyHeaderEl.classList.toggle('hero-hidden', progress >= HERO_HIDDEN_PROGRESS);
   }
 
-  contentEl.addEventListener('scroll', updateHeroVisibility, { passive: true });
+  window.addEventListener('scroll', updateHeroVisibility, { passive: true });
   window.addEventListener('resize', updateHeroVisibility, { passive: true });
   updateHeroVisibility();
 }

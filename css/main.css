@@ -21,7 +21,7 @@
   --shell-hero-base:       #2c678c;
   --shell-hero-accent:     #68a7cb;
   --shell-divider:         rgba(151, 191, 215, 0.34);
-  --shell-bg-image:        url('/img/background-blue.png');
+  --shell-bg-image:        url('/img/background.png');
   --shell-bg-repeat:       repeat;
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
@@ -825,6 +825,13 @@ a.repo-card:hover {
    RESPONSIVE — MOBILE
    ===================================================== */
 @media (max-width: 767px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   :root {
     --mobile-hero-h: auto;
     --hero-pad-x: clamp(1rem, 4.2vw, 1.5rem);
@@ -840,22 +847,19 @@ a.repo-card:hover {
   .app {
     display: flex !important;
     flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100svh;
+    height: auto;
+    overflow: visible;
   }
 
   .sidebar { display: none !important; }
 
-  /* ── Content: THE single scroll container on mobile.
-     The hero (#topbar) and sticky nav (.sticky-header) live inside it as
-     its first two children, so they scroll as part of the same document. ── */
+  /* ── Content: normal document flow on mobile so Safari can collapse
+     its browser chrome and let the shell background bleed into the top. ── */
   .content {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
+    min-height: 100svh;
+    overflow: visible;
     padding-bottom: 0;
-    -webkit-overflow-scrolling: touch;
     background: transparent;
   }
 
