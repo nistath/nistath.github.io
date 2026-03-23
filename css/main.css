@@ -19,19 +19,12 @@
 
   /* Shell theme */
   --shell-hero-base:       #2c678c;
-  --shell-hero-depth:      #1f4f70;
   --shell-hero-accent:     #68a7cb;
   --shell-divider:         rgba(151, 191, 215, 0.34);
-  --shell-hero-tint-start: rgba(118, 181, 214, 0.72);
-  --shell-hero-tint-mid:   rgba(44, 103, 140, 0.82);
-  --shell-hero-tint-end:   rgba(31, 79, 112, 0.9);
-  --shell-bg-image:
-    url('/img/background.png'),
-    linear-gradient(155deg, var(--shell-hero-tint-start) 0%, var(--shell-hero-tint-mid) 44%, var(--shell-hero-tint-end) 100%);
-  --shell-bg-repeat: repeat, no-repeat;
-  --shell-bg-size: 500px 500px, cover;
-  --shell-bg-position: 0 var(--bg-y, 0px), center;
-  --shell-bg-blend: luminosity, normal;
+  --shell-bg-image:        url('/img/background-blue.png');
+  --shell-bg-repeat:       repeat;
+  --shell-bg-size:         500px 500px;
+  --shell-bg-position:     0 var(--bg-y, 0px);
 
   /* Surface */
   --clr-bg:      #0d1117;
@@ -62,7 +55,6 @@ html, body {
   background-repeat: var(--shell-bg-repeat);
   background-size: var(--shell-bg-size);
   background-position: var(--shell-bg-position);
-  background-blend-mode: var(--shell-bg-blend);
   animation: bgscroll 12s linear infinite;
   color: var(--clr-text);
   overflow: hidden;
@@ -98,15 +90,14 @@ a:hover { text-decoration: underline; }
   background-repeat: var(--shell-bg-repeat);
   background-size: var(--shell-bg-size);
   background-position: var(--shell-bg-position);
-  background-blend-mode: var(--shell-bg-blend);
   animation: bgscroll 12s linear infinite;
   overflow: hidden;
   border-right: 1px solid var(--shell-divider);
 }
 
 @keyframes bgscroll {
-  from { background-position: 0 var(--bg-y, 0px), center; }
-  to   { background-position: 500px var(--bg-y, 0px), center; }
+  from { background-position: 0 var(--bg-y, 0px); }
+  to   { background-position: 500px var(--bg-y, 0px); }
 }
 
 .sidebar-inner {
@@ -245,7 +236,6 @@ a:hover { text-decoration: underline; }
   background-repeat: var(--shell-bg-repeat);
   background-size: var(--shell-bg-size);
   background-position: var(--shell-bg-position);
-  background-blend-mode: var(--shell-bg-blend);
   animation: bgscroll 12s linear infinite;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   z-index: 10;
@@ -1076,7 +1066,6 @@ a.repo-card:hover {
     background-repeat: var(--shell-bg-repeat);
     background-size: var(--shell-bg-size);
     background-position: var(--shell-bg-position);
-    background-blend-mode: var(--shell-bg-blend);
     animation: bgscroll 12s linear infinite;
   }
 

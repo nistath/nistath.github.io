@@ -82,14 +82,12 @@ Design tokens live in `:root` in `css/main.css`.
 The shell and hero treatment are controlled by the shell theme variables:
 
 - `--shell-hero-base`
-- `--shell-hero-depth`
 - `--shell-hero-accent`
 - `--shell-divider`
-- `--shell-hero-tint-start`
-- `--shell-hero-tint-mid`
-- `--shell-hero-tint-end`
+- `--shell-bg-image`
+- `--shell-bg-size`
 
-The sidebar, topbar, and sticky header use the moving `img/background.png` texture with a blue tint layered over it.
+The sidebar, topbar, and sticky header use the moving `img/background-blue.png` texture directly. Do not rely on CSS blend-mode tinting for shell color, since Safari renders it inconsistently.
 
 ### Greece Guide Link Patterns
 
