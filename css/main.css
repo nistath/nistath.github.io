@@ -841,6 +841,14 @@ a.repo-card:hover {
     animation: none;
   }
 
+  /* Canvas background (html) must match the darkened hero so the iOS
+     top-spill / overscroll area shows the right color.  body stays dark
+     to cover section content.  The blended color is --shell-hero-base
+     (#2c678c) through --sidebar-overlay rgba(8,18,32,0.68). */
+  html {
+    background-color: #142d43;
+  }
+
   :root {
     --mobile-hero-h: auto;
     --mobile-fixed-header-h: calc(var(--safe-top) + (var(--bar-h) * 2) + 2px);
