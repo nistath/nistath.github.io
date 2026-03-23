@@ -1,0 +1,10 @@
+{
+  "name": "nistath.github.io",
+  "private": true,
+  "scripts": {
+    "dev": "browser-sync start --config bs-config.js"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.3"
+  }
+}

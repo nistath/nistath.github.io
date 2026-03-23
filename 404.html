@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Page not found</title>
+  <script>
+    (function(location) {
+      var knownRoutes = {
+        '/': true,
+        '/about': true,
+        '/github': true,
+        '/resume': true,
+        '/portfolio': true,
+        '/greece': true
+      };
+
+      var normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+      if (normalizedPath === '/404.html' || !knownRoutes[normalizedPath]) return;
+
+      var requestedRoute = normalizedPath + location.search + location.hash;
+      location.replace('/?route=' + encodeURIComponent(requestedRoute));
+    }(window.location));
+  </script>
+</head>
+<body style="margin:0; min-height:100vh; display:grid; place-items:center; background:#0d1117; color:#e6edf3; font:16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+  <main style="padding:24px; text-align:center;">
+    <p style="margin:0 0 8px;">This page was not found.</p>
+    <p style="margin:0;"><a href="/" style="color:#68a7cb;">Go to nistath.com</a></p>
+  </main>
+</body>
+</html>

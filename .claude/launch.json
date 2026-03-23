@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Site dev server",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "test -d node_modules || npm ci; npm run dev -- --port $PORT"],
+      "autoPort": true
+    }
+  ]
+}
