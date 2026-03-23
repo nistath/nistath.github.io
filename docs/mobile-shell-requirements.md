@@ -23,29 +23,40 @@ for the site during the March 2026 visual-performance pass.
 
 ### Implementation
 
+iOS Safari dynamically samples `background-color` from the topmost DOM element
+to tint the browser chrome. It ignores `::before` / `::after` overlays. So on
+mobile, all shell elements bake the darkening overlay into their
+`background-image` stack and set `background-color` to the pre-computed
+darkened value (`--shell-hero-dark`, #142d43).
+
+- **`--shell-hero-dark` variable:** Defined in `:root` (`css/main.css`).
+  Pre-computed blend of `--shell-hero-base` (#2c678c) through
+  `--sidebar-overlay` (rgba(8,18,32,0.68)). Used everywhere iOS may sample
+  a `background-color`.
 - **Browser chrome tinting:** `<meta name="theme-color" content="#142d43">`
-  in `index.html` tells iOS Safari what color to use for the status bar and
-  toolbar. The value is `--shell-hero-base` (#2c678c) composited through
-  `--sidebar-overlay` (rgba(8,18,32,0.68)).
-- **Canvas / overscroll color:** In the mobile media query (`css/main.css`),
-  `html` gets `background-color: #142d43` (the same darkened hero blue) so
-  that iOS rubber-band overscroll at the top reveals a matching color instead
-  of the dark page background. `body` keeps `--mobile-page-bg` (#0d1117) to
-  cover section content areas.
+  in `index.html`. Fallback for browsers that respect the meta tag rather
+  than dynamic sampling.
+- **Canvas / overscroll color:** In the mobile media query, `html` gets
+  `background-color: var(--shell-hero-dark)` so that iOS rubber-band
+  overscroll at the top reveals a matching color. `body` keeps
+  `--mobile-page-bg` (#0d1117) to cover section content areas.
 - **Fixed spill element:** `body::before` (`css/main.css`, mobile media query)
   is a `position: fixed` pseudo-element at the top of the viewport with the
   darkened blue texture (`--sidebar-overlay` gradient over `--shell-bg-image`).
   It covers `height: var(--mobile-shell-spill-h)` and sits at `z-index: 0`
   behind `#app` (`z-index: 1`). This provides the textured background behind
   the compact header after the hero scrolls away.
-- **Hero element:** `.topbar` (`css/main.css`, mobile media query) carries
-  the shell texture directly and inherits `.topbar::before` (desktop rule)
-  which applies `--sidebar-overlay` as a darkening overlay. It has
-  `padding-top: var(--safe-top)` so the background extends into the safe area
-  while content sits below it.
-- **Compact header opacity:** `.sticky-header::before` applies
-  `--sidebar-overlay` as an overlay, and the header's own shell texture
-  background ensures content beneath it is not readable.
+- **Hero element:** `.topbar` on mobile uses
+  `background-color: var(--shell-hero-dark)` and a stacked
+  `background-image` (`linear-gradient(--sidebar-overlay) + --shell-bg-image`)
+  with `animation: bgscroll-overlay`. The desktop `.topbar::before` overlay is
+  disabled (`content: none`) so the darkening lives entirely in the background
+  stack. `padding-top: var(--safe-top)` extends the background into the safe
+  area while content sits below it.
+- **Compact header:** `.sticky-header` uses the same stacked-background
+  approach as `.topbar`. Its `::before` overlay is likewise disabled. The
+  `.app.app--resume-compact .sticky-header` variant receives the same
+  treatment.
 
 ## Bottom Spill
 
@@ -120,10 +131,18 @@ for the site during the March 2026 visual-performance pass.
 ## Testing Notes
 
 - Chrome desktop emulation is useful for validating scroll geometry, route
-  transitions, and pinned-header behavior.
+  transitions, and pinned-header behavior. Chrome overscroll shows a brief
+  texture-animation seam between the hero and the canvas; this is cosmetic and
+  does not reproduce on iOS.
 - Chrome desktop emulation is not a reliable representation of the exact top
   browser-chrome spill seen on a real iPhone, so on-device verification is
   still required for final polish.
-- The `#142d43` theme-color / canvas color is a computed flat approximation of
-  the textured darkened hero. It may need on-device tweaking if the texture's
-  average brightness differs noticeably.
+- iOS Safari dynamically samples `background-color` from the topmost visible
+  element — it ignores `::before`/`::after` pseudo-element overlays entirely.
+  Any future shell element that appears behind the browser chrome must set its
+  own `background-color` to `var(--shell-hero-dark)` and bake the overlay into
+  its `background-image` stack. Using a `::before` overlay will cause a
+  color mismatch in the Safari chrome area.
+- The `#142d43` value (`--shell-hero-dark`) is a computed flat approximation.
+  It may need on-device tweaking if the texture's average brightness differs
+  noticeably.

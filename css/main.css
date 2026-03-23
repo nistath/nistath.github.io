@@ -26,6 +26,10 @@
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
   --mobile-page-bg:        #0d1117;
+  /* --shell-hero-base composited through --sidebar-overlay.
+     Used as background-color on mobile shell elements so iOS Safari's
+     dynamic chrome-color sampling picks up the darkened value. */
+  --shell-hero-dark:       #142d43;
 
   /* Surface */
   --clr-bg:      #0d1117;
@@ -843,10 +847,9 @@ a.repo-card:hover {
 
   /* Canvas background (html) must match the darkened hero so the iOS
      top-spill / overscroll area shows the right color.  body stays dark
-     to cover section content.  The blended color is --shell-hero-base
-     (#2c678c) through --sidebar-overlay rgba(8,18,32,0.68). */
+     to cover section content. */
   html {
-    background-color: #142d43;
+    background-color: var(--shell-hero-dark);
   }
 
   :root {
@@ -871,7 +874,7 @@ a.repo-card:hover {
     position: fixed;
     inset: 0 0 auto;
     height: var(--mobile-shell-spill-h);
-    background-color: var(--shell-hero-base);
+    background-color: var(--shell-hero-dark);
     background-image:
       linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
       var(--shell-bg-image);
@@ -905,7 +908,9 @@ a.repo-card:hover {
     background: transparent;
   }
 
-  /* ── Hero (topbar): block element, scrolls away naturally ── */
+  /* ── Hero (topbar): block element, scrolls away naturally.
+     The overlay is baked into the background-image stack (not a ::before)
+     so that iOS Safari's chrome-color sampling sees the darkened value. ── */
   .topbar {
     display: flex !important;
     flex-direction: column;
@@ -913,13 +918,19 @@ a.repo-card:hover {
     overflow: hidden;
     padding-top: var(--safe-top);
     border-bottom: none;
-    background-color: var(--shell-hero-base);
-    background-image: var(--shell-bg-image);
-    background-repeat: var(--shell-bg-repeat);
-    background-size: var(--shell-bg-size);
-    background-position: var(--shell-bg-position);
-    animation: bgscroll 12s linear infinite;
+    background-color: var(--shell-hero-dark);
+    background-image:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--shell-bg-image);
+    background-repeat: no-repeat, var(--shell-bg-repeat);
+    background-size: auto, var(--shell-bg-size);
+    background-position: 0 0, var(--shell-bg-position);
+    animation: bgscroll-overlay 12s linear infinite;
     --bg-y: 0px;
+  }
+
+  .topbar::before {
+    content: none;
   }
 
   .topbar-hero-wrap {
@@ -1010,7 +1021,8 @@ a.repo-card:hover {
   }
 
   /* ── Mobile header: normal flow while the hero is visible, then fixed
-     once the compact state fully takes over. ── */
+     once the compact state fully takes over.  Overlay is baked into the
+     background stack (same rationale as .topbar above). ── */
   .sticky-header {
     display: flex;
     flex-direction: column;
@@ -1018,12 +1030,14 @@ a.repo-card:hover {
     z-index: 20;
     padding-top: calc(var(--safe-top) * var(--compact-progress, 0));
     --bg-y: 0px;
-    background-color: var(--shell-hero-base);
-    background-image: var(--shell-bg-image);
-    background-repeat: var(--shell-bg-repeat);
-    background-size: var(--shell-bg-size);
-    background-position: var(--shell-bg-position);
-    animation: bgscroll 12s linear infinite;
+    background-color: var(--shell-hero-dark);
+    background-image:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--shell-bg-image);
+    background-repeat: no-repeat, var(--shell-bg-repeat);
+    background-size: auto, var(--shell-bg-size);
+    background-position: 0 0, var(--shell-bg-position);
+    animation: bgscroll-overlay 12s linear infinite;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
@@ -1035,11 +1049,7 @@ a.repo-card:hover {
   }
 
   .sticky-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--sidebar-overlay);
-    pointer-events: none;
+    content: none;
   }
 
   .topbar-compact-wrap {
@@ -1122,12 +1132,14 @@ a.repo-card:hover {
 
   .app.app--resume-compact .sticky-header {
     padding-top: var(--safe-top);
-    background-color: var(--shell-hero-base);
-    background-image: var(--shell-bg-image);
-    background-repeat: var(--shell-bg-repeat);
-    background-size: var(--shell-bg-size);
-    background-position: var(--shell-bg-position);
-    animation: bgscroll 12s linear infinite;
+    background-color: var(--shell-hero-dark);
+    background-image:
+      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
+      var(--shell-bg-image);
+    background-repeat: no-repeat, var(--shell-bg-repeat);
+    background-size: auto, var(--shell-bg-size);
+    background-position: 0 0, var(--shell-bg-position);
+    animation: bgscroll-overlay 12s linear infinite;
   }
 
   .app.app--resume-compact .topbar-compact-wrap {
