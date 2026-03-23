@@ -25,6 +25,13 @@
   --shell-hero-tint-start: rgba(118, 181, 214, 0.72);
   --shell-hero-tint-mid:   rgba(44, 103, 140, 0.82);
   --shell-hero-tint-end:   rgba(31, 79, 112, 0.9);
+  --shell-bg-image:
+    url('/img/background.png'),
+    linear-gradient(155deg, var(--shell-hero-tint-start) 0%, var(--shell-hero-tint-mid) 44%, var(--shell-hero-tint-end) 100%);
+  --shell-bg-repeat: repeat, no-repeat;
+  --shell-bg-size: 500px 500px, cover;
+  --shell-bg-position: 0 var(--bg-y, 0px), center;
+  --shell-bg-blend: luminosity, normal;
 
   /* Surface */
   --clr-bg:      #0d1117;
@@ -50,7 +57,13 @@
 
 html, body {
   height: 100%;
-  background: var(--clr-bg);
+  background-color: var(--shell-hero-base);
+  background-image: var(--shell-bg-image);
+  background-repeat: var(--shell-bg-repeat);
+  background-size: var(--shell-bg-size);
+  background-position: var(--shell-bg-position);
+  background-blend-mode: var(--shell-bg-blend);
+  animation: bgscroll 12s linear infinite;
   color: var(--clr-text);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
@@ -81,13 +94,11 @@ a:hover { text-decoration: underline; }
 .sidebar {
   grid-area: sidebar;
   background-color: var(--shell-hero-base);
-  background-image:
-    url('/img/background.png'),
-    linear-gradient(155deg, var(--shell-hero-tint-start) 0%, var(--shell-hero-tint-mid) 44%, var(--shell-hero-tint-end) 100%);
-  background-repeat: repeat, no-repeat;
-  background-size: 500px 500px, cover;
-  background-position: 0 var(--bg-y, 0px), center;
-  background-blend-mode: luminosity, normal;
+  background-image: var(--shell-bg-image);
+  background-repeat: var(--shell-bg-repeat);
+  background-size: var(--shell-bg-size);
+  background-position: var(--shell-bg-position);
+  background-blend-mode: var(--shell-bg-blend);
   animation: bgscroll 12s linear infinite;
   overflow: hidden;
   border-right: 1px solid var(--shell-divider);
@@ -230,13 +241,11 @@ a:hover { text-decoration: underline; }
   padding: 0;
   position: relative;
   background-color: var(--shell-hero-base);
-  background-image:
-    url('/img/background.png'),
-    linear-gradient(155deg, var(--shell-hero-tint-start) 0%, var(--shell-hero-tint-mid) 44%, var(--shell-hero-tint-end) 100%);
-  background-repeat: repeat, no-repeat;
-  background-size: 500px 500px, cover;
-  background-position: 0 var(--bg-y, 0px), center;
-  background-blend-mode: luminosity, normal;
+  background-image: var(--shell-bg-image);
+  background-repeat: var(--shell-bg-repeat);
+  background-size: var(--shell-bg-size);
+  background-position: var(--shell-bg-position);
+  background-blend-mode: var(--shell-bg-blend);
   animation: bgscroll 12s linear infinite;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   z-index: 10;
@@ -508,6 +517,7 @@ a.repo-card:hover {
 .resume-wrap {
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -516,6 +526,7 @@ a.repo-card:hover {
   flex: 1;
   width: 100%;
   height: 100%;
+  min-height: 0;
   border: none;
   display: block;
 }
@@ -855,12 +866,7 @@ a.repo-card:hover {
     overflow-x: hidden;
     padding-bottom: 0;
     -webkit-overflow-scrolling: touch;
-    /* Green pattern behind everything — visible during top overscroll
-       (rubber-band) and matches the hero / sticky-header seamlessly. */
-    background:
-      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
-      var(--clr-accent) url('/img/background.png') repeat 0 0;
-    animation: bgscroll 12s linear infinite;
+    background: transparent;
   }
 
   /* ── Hero (topbar): block element, scrolls away naturally ── */
@@ -871,6 +877,8 @@ a.repo-card:hover {
     overflow: hidden;
     padding-top: var(--safe-top);
     border-bottom: none;
+    background: transparent;
+    animation: none;
     --bg-y: 0px;
   }
 
@@ -970,15 +978,7 @@ a.repo-card:hover {
     z-index: 20;
     padding-top: calc(var(--safe-top) * var(--compact-progress, 0));
     --bg-y: 0px;
-    background-color: var(--shell-hero-base);
-    background-image:
-      url('/img/background.png'),
-      linear-gradient(155deg, var(--shell-hero-tint-start) 0%, var(--shell-hero-tint-mid) 44%, var(--shell-hero-tint-end) 100%);
-    background-repeat: repeat, no-repeat;
-    background-size: 500px 500px, cover;
-    background-position: 0 var(--bg-y, 0px), center;
-    background-blend-mode: luminosity, normal;
-    animation: bgscroll 12s linear infinite;
+    background: transparent;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
@@ -1065,6 +1065,33 @@ a.repo-card:hover {
     pointer-events: auto;
   }
 
+  .app.app--resume-compact .topbar {
+    display: none !important;
+  }
+
+  .app.app--resume-compact .sticky-header {
+    padding-top: var(--safe-top);
+    background-color: var(--shell-hero-base);
+    background-image: var(--shell-bg-image);
+    background-repeat: var(--shell-bg-repeat);
+    background-size: var(--shell-bg-size);
+    background-position: var(--shell-bg-position);
+    background-blend-mode: var(--shell-bg-blend);
+    animation: bgscroll 12s linear infinite;
+  }
+
+  .app.app--resume-compact .topbar-compact-wrap {
+    height: var(--bar-h);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
+  .app.app--resume-compact .topbar-left,
+  .app.app--resume-compact .topbar-compact-social {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
   .topbar-social { display: none; }
 
   .topbar-nav {
@@ -1086,12 +1113,14 @@ a.repo-card:hover {
      height for #content to scroll by topbar.offsetHeight so the hero can be
      dismissed even when the text is brief. ── */
   .section {
-    position: static;
+    position: relative;
     display: none;
     opacity: 1;
     pointer-events: auto;
-    min-height: calc(100dvh - var(--bar-h));
+    min-height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
+    padding-bottom: var(--safe-bottom);
     background: var(--clr-bg);
+    background-clip: content-box;
   }
 
   .section.active {
@@ -1100,13 +1129,14 @@ a.repo-card:hover {
 
   /* Resume: explicit height so the iframe fills the viewport below the nav ── */
   #section-resume {
-    height: calc(100dvh - var(--bar-h));
-    padding-bottom: var(--safe-bottom);
+    min-height: 0;
+    height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom));
+    padding-bottom: 0;
   }
 
   /* ── Content padding ── */
   .section-inner {
-    padding: 2rem 1.25rem calc(3rem + var(--safe-bottom));
+    padding: 2rem 1.25rem 3rem;
   }
 
   .section-inner h1 { font-size: 1.75rem; }
@@ -1119,7 +1149,7 @@ a.repo-card:hover {
 
   /* Portfolio cards on mobile */
   .portfolio-wrap {
-    padding: 1.5rem 0 calc(3rem + var(--safe-bottom));
+    padding: 1.5rem 0 3rem;
   }
 
   .portfolio-intro {

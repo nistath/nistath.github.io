@@ -76,18 +76,15 @@ var PAGE_TITLES = {
   'greece':    'Guide to Greece — Nick Stathas'
 };
 
-/* ── Viewport meta: disable page zoom on the resume so iOS passes pinch
-   gestures to the PDF renderer instead of zooming the whole page ── */
+/* ── Viewport meta: keep one consistent viewport across sections.
+   Mobile PDF viewers behave better when we do not override scaling on the
+   resume route, especially on iOS where users may need to zoom back out. ── */
 var viewportMeta = document.querySelector('meta[name="viewport"]');
 var viewportDefault = viewportMeta ? viewportMeta.getAttribute('content') : null;
 
 function setViewportForSection(section) {
   if (!viewportMeta || !viewportDefault) return;
-  if (section === 'resume') {
-    viewportMeta.setAttribute('content', viewportDefault.replace(/(,\s*)?maximum-scale=[^,]*/i, '') + ', maximum-scale=1');
-  } else {
-    viewportMeta.setAttribute('content', viewportDefault);
-  }
+  viewportMeta.setAttribute('content', viewportDefault);
 }
 function normalizeRoutePath(pathname) {
   if (!pathname) return '/';
@@ -150,13 +147,9 @@ function navigate(section, options) {
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
   var heroEl = document.getElementById('topbar');
-  var wasHeroCollapsed = false;
+  var shouldCollapseMobileHero = !!options.collapseMobileHero || section === 'resume';
 
   setViewportForSection(section);
-
-  if (window.innerWidth <= 767 && contentScrollEl && heroEl) {
-    wasHeroCollapsed = contentScrollEl.scrollTop >= heroEl.offsetHeight - 1;
-  }
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
   if (section === 'about') {
@@ -164,6 +157,7 @@ function navigate(section, options) {
   } else {
     app.classList.add('app--browsing');
   }
+  app.classList.toggle('app--resume-compact', section === 'resume');
 
   /* Update all nav button active states */
   document.querySelectorAll('.nav-btn, .tab').forEach(function(btn) {
@@ -196,16 +190,22 @@ function navigate(section, options) {
     greeceNavInit();
   }
 
-  /* On mobile: preserve collapsed/expanded hero state across tab switches. */
+  /* On mobile: navigation clicks should always land in the compact state.
+     Re-apply after layout so the sticky header cannot get stuck mid-reveal. */
   if (window.innerWidth <= 767 && contentScrollEl) {
-    if (section === 'resume') {
-      contentScrollEl.scrollTop = heroEl ? heroEl.offsetHeight : 0;
-    } else if (heroEl) {
-      contentScrollEl.scrollTop = wasHeroCollapsed ? heroEl.offsetHeight : 0;
-    } else {
-      contentScrollEl.scrollTop = 0;
+    var targetScrollTop = 0;
+
+    if (section !== 'resume' && shouldCollapseMobileHero && heroEl) {
+      targetScrollTop = heroEl.offsetHeight;
     }
+
+    contentScrollEl.scrollTop = targetScrollTop;
     contentScrollEl.dispatchEvent(new Event('scroll'));
+
+    requestAnimationFrame(function() {
+      contentScrollEl.scrollTop = targetScrollTop;
+      contentScrollEl.dispatchEvent(new Event('scroll'));
+    });
   }
 }
 
@@ -213,7 +213,7 @@ function navigate(section, options) {
 document.querySelectorAll('.sidebar-nav .nav-btn').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
     e.preventDefault();
-    navigate(btn.dataset.section);
+    navigate(btn.dataset.section, { collapseMobileHero: true });
   });
 });
 
@@ -221,7 +221,7 @@ document.querySelectorAll('.sidebar-nav .nav-btn').forEach(function(btn) {
 document.querySelectorAll('.topbar-nav .tab').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
     e.preventDefault();
-    navigate(btn.dataset.section);
+    navigate(btn.dataset.section, { collapseMobileHero: true });
   });
 });
 
@@ -230,7 +230,7 @@ var topbarHome = document.getElementById('topbar-home');
 if (topbarHome) {
   topbarHome.addEventListener('click', function(e) {
     e.preventDefault();
-    navigate('about');
+    navigate('about', { collapseMobileHero: true });
   });
 }
 
@@ -259,6 +259,12 @@ if (stickyHeaderEl && topbarEl && contentEl) {
       return;
     }
 
+    if (document.getElementById('app').classList.contains('app--resume-compact')) {
+      stickyHeaderEl.style.setProperty('--compact-progress', '1');
+      stickyHeaderEl.classList.add('hero-hidden');
+      return;
+    }
+
     var heroHeight = topbarEl.offsetHeight;
     if (!heroHeight) return;
 
@@ -280,7 +286,7 @@ document.getElementById('content').addEventListener('click', function(e) {
   var link = e.target.closest('a[data-section]');
   if (link) {
     e.preventDefault();
-    navigate(link.dataset.section);
+    navigate(link.dataset.section, { collapseMobileHero: true });
   }
 });
 
