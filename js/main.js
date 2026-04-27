@@ -76,6 +76,65 @@ var PAGE_TITLES = {
   'greece':    'Guide to Greece — Nick Stathas'
 };
 
+/* Per-section social preview metadata. Mirrors the per-route stub HTML files
+   so that in-app navigation also keeps OG/Twitter tags accurate (useful when
+   users copy the URL after navigating). */
+var PAGE_META = {
+  'about': {
+    title: 'Nick Stathas',
+    description: 'Engineer, Maker, MIT EECS — building the unreasonable.',
+    image: '/img/og/og-about.png'
+  },
+  'github': {
+    title: 'GitHub — Nick Stathas',
+    description: 'Open-source side quests, experiments, and the occasional working library.',
+    image: '/img/og/og-github.png'
+  },
+  'resume': {
+    title: 'Resume — Nick Stathas',
+    description: 'A concise tour of the work — companies, roles, and things shipped.',
+    image: '/img/og/og-resume.png'
+  },
+  'portfolio': {
+    title: 'Portfolio — Nick Stathas',
+    description: 'Selected projects across robotics, autonomy, and creative engineering.',
+    image: '/img/og/og-portfolio.png'
+  },
+  'greece': {
+    title: 'Greece, by a Local — Nick Stathas',
+    description: "A local's guide to Athens, the islands, and meals worth flying for.",
+    image: '/img/og/og-greece.png'
+  }
+};
+
+var SITE_ORIGIN = 'https://nistath.com';
+
+function setMetaContent(selector, value) {
+  var el = document.querySelector(selector);
+  if (el) el.setAttribute('content', value);
+}
+
+function updateSocialMeta(section) {
+  var meta = PAGE_META[section] || PAGE_META[DEFAULT_SECTION];
+  var route = SECTION_PATHS[section] || '/';
+  var absUrl = SITE_ORIGIN + route;
+  var absImg = SITE_ORIGIN + meta.image;
+
+  setMetaContent('meta[name="description"]', meta.description);
+  setMetaContent('meta[property="og:title"]', meta.title);
+  setMetaContent('meta[property="og:description"]', meta.description);
+  setMetaContent('meta[property="og:url"]', absUrl);
+  setMetaContent('meta[property="og:image"]', absImg);
+  setMetaContent('meta[property="og:image:alt"]', meta.title);
+  setMetaContent('meta[name="twitter:title"]', meta.title);
+  setMetaContent('meta[name="twitter:description"]', meta.description);
+  setMetaContent('meta[name="twitter:image"]', absImg);
+  setMetaContent('meta[name="twitter:image:alt"]', meta.title);
+
+  var canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', absUrl);
+}
+
 var MOBILE_PAGE_BACKGROUNDS = {
   'about': '#0d1117',
   'github': '#0d1117',
@@ -198,8 +257,9 @@ function navigate(section, options) {
     sec.classList.toggle('active', sec.id === 'section-' + section);
   });
 
-  /* Update page title */
+  /* Update page title and social preview metadata */
   document.title = PAGE_TITLES[section] || 'Nick Stathas';
+  updateSocialMeta(section);
 
   /* Lazy-load GitHub repos */
   if (section === 'github' && !githubLoaded) {
