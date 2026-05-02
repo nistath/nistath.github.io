@@ -78,33 +78,14 @@ var PAGE_TITLES = {
 
 /* Per-section social preview metadata. Mirrors the per-route stub HTML files
    so that in-app navigation also keeps OG/Twitter tags accurate (useful when
-   users copy the URL after navigating). */
+   users copy the URL after navigating). The Greece guide gets its own card;
+   every other section reuses the default profile card. */
 var PAGE_META = {
-  'about': {
-    title: 'Nick Stathas',
-    description: 'Engineer, Maker, MIT EECS — building the unreasonable.',
-    image: '/img/og/og-about.png'
-  },
-  'github': {
-    title: 'GitHub — Nick Stathas',
-    description: 'Open-source side quests, experiments, and the occasional working library.',
-    image: '/img/og/og-github.png'
-  },
-  'resume': {
-    title: 'Resume — Nick Stathas',
-    description: 'A concise tour of the work — companies, roles, and things shipped.',
-    image: '/img/og/og-resume.png'
-  },
-  'portfolio': {
-    title: 'Portfolio — Nick Stathas',
-    description: 'Selected projects across robotics, autonomy, and creative engineering.',
-    image: '/img/og/og-portfolio.png'
-  },
-  'greece': {
-    title: 'Greece, by a Local — Nick Stathas',
-    description: "A local's guide to Athens, the islands, and meals worth flying for.",
-    image: '/img/og/og-greece.png'
-  }
+  'about':     { title: 'Nick Stathas',                    image: '/img/og/og-default.png' },
+  'github':    { title: 'Nick Stathas — GitHub',           image: '/img/og/og-default.png' },
+  'resume':    { title: 'Nick Stathas — Resume',           image: '/img/og/og-default.png' },
+  'portfolio': { title: 'Nick Stathas — Portfolio',        image: '/img/og/og-default.png' },
+  'greece':    { title: "Nick's Guide to Athens & Beyond", image: '/img/og/og-greece.png' }
 };
 
 var SITE_ORIGIN = 'https://nistath.com';
@@ -120,14 +101,11 @@ function updateSocialMeta(section) {
   var absUrl = SITE_ORIGIN + route;
   var absImg = SITE_ORIGIN + meta.image;
 
-  setMetaContent('meta[name="description"]', meta.description);
   setMetaContent('meta[property="og:title"]', meta.title);
-  setMetaContent('meta[property="og:description"]', meta.description);
   setMetaContent('meta[property="og:url"]', absUrl);
   setMetaContent('meta[property="og:image"]', absImg);
   setMetaContent('meta[property="og:image:alt"]', meta.title);
   setMetaContent('meta[name="twitter:title"]', meta.title);
-  setMetaContent('meta[name="twitter:description"]', meta.description);
   setMetaContent('meta[name="twitter:image"]', absImg);
   setMetaContent('meta[name="twitter:image:alt"]', meta.title);
 
