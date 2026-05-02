@@ -2,9 +2,11 @@
   "name": "nistath.github.io",
   "private": true,
   "scripts": {
-    "dev": "browser-sync start --config bs-config.js"
+    "dev": "browser-sync start --config bs-config.js",
+    "og": "node scripts/render-og.js"
   },
   "devDependencies": {
-    "browser-sync": "^3.0.3"
+    "browser-sync": "^3.0.3",
+    "playwright": "^1.56.1"
   }
 }
