@@ -414,31 +414,6 @@ a.gr-sight:focus-visible .gr-sight-name {
 }
 
 /* ── Ticketed sight: two-action pattern (map + official tickets) ── */
-.gr-sight--ticketed .gr-sight-name {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px 8px;
-}
-
-.gr-sight-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  padding: 2px 8px 2px 7px;
-  border-radius: 999px;
-  background: rgba(176,125,46,0.12);
-  color: #8a5a1a;
-  border: 1px solid rgba(176,125,46,0.28);
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
 .gr-sight-actions {
   display: flex;
   flex-wrap: wrap;
