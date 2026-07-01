@@ -1,0 +1,107 @@
+id: crete
+kind: island
+title: Crete
+tagline: The largest island — feels like its own country
+image:
+  aspect: 16/9
+  src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900
+  alt: Chania Venetian harbor, Crete
+body:
+  - type: p
+    text: Gorges, beaches, Venetian harbors, ancient palaces, incredible food. Plan at least a full week.
+  - type: h3
+    text: Getting There
+  - type: chips
+    items:
+      - text: ✈️ Chania (CHQ)
+        href: https://www.google.com/maps/search/?api=1&query=Chania+Crete
+      - text: ✈️ Heraklion (HER)
+        href: https://www.google.com/maps/search/?api=1&query=Heraklion+Crete
+      - text: ⛴ Overnight ferry
+  - type: h3
+    text: Where to Stay
+  - type: p
+    text: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">**Chania**</a> (west) — Lively Venetian harbor town, best base for the gorge and beaches. Try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer">**Riviera Suites**</a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer">**Elounda**</a> (northeast) — Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island — pick one based on your itinerary.
+  - type: h3
+    text: Things to Do
+  - type: image
+    aspect: 16/7
+    style: margin-bottom:12px
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900
+    alt: Samaria Gorge
+  - type: sights
+    items:
+      - name: Samariá Gorge
+        desc: ~16 km, one of Europe’s longest. Full day. Book a tour bus from Chania.
+        href: https://www.google.com/maps/search/?api=1&query=Samaria+Gorge+Crete
+      - name: Elafonisi Beach
+        desc: Pink-sand lagoon. Almost tropical. Dedicate a full day.
+        href: https://www.google.com/maps/search/?api=1&query=Elafonisi+Beach+Crete
+      - name: Palace of Knossos
+        desc: Center of Minoan civilization, home of the labyrinth. Get a guide.
+        actions:
+          - kind: map
+            icon: 📍
+            label: Map
+            href: https://www.google.com/maps/search/?api=1&query=Palace+of+Knossos+Crete
+          - kind: ticket
+            icon: 🎟️
+            label: Official tickets
+            href: https://hhticket.gr/
+      - name: Heraklion Archaeological Museum
+        desc: Finest Minoan collection in the world.
+        actions:
+          - kind: map
+            icon: 📍
+            label: Map
+            href: https://www.google.com/maps/search/?api=1&query=Heraklion+Archaeological+Museum
+          - kind: ticket
+            icon: 🎟️
+            label: Official tickets
+            href: https://hhticket.gr/
+      - name: Fortezza (Rethymno)
+        desc: Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.
+        href: https://www.google.com/maps/search/?api=1&query=Fortezza+of+Rethymno
+      - name: Firka Fortress (Chania)
+        desc: At Chania’s old harbor entrance. Great views.
+        href: https://www.google.com/maps/search/?api=1&query=Firka+Fortress+Chania
+      - name: Spinalonga
+        desc: Fortified island near Elounda. Short boat trip to explore.
+        href: https://www.google.com/maps/search/?api=1&query=Spinalonga+Crete
+  - type: h3
+    text: Eat & Drink
+  - type: venues
+    items:
+      - icon: 🥐
+        name: Red Jane Bakery
+        desc: In Chania — don’t skip it.
+        href: https://www.google.com/maps/search/?api=1&query=Red+Jane+Bakery+Chania
+      - icon: 🍸
+        name: Sinagogi
+        desc: Best bar in Chania.
+        href: https://www.google.com/maps/search/?api=1&query=Sinagogi+bar+Chania
+  - type: note
+    text: We’ve barely scratched the surface. Do your own research — or better yet, ask a local.
+aside:
+  - style: essentials
+    title: 🏔 Essentials
+    items:
+      - Plan at least a full week
+      - Base in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> — try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer">Riviera Suites</a>
+      - Book <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Samaria+Gorge+Crete" target="_blank" rel="noopener noreferrer">Samariá Gorge</a> tour the day before
+      - Red Jane Bakery — don’t skip it
+      - "Best bar in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Chania</a>: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Sinagogi+bar+Chania\" target=\"_blank\" rel=\"noopener noreferrer\">Sinagogi</a>"
+  - style: ferry
+    title: 🚢 Getting There
+    items:
+      - Fly to <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> (CHQ) or <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a> (HER)
+      - Overnight ferry from Piraeus — get a cabin
+  - style: logistics
+    title: 🗺 Logistics
+    facts:
+      - term: Car hire
+        desc: essential to explore
+      - term: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> ↔ <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a>
+        desc: 2.5 hrs by car
+      - term: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer">Elounda</a>
+        desc: 1.5 hrs from Heraklion

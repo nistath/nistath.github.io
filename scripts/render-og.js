@@ -30,6 +30,7 @@ const OUT_DIR = path.join(ROOT, 'img', 'og');
 const CACHE_DIR = path.join(ROOT, 'img', 'cache');
 const ATHENS_UPSTREAM = 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg';
 const ATHENS_CACHE = path.join(CACHE_DIR, 'athens-skyline.jpg');
+const SYSTEM_CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
 const SPA_ROUTES = new Set(['/about', '/github', '/resume', '/portfolio', '/greece']);
 const MIME = {
@@ -55,6 +56,18 @@ function startServer() {
     });
   });
   return new Promise(resolve => server.listen(0, '127.0.0.1', () => resolve(server)));
+}
+
+async function launchChromium() {
+  const options = { args: ['--ignore-certificate-errors'] };
+  try {
+    return await chromium.launch(options);
+  } catch (err) {
+    if (fs.existsSync(SYSTEM_CHROME)) {
+      return chromium.launch({ ...options, executablePath: SYSTEM_CHROME });
+    }
+    throw err;
+  }
 }
 
 async function waitForImage(page, selector) {
@@ -89,7 +102,7 @@ async function main() {
   const origin = `http://127.0.0.1:${port}`;
   console.log('serving', ROOT, 'on', origin);
 
-  const browser = await chromium.launch({ args: ['--ignore-certificate-errors'] });
+  const browser = await launchChromium();
 
   /* ─── Default OG: mobile topbar hero at a phone viewport ───
      The mobile topbar is what triggers the avatar + name horizontal hero

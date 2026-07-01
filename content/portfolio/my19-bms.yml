@@ -1,0 +1,24 @@
+id: my19-bms
+color: "#0a7c5c"
+icon: bms
+title: MY19 Battery Management System
+subtitle: High-voltage BMS and data acquisition for an electric racer
+org: MIT Motorsports
+period: 2017 – 2020
+tags:
+  - C++
+  - STM32F413
+  - LTC6813
+  - CAN Bus
+  - DMA
+  - Python
+  - NumPy
+  - MATLAB
+bullets:
+  - Implemented C++ drivers for a daisy chain of **LTC6813** multicell battery monitor ICs, enabling precise per-cell voltage and temperature monitoring.
+  - Designed a custom STM32F413-based data logger using **DMA** for simultaneous high-throughput SD card logging of internal messages and CAN bus traffic.
+  - Built a Python data pipeline for storing, tagging, and parsing logs into MATLAB or NumPy formats for post-race analysis.
+  - Created a modern CAN bus **serialization specification language** and accompanying Python code-generation framework used across the team.
+links:
+  - label: MIT Motorsports
+    url: https://www.mitmotorsports.com/

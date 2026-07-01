@@ -39,6 +39,7 @@ module.exports = {
     'fonts/**/*',
     'files/**/*',
   ],
+  host: '127.0.0.1',
   port: 8080,
   open: false,
   notify: false,

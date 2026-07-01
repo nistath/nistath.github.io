@@ -1,0 +1,43 @@
+id: paros-naxos
+kind: island
+title: Paros & Naxos
+tagline: Close neighbors, easy to visit together
+image:
+  aspect: 16/9
+  src: https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg
+  alt: Portara, Temple of Apollo, Naxos
+body:
+  - type: p
+    text: Ferries between them take 30–45 minutes. Either is great on its own.
+  - type: h3
+    text: Naxos
+  - type: p
+    text: The most well-rounded island — beaches, history, mountain villages, great food, youthful energy.
+  - type: sights
+    items:
+      - name: Guided bus tour
+        desc: Hit the island’s major sights with a local guide.
+      - name: Catamaran cruise
+        desc: Swimming in secluded coves with lunch on board.
+      - name: Portara (Temple of Apollo)
+        desc: Iconic marble gateway. Beautiful at sunset.
+        href: https://www.google.com/maps/search/?api=1&query=Portara+Temple+of+Apollo+Naxos
+  - type: h3
+    text: Paros & Antiparos
+  - type: p
+    text: Paros has charming <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros" target="_blank" rel="noopener noreferrer">Parikia</a> and pretty <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros" target="_blank" rel="noopener noreferrer">Naoussa</a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Antiparos" target="_blank" rel="noopener noreferrer">Antiparos</a> has a great secluded cliff beach hike. Ask around when you arrive.
+aside:
+  - style: essentials
+    title: ✨ Naxos Essentials
+    items:
+      - Best all-around Cycladic island
+      - Book a guided bus tour
+      - "Catamaran cruise: coves & lunch on board"
+      - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Portara+Temple+of+Apollo+Naxos" target="_blank" rel="noopener noreferrer">Portara</a> at sunset — unmissable
+      - "Paros: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros\" target=\"_blank\" rel=\"noopener noreferrer\">Parikia</a> & <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros\" target=\"_blank\" rel=\"noopener noreferrer\">Naoussa</a> village"
+  - style: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~5 hrs to Naxos"
+      - "Paros ↔ Naxos: 30–45 min"
+      - Book at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a>

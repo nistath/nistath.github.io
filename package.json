@@ -2,11 +2,15 @@
   "name": "nistath.github.io",
   "private": true,
   "scripts": {
-    "dev": "browser-sync start --config bs-config.js",
+    "content": "node scripts/build-content.js",
+    "content:check": "node scripts/build-content.js --check",
+    "dev": "node scripts/dev.js",
     "og": "node scripts/render-og.js"
   },
   "devDependencies": {
     "browser-sync": "^3.0.3",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0",
     "playwright": "^1.56.1"
   }
 }

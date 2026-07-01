@@ -1,0 +1,49 @@
+hero:
+  eyebrow: Nick’s Guide to
+  title: Athens
+  emphasis: "& Beyond"
+nav:
+  - id: travel
+    icon: ✈️
+    label: Travel
+  - id: sights
+    icon: 🏛️
+    label: Sights
+  - id: food
+    icon: 🫒
+    label: Eat & Drink
+  - id: mykonos
+    icon: 🎉
+    label: Mykonos
+  - id: santorini
+    icon: 🌅
+    label: Santorini
+  - id: crete
+    icon: 🏔️
+    label: Crete
+  - id: paros-naxos
+    icon: ⛵
+    label: Paros & Naxos
+  - id: other-islands
+    icon: 🏝️
+    label: More Islands
+ticketsBanner:
+  icon: 🎟️
+  body: "**Buy archaeological-site tickets at <a href=\"https://hhticket.gr/\" target=\"_blank\" rel=\"noopener noreferrer\">hhticket.gr</a>** — the official Hellenic Ministry of Culture source. Skip resellers: they cost more and timed-entry slots only count if booked here."
+order:
+  - travel
+  - sights
+  - food
+  - islands-intro
+  - mykonos
+  - santorini
+  - crete
+  - paros-naxos
+  - other-islands
+islandsIntro:
+  eyebrow: Beyond Athens
+  title: Island Escapes
+  sub: Each island has its own personality.
+footer:
+  greek: Καλό ταξίδι!
+  sub: Have the best time — see you in Greece.

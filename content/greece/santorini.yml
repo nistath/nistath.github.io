@@ -1,0 +1,99 @@
+id: santorini
+kind: island
+title: Santorini
+tagline: Dramatic cliffs, legendary sunsets, real depth
+image:
+  aspect: 16/9
+  src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900
+  alt: Oia blue domes at sunset, Santorini
+body:
+  - type: p
+    text: Built on a volcanic caldera — cliffs into deep blue water, white buildings stacked together. Romantic, photogenic, historically rich.
+  - type: h3
+    text: Where to Stay
+  - type: p
+    text: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Fira+Santorini" target="_blank" rel="noopener noreferrer">**Fira**</a> is lively. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Oia+Santorini" target="_blank" rel="noopener noreferrer">**Oia**</a> is fancier with the iconic sunset. Stay along the caldera coast between them for a middle ground.
+  - type: h3
+    text: Things to Do
+  - type: image
+    aspect: 16/7
+    style: margin-bottom:12px
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900
+    alt: Fira to Oia caldera hike
+  - type: sights
+    items:
+      - name: Oia Castle (Agios Nikolaos)
+        desc: 15th-century Venetian fortress ruins. The sunset spot — arrive early.
+        href: https://www.google.com/maps/search/?api=1&query=Castle+of+Oia+Agios+Nikolaos+Santorini
+      - name: Fira to Oia Hike
+        desc: ~10 km caldera rim trail. Very little shade — go early, bring water.
+        href: https://www.google.com/maps/search/?api=1&query=Fira+to+Oia+Hike+Santorini
+      - name: Akrotiri
+        desc: Bronze Age settlement — the “Pompeii of the Aegean.” Over 3,500 years old.
+        actions:
+          - kind: map
+            icon: 📍
+            label: Map
+            href: https://www.google.com/maps/search/?api=1&query=Akrotiri+Archaeological+Site+Santorini
+          - kind: ticket
+            icon: 🎟️
+            label: Official tickets
+            href: https://hhticket.gr/
+      - name: Ancient Thira
+        desc: Hellenistic ruins on a ridge between Kamari and Perissa beaches.
+        actions:
+          - kind: map
+            icon: 📍
+            label: Map
+            href: https://www.google.com/maps/search/?api=1&query=Ancient+Thera+Santorini
+          - kind: ticket
+            icon: 🎟️
+            label: Official tickets
+            href: https://hhticket.gr/
+      - name: Museums in Fira
+        desc: Good indoor stop before or after Akrotiri.
+        links:
+          - label: Fira
+            href: https://www.google.com/maps/search/?api=1&query=Fira+Santorini
+          - label: Museum of Prehistoric Thera
+            href: https://www.google.com/maps/search/?api=1&query=Museum+of+Prehistoric+Thera+Fira
+          - label: Archaeological Museum of Thera
+            href: https://www.google.com/maps/search/?api=1&query=Archaeological+Museum+of+Thera+Fira
+      - name: Red & White Beach
+        desc: Dramatic colored cliffs. Red Beach on foot, White Beach by boat.
+        links:
+          - label: Red Beach
+            href: https://www.google.com/maps/search/?api=1&query=Red+Beach+Santorini
+          - label: White Beach
+            href: https://www.google.com/maps/search/?api=1&query=White+Beach+Santorini
+      - name: Ammoudi Bay
+        desc: Hidden harbor below Oia. Hike or donkey down for swimming and seafood.
+        href: https://www.google.com/maps/search/?api=1&query=Ammoudi+Bay+Santorini
+  - type: h3
+    text: Eat & Drink
+  - type: venues
+    items:
+      - icon: 🥙
+        name: Yogi Gyro
+        desc: In Fira — best gyros on the island.
+        href: https://www.google.com/maps/search/?api=1&query=Yogi+Gyro+Santorini
+      - icon: 🌅
+        name: PK Cocktail Bar
+        desc: The spot for sunset drinks.
+        href: https://www.google.com/maps/search/?api=1&query=PK+Cocktail+Bar+Santorini
+aside:
+  - style: essentials
+    title: 🌅 Essentials
+    items:
+      - Stay in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Oia+Santorini" target="_blank" rel="noopener noreferrer">Oia</a> for iconic sunset views
+      - Book caldera-view hotels early
+      - Hike <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Fira+to+Oia+Hike+Santorini" target="_blank" rel="noopener noreferrer">Fira → Oia</a> (10 km, go early)
+      - Visit <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Akrotiri+Archaeological+Site+Santorini" target="_blank" rel="noopener noreferrer">Akrotiri</a> archaeological site
+      - "Sunset drinks: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=PK+Cocktail+Bar+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">PK Cocktail Bar</a>"
+      - "Best gyros: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Yogi+Gyro+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Yogi Gyro</a> in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Fira+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Fira</a>"
+  - style: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~8 hrs (overnight)"
+      - "High-speed ferry: ~5 hrs"
+      - "Flight: ~45 min from ATH"

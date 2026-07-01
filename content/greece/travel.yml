@@ -1,0 +1,58 @@
+id: travel
+kind: section
+title: Getting There & Around
+body:
+  - type: cityImage
+    alt: Athens city view at sunset
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900
+  - type: card
+    class: gr-card--city-intro
+    blocks:
+      - type: h3
+        text: Getting In
+      - type: p
+        text: Fly into **Athens International Airport (ATH)**. Taxi (~€40 flat rate, ~40 min), metro Line 3 to <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Syntagma+Square+Athens" target="_blank" rel="noopener noreferrer">Syntagma Square</a> (~40 min), or private transfer. If you’re heading straight to an island, many have direct international flights — worth checking before defaulting to ATH.
+      - type: chips
+        items:
+          - text: 🚕 Taxi ~€40
+          - text: 🚇 Metro ~40 min
+          - text: 📱 Uber / FreeNow
+      - type: h3
+        text: Getting Around
+      - type: p
+        text: Athens is very walkable in the center. <a class="gr-inline-link" href="https://free-now.com" target="_blank" rel="noopener noreferrer">**FreeNow**</a> has the best local driver availability. The metro is clean, cheap, and efficient. Google Maps works great for transit.
+      - type: h3
+        text: Where to Stay
+      - type: p
+        text: We recommend <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens" target="_blank" rel="noopener noreferrer">**Plaka**</a> (charming village feel, narrow streets) and <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Thiseio+Athens" target="_blank" rel="noopener noreferrer">**Thiseio**</a> (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.
+      - type: chips
+        flush: true
+        items:
+          - text: 📍 Plaka
+            href: https://www.google.com/maps/search/?api=1&query=Plaka+Athens
+          - text: 📍 Thiseio
+            href: https://www.google.com/maps/search/?api=1&query=Thiseio+Athens
+aside:
+  - style: facts
+    title: 🛬 Quick Facts
+    facts:
+      - term: Airport
+        desc: ATH — Eleftherios Venizelos
+      - term: Metro to centre
+        desc: ~40 min
+      - term: Taxi flat rate
+        desc: ~€40
+      - term: Currency
+        desc: Euro (€)
+      - term: Language
+        desc: Greek
+      - term: SIM cards
+        desc: At airport arrivals
+  - style: tips
+    title: 💡 Pro Tips
+    items:
+      - Validate your metro ticket before boarding
+      - FreeNow usually beats Uber on price & availability
+      - Hotels in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens" target="_blank" rel="noopener noreferrer">Plaka</a> are walkable to almost everything
+      - Most restaurants open for dinner at 8–9 PM
+      - Book island ferries at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a>

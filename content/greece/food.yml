@@ -1,0 +1,91 @@
+id: food
+kind: section
+title: Nick’s Restaurants & Bars
+body:
+  - type: p
+    class: gr-intro-copy
+    text: Tried and true picks in Athens.
+  - type: h3
+    text: Restaurants
+  - type: venues
+    items:
+      - icon: 🍽️
+        name: Strofi Athenian Restaurant
+        desc: Refined traditional Greek with rooftop Acropolis views. Book a terrace table. Great before or after a show at the Herodion.
+        href: https://maps.app.goo.gl/MmdW2hYJR4kPLk5V9
+      - icon: 🥩
+        name: Basegrill Athens
+        desc: One of Athens’ best steakhouses. Premium cuts, egg nest potatoes, great wine list.
+        href: https://maps.app.goo.gl/TuuheUo7c9UeZJmS6
+      - icon: 🫕
+        name: Barbadimos
+        desc: Authentic, no-frills Greek cooking. The kind of place locals go.
+        href: https://maps.app.goo.gl/pMdBjwyFk8QpfxVz9
+      - icon: 🥙
+        name: Gyristroula
+        desc: Solid souvlaki — quick, delicious, and cheap.
+        href: https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6
+      - icon: 🥙
+        name: Street Souvlaki
+        desc: Another go-to for fast, excellent souvlaki.
+        href: https://maps.app.goo.gl/dsEzw2CS7NDqNAva8
+      - icon: 🍦
+        name: Lartecono Davinci Gelato
+        desc: For when you need a gelato break (you will).
+        href: https://maps.app.goo.gl/oLmuDNnoERDjQYA88
+      - icon: 🍩
+        name: Loukoumadaki Athens
+        desc: Greek donuts (loukoumades) with honey and cinnamon. A must-try.
+        href: https://maps.app.goo.gl/TmMjRhbJWTNM21aF6
+      - icon: ☕
+        name: City ZEN All Day Bar Restaurant
+        desc: Relaxed meal or drinks any time of day.
+        href: https://maps.app.goo.gl/HVo2Ka9dJLPXXRLk8
+  - type: h3
+    text: Bars & Nightlife
+  - type: venues
+    items:
+      - icon: 🌿
+        name: six d.o.g.s
+        desc: All-day bar & live music with a hidden garden. Cocktails, DJs, diverse crowd.
+        href: https://maps.app.goo.gl/yPNufsHcREnSA1C87
+      - icon: 🏙️
+        name: Bios
+        desc: Legendary rooftop bar on Pireos St. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
+        href: https://maps.app.goo.gl/i7qomXPkvD9t7DJ79
+      - icon: 🎶
+        name: Drachmi
+        desc: Lively cocktail bar on Kolokotroni Square. Packed on weekends. Great drinks, funky music, young crowd.
+        href: https://maps.app.goo.gl/dxBLrnwPHm3ZHs4k7
+      - icon: 🧺
+        name: Πλυντήριο
+        lang: el
+        desc: Club themed as a laundromat. Fun, irreverent, young crowd.
+        href: https://maps.app.goo.gl/Z3bNF4B6Wus1hACc7
+aside:
+  - style: eats
+    title: 🍋 Must-Eat
+    items:
+      - Souvlaki — the Greek street staple
+      - Loukoumades — honey-drizzled donuts
+      - Spanakopita — spinach & feta pastry
+      - Greek yogurt with thyme honey
+      - Fresh seafood near Piraeus
+  - style: tips
+    title: 🍷 Drink Like a Local
+    items:
+      - Freddo espresso = iced espresso
+      - Tsipouro — the Greek grappa
+      - Ouzo with seafood meze
+      - In Greece, rounding up or leaving a couple of euros is normal; 5–10% is more for especially good service
+  - style: facts
+    title: 📍 Neighbourhoods
+    facts:
+      - term: Monastiraki
+        desc: street food hub
+      - term: Psyrri
+        desc: artsy bars & mezedopolia
+      - term: Kolonaki
+        desc: upscale dining
+      - term: Gazi
+        desc: nightlife district

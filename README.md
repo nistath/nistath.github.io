@@ -6,6 +6,8 @@ This repository now hosts a plain static site served directly by GitHub Pages. T
 
 For normal development, use the BrowserSync setup in this repo. It gives you:
 
+- content generation from `content/` before the server starts
+- automatic regeneration when `content/**/*.yml` changes
 - live reload on file changes
 - local serving on `http://127.0.0.1:8080`
 - route fallback for the site's direct SPA paths: `/about`, `/github`, `/resume`, `/portfolio`, and `/greece`
@@ -23,6 +25,22 @@ Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 This local dev server uses a whitelist-based fallback in `bs-config.js`, so the known site routes above are served from `index.html` during development. Unknown routes are left alone instead of being swallowed, which keeps local behavior closer to production where GitHub Pages routing is implemented via `404.html`.
 
 If you want a reproducible clean install in CI or a fresh checkout, `npm ci` also works.
+
+## Editing portfolio and Greece content
+
+Portfolio and Greece prose live under `content/`. Edit those YAML files by hand, then run:
+
+```bash
+npm run content
+```
+
+That regenerates the committed static HTML in `index.html`. To verify generated output is current without changing files:
+
+```bash
+npm run content:check
+```
+
+The `index.html` generated regions are not the source of truth. Keep prose, links, project order, guide section order, venues, tips, and sight nesting in `content/`; change `scripts/build-content.js` only when the templates or supported content shapes need to change.
 
 ### Quick static check
 

@@ -1,0 +1,59 @@
+id: sights
+kind: section
+title: Things to Do in Athens
+body:
+  - type: image
+    aspect: 16/9
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_of_Athens_on_January_30,_2022.jpg?width=900
+    alt: The Acropolis of Athens
+  - type: tagline
+    text: Ancient history and modern energy sit right on top of each other.
+  - type: sights
+    items:
+      - name: Acropolis
+        desc: The must-see. Go early to beat crowds and heat. Parthenon, Erechtheion, and Temple of Athena Nike.
+        actions:
+          - kind: map
+            icon: 📍
+            label: Map
+            href: https://www.google.com/maps/search/?api=1&query=Acropolis+of+Athens
+          - kind: ticket
+            icon: 🎟️
+            label: Official tickets
+            href: https://hhticket.gr/
+      - name: Acropolis Museum
+        desc: World-class collection at the base of the hill. Top-floor gallery with Parthenon views is unforgettable.
+        href: https://www.google.com/maps/search/?api=1&query=Acropolis+Museum+Athens
+      - name: National Garden
+        desc: Leafy escape next to the Parliament building. Great for a break from the sun.
+        href: https://www.google.com/maps/search/?api=1&query=National+Garden+Athens
+      - name: Vrachakia
+        desc: Lesser-known rocky area with a local feel. Worth exploring off the beaten path.
+        href: https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D
+      - name: Philopappos Monument
+        desc: Best panoramic views of the Acropolis and city. Especially beautiful at sunset.
+        href: https://www.google.com/maps/search/?api=1&query=Philopappos+Monument+Athens
+      - name: Odeon of Herodes Atticus
+        desc: Ancient Roman theatre built into the Acropolis slope, still used for summer performances. Catch a concert or show if the season lines up — it's unforgettable.
+        href: https://www.google.com/maps/search/?api=1&query=Odeon+of+Herodes+Atticus+Athens
+aside:
+  - style: itinerary
+    title: 🗓 Suggested Order
+    dayPlan:
+      - label: Day 1
+        items:
+          - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Acropolis+of+Athens" target="_blank" rel="noopener noreferrer">Acropolis</a> — early morning
+          - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Acropolis+Museum+Athens" target="_blank" rel="noopener noreferrer">Acropolis Museum</a>
+          - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens" target="_blank" rel="noopener noreferrer">Plaka</a> stroll & dinner with a view
+      - label: Day 2
+        items:
+          - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=National+Garden+Athens" target="_blank" rel="noopener noreferrer">National Garden</a> & <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Hellenic+Parliament+Athens" target="_blank" rel="noopener noreferrer">Parliament</a>
+          - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Philopappos+Hill+Athens" target="_blank" rel="noopener noreferrer">Philopappos Hill</a> at sunset
+          - <a class="gr-inline-link" href="https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&amp;g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Vrachakia</a> if you’re feeling adventurous
+  - style: tips
+    title: ⏰ Timing Tips
+    items:
+      - Book Acropolis tickets in advance at <a class="gr-inline-link" href="https://hhticket.gr/" target="_blank" rel="noopener noreferrer">hhticket.gr</a> (official)
+      - Go before 9 AM or after 5 PM to beat the heat
+      - Arrive 30 min before sunset for <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Philopappos+Hill+Athens" target="_blank" rel="noopener noreferrer">Philopappos</a>
+      - <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Acropolis+Museum+Athens" target="_blank" rel="noopener noreferrer">Acropolis Museum</a> closed Tuesdays — check ahead
