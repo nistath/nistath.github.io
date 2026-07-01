@@ -300,94 +300,42 @@
 {{ m.islandFooter() }}
 
 <!-- PAROS & NAXOS -->
-<div id="gr-paros-naxos" class="gr-island">
-  <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg" alt="Portara, Temple of Apollo, Naxos" loading="lazy">
-  </div>
-  <div class="gr-island-card">
-    <div class="gr-island-card-inner">
-      <h2 class="gr-island-name">Paros &amp; Naxos</h2>
-      <p class="gr-island-tagline">Close neighbors, easy to visit together</p>
-      <div class="gr-island-body">
-        <div class="gr-grid">
+{{ m.islandHeader('paros-naxos', 'Paros &amp; Naxos', 'Close neighbors, easy to visit together', 'https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg', 'Portara, Temple of Apollo, Naxos') }}
           <div class="gr-body">
             <p class="gr-p">Ferries between them take 30&ndash;45 minutes. Either is great on its own.</p>
             <h3 class="gr-h3">Naxos</h3>
             <p class="gr-p">The most well-rounded island &mdash; beaches, history, mountain villages, great food, youthful energy.</p>
             <div class="gr-card gr-card--flush">
-              <div class="gr-sight">
-                <div class="gr-sight-name">Guided bus tour</div>
-                <div class="gr-sight-desc">Hit the island&#8217;s major sights with a local guide.</div>
-              </div>
-              <div class="gr-sight">
-                <div class="gr-sight-name">Catamaran cruise</div>
-                <div class="gr-sight-desc">Swimming in secluded coves with lunch on board.</div>
-              </div>
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Portara+Temple+of+Apollo+Naxos" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Portara (Temple of Apollo) <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">Iconic marble gateway. Beautiful at sunset.</div>
-              </a>
+              {{ m.sight('Guided bus tour', 'Hit the island&#8217;s major sights with a local guide.') }}
+              {{ m.sight('Catamaran cruise', 'Swimming in secluded coves with lunch on board.') }}
+              {{ m.sight('Portara (Temple of Apollo)', 'Iconic marble gateway. Beautiful at sunset.', href='https://www.google.com/maps/search/?api=1&query=Portara+Temple+of+Apollo+Naxos') }}
             </div>
             <h3 class="gr-h3">Paros &amp; Antiparos</h3>
             <p class="gr-p">Paros has charming <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros" target="_blank" rel="noopener noreferrer">Parikia</a> and pretty <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros" target="_blank" rel="noopener noreferrer">Naoussa</a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Antiparos" target="_blank" rel="noopener noreferrer">Antiparos</a> has a great secluded cliff beach hike. Ask around when you arrive.</p>
           </div>
           <aside class="gr-aside">
-            <div class="gr-tip gr-tip--essentials">
-              <div class="gr-tip-title">&#x2728; Naxos Essentials</div>
-              <ul class="gr-tip-list">
-                <li>Best all-around Cycladic island</li>
-                <li>Book a guided bus tour</li>
-                <li>Catamaran cruise: coves &amp; lunch on board</li>
-                <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Portara+Temple+of+Apollo+Naxos" target="_blank" rel="noopener noreferrer">Portara</a> at sunset &mdash; unmissable</li>
-                <li>Paros: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros" target="_blank" rel="noopener noreferrer">Parikia</a> &amp; <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros" target="_blank" rel="noopener noreferrer">Naoussa</a> village</li>
-              </ul>
-            </div>
-            <div class="gr-tip gr-tip--ferry">
-              <div class="gr-tip-title">&#x1F6A2; Getting There</div>
-              <ul class="gr-tip-list">
-                <li>Ferry from Piraeus: ~5 hrs to Naxos</li>
-                <li>Paros &harr; Naxos: 30&ndash;45 min</li>
-                <li>Book at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a></li>
-              </ul>
-            </div>
+            {{ m.tipList('&#x2728;', 'Naxos Essentials', 'essentials', [
+              'Best all-around Cycladic island',
+              'Book a guided bus tour',
+              'Catamaran cruise: coves &amp; lunch on board',
+              '<a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Portara+Temple+of+Apollo+Naxos" target="_blank" rel="noopener noreferrer">Portara</a> at sunset &mdash; unmissable',
+              'Paros: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros" target="_blank" rel="noopener noreferrer">Parikia</a> &amp; <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros" target="_blank" rel="noopener noreferrer">Naoussa</a> village'
+            ]) }}
+            {{ m.tipList('&#x1F6A2;', 'Getting There', 'ferry', [
+              'Ferry from Piraeus: ~5 hrs to Naxos',
+              'Paros &harr; Naxos: 30&ndash;45 min',
+              'Book at <a href="https://ferryscanner.com" target="_blank" rel="noopener">ferryscanner.com</a>'
+            ]) }}
           </aside>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{{ m.islandFooter() }}
 
 <!-- OTHER ISLANDS -->
 <section id="gr-other-islands" class="gr-section">
   <h2 class="gr-h2">Other Islands Worth Knowing</h2>
   <div class="gr-other-list">
-    <div class="gr-other-card">
-      <div class="gr-img" style="aspect-ratio:16/7">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG" alt="Sarakiniko Beach, Milos" loading="lazy">
-      </div>
-      <div class="gr-other-card-body">
-        <h3 class="gr-other-name">Milos</h3>
-        <p class="gr-other-desc">Volcanic coastline, sea caves, colorful beaches. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Sarakiniko+Beach+Milos" target="_blank" rel="noopener noreferrer">Sarakiniko</a>&#8217;s white lunar landscape is iconic. Quieter, rugged &mdash; great for couples.</p>
-      </div>
-    </div>
-    <div class="gr-other-card">
-      <div class="gr-img" style="aspect-ratio:16/7">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg" alt="Rhodes Old Town" loading="lazy">
-      </div>
-      <div class="gr-other-card-body">
-        <h3 class="gr-other-name">Rhodes</h3>
-        <p class="gr-other-desc"><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Rhodes+Old+Town" target="_blank" rel="noopener noreferrer">Medieval Old Town</a> is a UNESCO site &mdash; a walled city for hours. Beaches, <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Lindos+Acropolis+Rhodes" target="_blank" rel="noopener noreferrer">ancient Lindos</a>, different vibe from the Cyclades.</p>
-      </div>
-    </div>
-    <div class="gr-other-card">
-      <div class="gr-img" style="aspect-ratio:16/7">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg" alt="Corfu Old Town" loading="lazy">
-      </div>
-      <div class="gr-other-card-body">
-        <h3 class="gr-other-name">Corfu</h3>
-        <p class="gr-other-desc">Northwest, closer to Italy. Venetian influence, lush green hills, elegant architecture around <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Corfu+Old+Town" target="_blank" rel="noopener noreferrer">Corfu Old Town</a>. Longer journey but completely different.</p>
-      </div>
-    </div>
+    {{ m.otherIslandCard('Milos', 'Volcanic coastline, sea caves, colorful beaches. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Sarakiniko+Beach+Milos" target="_blank" rel="noopener noreferrer">Sarakiniko</a>&#8217;s white lunar landscape is iconic. Quieter, rugged &mdash; great for couples.', 'https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG', 'Sarakiniko Beach, Milos') }}
+    {{ m.otherIslandCard('Rhodes', '<a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Rhodes+Old+Town" target="_blank" rel="noopener noreferrer">Medieval Old Town</a> is a UNESCO site &mdash; a walled city for hours. Beaches, <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Lindos+Acropolis+Rhodes" target="_blank" rel="noopener noreferrer">ancient Lindos</a>, different vibe from the Cyclades.', 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg', 'Rhodes Old Town') }}
+    {{ m.otherIslandCard('Corfu', 'Northwest, closer to Italy. Venetian influence, lush green hills, elegant architecture around <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Corfu+Old+Town" target="_blank" rel="noopener noreferrer">Corfu Old Town</a>. Longer journey but completely different.', 'https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg', 'Corfu Old Town') }}
   </div>
 </section>
 

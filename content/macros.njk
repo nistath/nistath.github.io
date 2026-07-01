@@ -91,6 +91,19 @@
 </div>
 {% endmacro %}
 
+{# Small card in the "Other Islands Worth Knowing" grid: image + name + prose. #}
+{% macro otherIslandCard(name, desc, imgSrc, imgAlt) %}
+<div class="gr-other-card">
+  <div class="gr-img" style="aspect-ratio:16/7">
+    <img src="{{ imgSrc }}" alt="{{ imgAlt }}" loading="lazy">
+  </div>
+  <div class="gr-other-card-body">
+    <h3 class="gr-other-name">{{ name | safe }}</h3>
+    <p class="gr-other-desc">{{ desc | safe }}</p>
+  </div>
+</div>
+{% endmacro %}
+
 {#
   Island wrapper, opening half. Nunjucks macros only support a single
   {% call %} block, but each island needs two independent freeform regions
