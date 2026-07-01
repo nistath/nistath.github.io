@@ -29,7 +29,22 @@ Push to `master`. GitHub Pages serves the repository contents automatically.
 
 ## Architecture
 
-This is a zero-dependency static personal site. Runtime behavior is plain HTML, CSS, and JavaScript. `package.json` exists only to support the local BrowserSync workflow.
+This is a zero-dependency static personal site. Runtime behavior is plain HTML, CSS, and JavaScript. `package.json`'s dependencies are dev-only tooling (BrowserSync for local serving, Playwright for OG image generation, Nunjucks for the greece content template) — nothing is shipped to production or loaded at runtime.
+
+### Content authoring workflow
+
+Prose content for the portfolio and the Greece guide lives under `content/`, separate from the rendering/behavior logic in `js/main.js`:
+
+- `content/portfolio.js` — the `PROJECTS` array and its icon SVG constants (see "Portfolio cards" below). Plain script, loaded via `<script src="/content/portfolio.js">` in `index.html` before `js/main.js`. No build step — edit it and refresh the browser (`npm run dev`).
+- `content/greece.njk` (+ `content/macros.njk`) — the Greece guide's prose and card markup, written as a Nunjucks template using macros defined in `macros.njk` (`venue()`, `sight()`, `groupedSight()`, `factList()`, `tipList()`, `chips()`, `otherIslandCard()`, `islandHeader()`/`islandFooter()`). This is a **build-time** template, not runtime. After editing it, run:
+
+  ```bash
+  npm run content
+  ```
+
+  This regenerates the region of `index.html` between the `<!-- BEGIN GENERATED: greece-content -->` / `<!-- END GENERATED: greece-content -->` markers inside `<main class="gr-main">`. **Never hand-edit `index.html` between those markers** — the next `npm run content` run silently overwrites it. Everything outside the markers (the `.gr-hero` header and `.gr-nav` buttons, which are tightly coupled to the scrollspy logic in `greeceNavInit()`) is still plain hand-written HTML, edited directly as before.
+
+  The render script (`scripts/render-content.js`) fails loudly — refusing to touch `index.html` — if the markers are missing, duplicated, or out of order, and it also rejects a render that would produce a nested `<a>` inside a `.gr-venue`/`.gr-sight` full-card link (see "Greece Guide Link Patterns" below). Preview with `npm run dev`, review the `index.html` diff, then commit the template source and the regenerated `index.html` together — the same manual pattern already used by `npm run og` for OG image generation. There is no CI; nothing regenerates `index.html` automatically.
 
 ### Layout system
 
@@ -63,9 +78,9 @@ Keep local asset references in `index.html` root-relative, not route-relative. D
 
 ### Portfolio cards
 
-Projects are defined in the `PROJECTS` array in `js/main.js`. Each entry renders through `buildCard()`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
+Projects are defined in the `PROJECTS` array in `content/portfolio.js`. Each entry renders through `buildCard()` in `js/main.js`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
 
-To add a project, append a new object to `PROJECTS` with keys such as `id`, `color`, `icon`, `title`, `subtitle`, `org`, `period`, `tags`, and `bullets`. Optional keys include `links` and `subItems`.
+To add a project, append a new object to `PROJECTS` (in `content/portfolio.js`) with keys such as `id`, `color`, `icon`, `title`, `subtitle`, `org`, `period`, `tags`, and `bullets`. Optional keys include `links` and `subItems`. `bullets` (and subItem `content`) are inserted as raw HTML, so inline `<strong>`/`<em>` works; every other field is escaped.
 
 ### Email obfuscation
 
@@ -91,9 +106,9 @@ The sidebar, topbar, and sticky header use the moving `img/background-blue.png` 
 
 ### Greece Guide Link Patterns
 
-The Greece guide in `index.html` uses two different link patterns that should not be mixed:
+The Greece guide (authored in `content/greece.njk`, rendered into `index.html` by `npm run content`) uses two different link patterns that should not be mixed:
 
-- `.gr-venue` and `a.gr-sight` are full-card anchors. Do not place another `<a>` anywhere inside them, including inside names or descriptions. Nested anchors are invalid HTML and browsers will reparse the markup in inconsistent ways.
-- `.gr-inline-link` is only for prose, list items, fact rows, and other non-clickable containers.
-- If one row needs multiple destination links, keep the row itself non-clickable and use the grouped pattern already in `css/greece.css`: `.gr-sight.gr-sight--grouped` with child `.gr-sight-links` and `.gr-sight-link` items.
+- `.gr-venue` and `a.gr-sight` are full-card anchors, produced by the `venue()` and `sight(href=...)` macros in `content/macros.njk`. Do not place another `<a>` anywhere inside their `name`/`desc` arguments. Nested anchors are invalid HTML and browsers will reparse the markup in inconsistent ways. `scripts/render-content.js` scans the rendered output and fails the build if it finds one anyway.
+- `.gr-inline-link` is only for prose, list items, fact rows, and other non-clickable containers (e.g. inside a `tipList()`/`factList()` item, or in a plain `<p class="gr-p">` paragraph).
+- If one row needs multiple destination links, keep the row itself non-clickable and use the `groupedSight(name, desc, links)` macro (`.gr-sight--grouped` with child `.gr-sight-links`/`.gr-sight-link`) instead of nesting anchors.
 - When a card is already the link target, keep secondary place mentions in that card as plain text instead of adding more anchors.
