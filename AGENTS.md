@@ -29,7 +29,7 @@ Push to `master`. GitHub Pages serves the repository contents automatically.
 
 ## Architecture
 
-This is a zero-dependency static personal site. Runtime behavior is plain HTML, CSS, and JavaScript. `package.json` exists only to support the local BrowserSync workflow.
+This is a zero-runtime-dependency static personal site. Runtime behavior is plain HTML, CSS, and JavaScript. `package.json` exists only to support local development and manual content-generation workflows.
 
 ### Layout system
 
@@ -63,9 +63,21 @@ Keep local asset references in `index.html` root-relative, not route-relative. D
 
 ### Portfolio cards
 
-Projects are defined in the `PROJECTS` array in `js/main.js`. Each entry renders through `buildCard()`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
+Projects are defined in the `PROJECTS` array in `content/portfolio.js`. Each entry renders through `buildCard()` in `js/main.js`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
 
 To add a project, append a new object to `PROJECTS` with keys such as `id`, `color`, `icon`, `title`, `subtitle`, `org`, `period`, `tags`, and `bullets`. Optional keys include `links` and `subItems`.
+
+### Content authoring workflow
+
+Portfolio content lives in `content/portfolio.js`. It is loaded as a normal classic script before `js/main.js`, so edits need no build step; refresh the browser after changing it.
+
+The Greece guide prose and repeated card/list markup live in `content/greece.njk`, with reusable macros in `content/macros.njk`. After editing Greece content, run:
+
+```bash
+npm run content
+```
+
+That regenerates the marked Greece region in `index.html`. Do not hand-edit the generated region directly; the next render overwrites it. Commit the template source and regenerated `index.html` together, following the same review-the-diff pattern used for `npm run og`.
 
 ### Email obfuscation
 

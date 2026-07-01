@@ -1,0 +1,381 @@
+{% from "macros.njk" import venue, sight, groupedSight, factList, tipList, chips, islandHeader, islandFooter %}
+
+<!-- Official tickets notice -->
+<aside class="gr-tickets-banner" role="note" aria-label="Official ticket source">
+  <span class="gr-tickets-banner-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>
+  <div class="gr-tickets-banner-body">
+    <strong>Buy archaeological-site tickets at <a href="https://hhticket.gr/" target="_blank" rel="noopener noreferrer">hhticket.gr</a></strong>
+    &mdash; the official Hellenic Ministry of Culture source. Skip resellers: they cost more and timed-entry slots only count if booked here.
+  </div>
+</aside>
+
+<!-- TRAVEL -->
+<section id="gr-travel" class="gr-section">
+  <h2 class="gr-h2">Getting There &amp; Around</h2>
+  <div class="gr-grid">
+    <div class="gr-body">
+      <div class="gr-city-feature">
+        <div class="gr-img gr-city-image" role="img" aria-label="Athens city view at sunset" style="--gr-city-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900')"></div>
+      </div>
+      <div class="gr-card gr-card--city-intro">
+        <h3 class="gr-h3">Getting In</h3>
+        <p class="gr-p">Fly into <strong>Athens International Airport (ATH)</strong>. Taxi (~&euro;40 flat rate, ~40 min), metro Line 3 to <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Syntagma+Square+Athens" target="_blank" rel="noopener noreferrer">Syntagma Square</a> (~40 min), or private transfer. If you&rsquo;re heading straight to an island, many have direct international flights &mdash; worth checking before defaulting to ATH.</p>
+        {{ chips([
+          { text: "&#x1F695; Taxi ~&euro;40" },
+          { text: "&#x1F687; Metro ~40 min" },
+          { text: "&#x1F4F1; Uber / FreeNow" }
+        ]) }}
+        <h3 class="gr-h3">Getting Around</h3>
+        <p class="gr-p">Athens is very walkable in the center. <a class="gr-inline-link" href="https://free-now.com" target="_blank" rel="noopener noreferrer"><strong>FreeNow</strong></a> has the best local driver availability. The metro is clean, cheap, and efficient. Google Maps works great for transit.</p>
+        <h3 class="gr-h3">Where to Stay</h3>
+        <p class="gr-p">We recommend <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens" target="_blank" rel="noopener noreferrer"><strong>Plaka</strong></a> (charming village feel, narrow streets) and <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Thiseio+Athens" target="_blank" rel="noopener noreferrer"><strong>Thiseio</strong></a> (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.</p>
+        {{ chips([
+          { text: "&#x1F4CD; Plaka", href: "https://www.google.com/maps/search/?api=1&query=Plaka+Athens" },
+          { text: "&#x1F4CD; Thiseio", href: "https://www.google.com/maps/search/?api=1&query=Thiseio+Athens" }
+        ], true) }}
+      </div>
+    </div>
+    <aside class="gr-aside">
+      {{ factList("&#x1F6EC;", "Quick Facts", [
+        { term: "Airport", desc: "ATH &mdash; Eleftherios Venizelos" },
+        { term: "Metro to centre", desc: "~40 min" },
+        { term: "Taxi flat rate", desc: "~&euro;40" },
+        { term: "Currency", desc: "Euro (&euro;)" },
+        { term: "Language", desc: "Greek" },
+        { term: "SIM cards", desc: "At airport arrivals" }
+      ]) }}
+      {{ tipList("&#x1F4A1;", "Pro Tips", "tips", [
+        "Validate your metro ticket before boarding",
+        "FreeNow usually beats Uber on price &amp; availability",
+        "Hotels in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens\" target=\"_blank\" rel=\"noopener noreferrer\">Plaka</a> are walkable to almost everything",
+        "Most restaurants open for dinner at 8&ndash;9 PM",
+        "Book island ferries at <a href=\"https://ferryscanner.com\" target=\"_blank\" rel=\"noopener\">ferryscanner.com</a>"
+      ]) }}
+    </aside>
+  </div>
+</section>
+
+<!-- SIGHTS -->
+<section id="gr-sights" class="gr-section">
+  <h2 class="gr-h2">Things to Do in Athens</h2>
+  <div class="gr-grid">
+    <div class="gr-body">
+      <div class="gr-img" style="aspect-ratio:16/9">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_of_Athens_on_January_30,_2022.jpg?width=900" alt="The Acropolis of Athens" loading="lazy">
+      </div>
+      <p class="gr-tagline">Ancient history and modern energy sit right on top of each other.</p>
+      <div class="gr-card gr-card--flush">
+        {{ sight("Acropolis", "The must-see. Go early to beat crowds and heat. Parthenon, Erechtheion, and Temple of Athena Nike.", mapHref="https://www.google.com/maps/search/?api=1&query=Acropolis+of+Athens", ticketHref="https://hhticket.gr/") }}
+        {{ sight("Acropolis Museum", "World-class collection at the base of the hill. Top-floor gallery with Parthenon views is unforgettable.", "https://www.google.com/maps/search/?api=1&query=Acropolis+Museum+Athens") }}
+        {{ sight("National Garden", "Leafy escape next to the Parliament building. Great for a break from the sun.", "https://www.google.com/maps/search/?api=1&query=National+Garden+Athens") }}
+        {{ sight("Vrachakia", "Lesser-known rocky area with a local feel. Worth exploring off the beaten path.", "https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D") }}
+        {{ sight("Philopappos Monument", "Best panoramic views of the Acropolis and city. Especially beautiful at sunset.", "https://www.google.com/maps/search/?api=1&query=Philopappos+Monument+Athens") }}
+        {{ sight("Odeon of Herodes Atticus", "Ancient Roman theatre built into the Acropolis slope, still used for summer performances. Catch a concert or show if the season lines up — it's unforgettable.", "https://www.google.com/maps/search/?api=1&query=Odeon+of+Herodes+Atticus+Athens") }}
+      </div>
+    </div>
+    <aside class="gr-aside">
+      <div class="gr-tip gr-tip--itinerary">
+        <div class="gr-tip-title">&#x1F5D3; Suggested Order</div>
+        <div class="gr-day-plan">
+          <div>
+            <span class="gr-day-label">Day 1</span>
+            <ul class="gr-tip-list">
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Acropolis+of+Athens" target="_blank" rel="noopener noreferrer">Acropolis</a> &mdash; early morning</li>
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Acropolis+Museum+Athens" target="_blank" rel="noopener noreferrer">Acropolis Museum</a></li>
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Plaka+Athens" target="_blank" rel="noopener noreferrer">Plaka</a> stroll &amp; dinner with a view</li>
+            </ul>
+          </div>
+          <div>
+            <span class="gr-day-label">Day 2</span>
+            <ul class="gr-tip-list">
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=National+Garden+Athens" target="_blank" rel="noopener noreferrer">National Garden</a> &amp; <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Hellenic+Parliament+Athens" target="_blank" rel="noopener noreferrer">Parliament</a></li>
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Philopappos+Hill+Athens" target="_blank" rel="noopener noreferrer">Philopappos Hill</a> at sunset</li>
+              <li><a class="gr-inline-link" href="https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&amp;g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Vrachakia</a> if you&#8217;re feeling adventurous</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{ tipList("&#x23F0;", "Timing Tips", "tips", [
+        "Book Acropolis tickets in advance at <a class=\"gr-inline-link\" href=\"https://hhticket.gr/\" target=\"_blank\" rel=\"noopener noreferrer\">hhticket.gr</a> (official)",
+        "Go before 9 AM or after 5 PM to beat the heat",
+        "Arrive 30 min before sunset for <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Philopappos+Hill+Athens\" target=\"_blank\" rel=\"noopener noreferrer\">Philopappos</a>",
+        "<a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Acropolis+Museum+Athens\" target=\"_blank\" rel=\"noopener noreferrer\">Acropolis Museum</a> closed Tuesdays &mdash; check ahead"
+      ]) }}
+    </aside>
+  </div>
+</section>
+
+<!-- FOOD -->
+<section id="gr-food" class="gr-section">
+  <h2 class="gr-h2">Nick&#8217;s Restaurants &amp; Bars</h2>
+  <div class="gr-grid">
+    <div class="gr-body">
+      <p class="gr-p gr-intro-copy">Tried and true picks in Athens.</p>
+      <h3 class="gr-h3">Restaurants</h3>
+      <div class="gr-venue-list">
+        {{ venue("&#x1F37D;&#xFE0F;", "Strofi Athenian Restaurant", "Refined traditional Greek with rooftop Acropolis views. Book a terrace table. Great before or after a show at the Herodion.", "https://maps.app.goo.gl/MmdW2hYJR4kPLk5V9") }}
+        {{ venue("&#x1F969;", "Basegrill Athens", "One of Athens&#8217; best steakhouses. Premium cuts, egg nest potatoes, great wine list.", "https://maps.app.goo.gl/TuuheUo7c9UeZJmS6") }}
+        {{ venue("&#x1FAD5;", "Barbadimos", "Authentic, no-frills Greek cooking. The kind of place locals go.", "https://maps.app.goo.gl/pMdBjwyFk8QpfxVz9") }}
+        {{ venue("&#x1F959;", "Gyristroula", "Solid souvlaki &mdash; quick, delicious, and cheap.", "https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6") }}
+        {{ venue("&#x1F959;", "Street Souvlaki", "Another go-to for fast, excellent souvlaki.", "https://maps.app.goo.gl/dsEzw2CS7NDqNAva8") }}
+        {{ venue("&#x1F366;", "Lartecono Davinci Gelato", "For when you need a gelato break (you will).", "https://maps.app.goo.gl/oLmuDNnoERDjQYA88") }}
+        {{ venue("&#x1F369;", "Loukoumadaki Athens", "Greek donuts (loukoumades) with honey and cinnamon. A must-try.", "https://maps.app.goo.gl/TmMjRhbJWTNM21aF6") }}
+        {{ venue("&#x2615;", "City ZEN All Day Bar Restaurant", "Relaxed meal or drinks any time of day.", "https://maps.app.goo.gl/HVo2Ka9dJLPXXRLk8") }}
+      </div>
+      <h3 class="gr-h3">Bars &amp; Nightlife</h3>
+      <div class="gr-venue-list">
+        {{ venue("&#x1F33F;", "six d.o.g.s", "All-day bar &amp; live music with a hidden garden. Cocktails, DJs, diverse crowd.", "https://maps.app.goo.gl/yPNufsHcREnSA1C87") }}
+        {{ venue("&#x1F3D9;&#xFE0F;", "Bios", "Legendary rooftop bar on Pireos St. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.", "https://maps.app.goo.gl/i7qomXPkvD9t7DJ79") }}
+        {{ venue("&#x1F3B6;", "Drachmi", "Lively cocktail bar on Kolokotroni Square. Packed on weekends. Great drinks, funky music, young crowd.", "https://maps.app.goo.gl/dxBLrnwPHm3ZHs4k7") }}
+        <a class="gr-venue" href="https://maps.app.goo.gl/Z3bNF4B6Wus1hACc7" target="_blank" rel="noopener noreferrer">
+          <div class="gr-venue-inner">
+            <span class="gr-venue-icon">&#x1F9FA;</span>
+            <div>
+              <div class="gr-venue-name" lang="el">Πλυντήριο <span class="gr-venue-ext">&#x2197;</span></div>
+              <div class="gr-venue-desc">Club themed as a laundromat. Fun, irreverent, young crowd.</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <aside class="gr-aside">
+      {{ tipList("&#x1F34B;", "Must-Eat", "eats", [
+        "Souvlaki &mdash; the Greek street staple",
+        "Loukoumades &mdash; honey-drizzled donuts",
+        "Spanakopita &mdash; spinach &amp; feta pastry",
+        "Greek yogurt with thyme honey",
+        "Fresh seafood near Piraeus"
+      ]) }}
+      {{ tipList("&#x1F377;", "Drink Like a Local", "tips", [
+        "Freddo espresso = iced espresso",
+        "Tsipouro &mdash; the Greek grappa",
+        "Ouzo with seafood meze",
+        "In Greece, rounding up or leaving a couple of euros is normal; 5&ndash;10% is more for especially good service"
+      ]) }}
+      {{ factList("&#x1F4CD;", "Neighbourhoods", [
+        { term: "Monastiraki", desc: "street food hub" },
+        { term: "Psyrri", desc: "artsy bars &amp; mezedopolia" },
+        { term: "Kolonaki", desc: "upscale dining" },
+        { term: "Gazi", desc: "nightlife district" }
+      ]) }}
+    </aside>
+  </div>
+</section>
+
+<!-- ISLANDS DIVIDER -->
+<div class="gr-islands-intro">
+  <div class="gr-islands-eyebrow">Beyond Athens</div>
+  <h2 class="gr-islands-title">Island Escapes</h2>
+  <p class="gr-islands-sub">Each island has its own personality.</p>
+</div>
+
+<!-- MYKONOS -->
+{{ islandHeader("gr-mykonos", "Mykonos", "Glamorous, loud, and unapologetically fun", "https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg", "Mykonos windmills") }}
+        <div class="gr-grid">
+          <div class="gr-body">
+            <p class="gr-p">Beach clubs, DJs, late nights, and beautiful people. But old town <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Mykonos+Chora" target="_blank" rel="noopener noreferrer">Chora</a> is genuinely charming, and there&#8217;s a real archaeological gem nearby.</p>
+            <h3 class="gr-h3">Beaches</h3>
+            <p class="gr-p">Good but below average by Greek island standards. You&#8217;re here for the scene. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Paradise+Beach+Mykonos" target="_blank" rel="noopener noreferrer">Paradise</a> and <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Super+Paradise+Beach+Mykonos" target="_blank" rel="noopener noreferrer">Super Paradise</a> are more party than swim.</p>
+            <h3 class="gr-h3">Don&#8217;t Miss</h3>
+            <div class="gr-card gr-card--flush">
+              {{ sight("Delos", "Short boat ride &mdash; one of Greece&#8217;s most important archaeological sites. Birthplace of Apollo and Artemis. Visit with a guide.", mapHref="https://www.google.com/maps/search/?api=1&query=Delos+Archaeological+Site", ticketHref="https://hhticket.gr/") }}
+              {{ sight("The Windmills", "Iconic row overlooking the harbor. Classic photo spot, beautiful at sunset.", "https://www.google.com/maps/search/?api=1&query=Mykonos+Windmills") }}
+            </div>
+            <h3 class="gr-h3">Eat &amp; Drink</h3>
+            <div class="gr-venue-list">
+              {{ venue("&#x1F426;", "Pelican", "Nick&#8217;s top pick for a meal on the island.", "https://www.google.com/maps/search/?api=1&query=Pelican+Restaurant+Mykonos") }}
+              {{ venue("&#x1F942;", "Caprice", "Sunset drinks on the water in Little Venice. Stunning views.", "https://www.google.com/maps/search/?api=1&query=Caprice+Bar+Mykonos") }}
+              {{ venue("&#x1F389;", "Skandinavian", "The go-to club for a big night out.", "https://www.google.com/maps/search/?api=1&query=Skandinavian+Bar+Mykonos") }}
+            </div>
+          </div>
+          <aside class="gr-aside">
+            {{ tipList("&#x1F30A;", "Essentials", "essentials", [
+              "Stay in old town <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Mykonos+Chora\" target=\"_blank\" rel=\"noopener noreferrer\">Chora</a>, not beach hotels",
+              "Visit <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Delos+Archaeological+Site\" target=\"_blank\" rel=\"noopener noreferrer\">Delos</a> &mdash; don&#8217;t skip it",
+              "Sunset drinks: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Caprice+Bar+Mykonos\" target=\"_blank\" rel=\"noopener noreferrer\">Caprice</a> in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Little+Venice+Mykonos\" target=\"_blank\" rel=\"noopener noreferrer\">Little Venice</a>",
+              "Big night out: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Skandinavian+Bar+Mykonos\" target=\"_blank\" rel=\"noopener noreferrer\">Skandinavian</a>",
+              "Best meal: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Pelican+Restaurant+Mykonos\" target=\"_blank\" rel=\"noopener noreferrer\">Pelican</a>"
+            ]) }}
+            {{ tipList("&#x1F6A2;", "Getting There", "ferry", [
+              "Ferry from Piraeus: ~2.5&ndash;5 hrs",
+              "Flight: ~45 min from ATH",
+              "Book at <a href=\"https://ferryscanner.com\" target=\"_blank\" rel=\"noopener\">ferryscanner.com</a>"
+            ]) }}
+          </aside>
+        </div>
+{{ islandFooter() }}
+<!-- SANTORINI -->
+{{ islandHeader("gr-santorini", "Santorini", "Dramatic cliffs, legendary sunsets, real depth", "https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900", "Oia blue domes at sunset, Santorini") }}
+        <div class="gr-grid">
+          <div class="gr-body">
+            <p class="gr-p">Built on a volcanic caldera &mdash; cliffs into deep blue water, white buildings stacked together. Romantic, photogenic, historically rich.</p>
+            <h3 class="gr-h3">Where to Stay</h3>
+            <p class="gr-p"><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Fira+Santorini" target="_blank" rel="noopener noreferrer"><strong>Fira</strong></a> is lively. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Oia+Santorini" target="_blank" rel="noopener noreferrer"><strong>Oia</strong></a> is fancier with the iconic sunset. Stay along the caldera coast between them for a middle ground.</p>
+            <h3 class="gr-h3">Things to Do</h3>
+            <div class="gr-img" style="aspect-ratio:16/7;margin-bottom:12px">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900" alt="Fira to Oia caldera hike" loading="lazy">
+            </div>
+            <div class="gr-card gr-card--flush">
+              {{ sight("Oia Castle (Agios Nikolaos)", "15th-century Venetian fortress ruins. The sunset spot &mdash; arrive early.", "https://www.google.com/maps/search/?api=1&query=Castle+of+Oia+Agios+Nikolaos+Santorini") }}
+              {{ sight("Fira to Oia Hike", "~10 km caldera rim trail. Very little shade &mdash; go early, bring water.", "https://www.google.com/maps/search/?api=1&query=Fira+to+Oia+Hike+Santorini") }}
+              {{ sight("Akrotiri", "Bronze Age settlement &mdash; the &#8220;Pompeii of the Aegean.&#8221; Over 3,500 years old.", mapHref="https://www.google.com/maps/search/?api=1&query=Akrotiri+Archaeological+Site+Santorini", ticketHref="https://hhticket.gr/") }}
+              {{ sight("Ancient Thira", "Hellenistic ruins on a ridge between Kamari and Perissa beaches.", mapHref="https://www.google.com/maps/search/?api=1&query=Ancient+Thera+Santorini", ticketHref="https://hhticket.gr/") }}
+              {{ groupedSight("Museums in Fira", "Good indoor stop before or after Akrotiri.", [
+                { label: "Fira", href: "https://www.google.com/maps/search/?api=1&query=Fira+Santorini" },
+                { label: "Museum of Prehistoric Thera", href: "https://www.google.com/maps/search/?api=1&query=Museum+of+Prehistoric+Thera+Fira" },
+                { label: "Archaeological Museum of Thera", href: "https://www.google.com/maps/search/?api=1&query=Archaeological+Museum+of+Thera+Fira" }
+              ]) }}
+              {{ groupedSight("Red &amp; White Beach", "Dramatic colored cliffs. Red Beach on foot, White Beach by boat.", [
+                { label: "Red Beach", href: "https://www.google.com/maps/search/?api=1&query=Red+Beach+Santorini" },
+                { label: "White Beach", href: "https://www.google.com/maps/search/?api=1&query=White+Beach+Santorini" }
+              ]) }}
+              {{ sight("Ammoudi Bay", "Hidden harbor below Oia. Hike or donkey down for swimming and seafood.", "https://www.google.com/maps/search/?api=1&query=Ammoudi+Bay+Santorini") }}
+            </div>
+            <h3 class="gr-h3">Eat &amp; Drink</h3>
+            <div class="gr-venue-list">
+              {{ venue("&#x1F959;", "Yogi Gyro", "In Fira &mdash; best gyros on the island.", "https://www.google.com/maps/search/?api=1&query=Yogi+Gyro+Santorini") }}
+              {{ venue("&#x1F305;", "PK Cocktail Bar", "The spot for sunset drinks.", "https://www.google.com/maps/search/?api=1&query=PK+Cocktail+Bar+Santorini") }}
+            </div>
+          </div>
+          <aside class="gr-aside">
+            {{ tipList("&#x1F305;", "Essentials", "essentials", [
+              "Stay in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Oia+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Oia</a> for iconic sunset views",
+              "Book caldera-view hotels early",
+              "Hike <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Fira+to+Oia+Hike+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Fira &rarr; Oia</a> (10 km, go early)",
+              "Visit <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Akrotiri+Archaeological+Site+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Akrotiri</a> archaeological site",
+              "Sunset drinks: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=PK+Cocktail+Bar+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">PK Cocktail Bar</a>",
+              "Best gyros: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Yogi+Gyro+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Yogi Gyro</a> in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Fira+Santorini\" target=\"_blank\" rel=\"noopener noreferrer\">Fira</a>"
+            ]) }}
+            {{ tipList("&#x1F6A2;", "Getting There", "ferry", [
+              "Ferry from Piraeus: ~8 hrs (overnight)",
+              "High-speed ferry: ~5 hrs",
+              "Flight: ~45 min from ATH"
+            ]) }}
+          </aside>
+        </div>
+{{ islandFooter() }}
+<!-- CRETE -->
+{{ islandHeader("gr-crete", "Crete", "The largest island &mdash; feels like its own country", "https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900", "Chania Venetian harbor, Crete") }}
+        <div class="gr-grid">
+          <div class="gr-body">
+            <p class="gr-p">Gorges, beaches, Venetian harbors, ancient palaces, incredible food. Plan at least a full week.</p>
+            <h3 class="gr-h3">Getting There</h3>
+            {{ chips([
+              { text: "&#x2708;&#xFE0F; Chania (CHQ)", href: "https://www.google.com/maps/search/?api=1&query=Chania+Crete" },
+              { text: "&#x2708;&#xFE0F; Heraklion (HER)", href: "https://www.google.com/maps/search/?api=1&query=Heraklion+Crete" },
+              { text: "&#x26F4; Overnight ferry" }
+            ]) }}
+            <h3 class="gr-h3">Where to Stay</h3>
+            <p class="gr-p"><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer"><strong>Chania</strong></a> (west) &mdash; Lively Venetian harbor town, best base for the gorge and beaches. Try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer"><strong>Riviera Suites</strong></a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer"><strong>Elounda</strong></a> (northeast) &mdash; Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island &mdash; pick one based on your itinerary.</p>
+            <h3 class="gr-h3">Things to Do</h3>
+            <div class="gr-img" style="aspect-ratio:16/7;margin-bottom:12px">
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900" alt="Samaria Gorge" loading="lazy">
+            </div>
+            <div class="gr-card gr-card--flush">
+              {{ sight("Samari&aacute; Gorge", "~16 km, one of Europe&#8217;s longest. Full day. Book a tour bus from Chania.", "https://www.google.com/maps/search/?api=1&query=Samaria+Gorge+Crete") }}
+              {{ sight("Elafonisi Beach", "Pink-sand lagoon. Almost tropical. Dedicate a full day.", "https://www.google.com/maps/search/?api=1&query=Elafonisi+Beach+Crete") }}
+              {{ sight("Palace of Knossos", "Center of Minoan civilization, home of the labyrinth. Get a guide.", mapHref="https://www.google.com/maps/search/?api=1&query=Palace+of+Knossos+Crete", ticketHref="https://hhticket.gr/") }}
+              {{ sight("Heraklion Archaeological Museum", "Finest Minoan collection in the world.", mapHref="https://www.google.com/maps/search/?api=1&query=Heraklion+Archaeological+Museum", ticketHref="https://hhticket.gr/") }}
+              {{ sight("Fortezza (Rethymno)", "Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.", "https://www.google.com/maps/search/?api=1&query=Fortezza+of+Rethymno") }}
+              {{ sight("Firka Fortress (Chania)", "At Chania&#8217;s old harbor entrance. Great views.", "https://www.google.com/maps/search/?api=1&query=Firka+Fortress+Chania") }}
+              {{ sight("Spinalonga", "Fortified island near Elounda. Short boat trip to explore.", "https://www.google.com/maps/search/?api=1&query=Spinalonga+Crete") }}
+            </div>
+            <h3 class="gr-h3">Eat &amp; Drink</h3>
+            <div class="gr-venue-list">
+              {{ venue("&#x1F950;", "Red Jane Bakery", "In Chania &mdash; don&#8217;t skip it.", "https://www.google.com/maps/search/?api=1&query=Red+Jane+Bakery+Chania") }}
+              {{ venue("&#x1F378;", "Sinagogi", "Best bar in Chania.", "https://www.google.com/maps/search/?api=1&query=Sinagogi+bar+Chania") }}
+            </div>
+            <div class="gr-note">
+              <p>We&#8217;ve barely scratched the surface. Do your own research &mdash; or better yet, ask a local.</p>
+            </div>
+          </div>
+          <aside class="gr-aside">
+            {{ tipList("&#x1F3D4;", "Essentials", "essentials", [
+              "Plan at least a full week",
+              "Base in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Chania</a> &mdash; try <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania\" target=\"_blank\" rel=\"noopener noreferrer\">Riviera Suites</a>",
+              "Book <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Samaria+Gorge+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Samari&aacute; Gorge</a> tour the day before",
+              "Red Jane Bakery &mdash; don&#8217;t skip it",
+              "Best bar in <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Chania</a>: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Sinagogi+bar+Chania\" target=\"_blank\" rel=\"noopener noreferrer\">Sinagogi</a>"
+            ]) }}
+            {{ tipList("&#x1F6A2;", "Getting There", "ferry", [
+              "Fly to <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Chania</a> (CHQ) or <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Heraklion</a> (HER)",
+              "Overnight ferry from Piraeus &mdash; get a cabin"
+            ]) }}
+            {{ factList("&#x1F5FA;", "Logistics", [
+              { term: "Car hire", desc: "essential to explore" },
+              { term: "<a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Chania</a> &harr; <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Heraklion</a>", desc: "2.5 hrs by car" },
+              { term: "<a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete\" target=\"_blank\" rel=\"noopener noreferrer\">Elounda</a>", desc: "1.5 hrs from Heraklion" }
+            ], "logistics") }}
+          </aside>
+        </div>
+{{ islandFooter() }}
+<!-- PAROS & NAXOS -->
+{{ islandHeader("gr-paros-naxos", "Paros &amp; Naxos", "Close neighbors, easy to visit together", "https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg", "Portara, Temple of Apollo, Naxos") }}
+        <div class="gr-grid">
+          <div class="gr-body">
+            <p class="gr-p">Ferries between them take 30&ndash;45 minutes. Either is great on its own.</p>
+            <h3 class="gr-h3">Naxos</h3>
+            <p class="gr-p">The most well-rounded island &mdash; beaches, history, mountain villages, great food, youthful energy.</p>
+            <div class="gr-card gr-card--flush">
+              {{ sight("Guided bus tour", "Hit the island&#8217;s major sights with a local guide.") }}
+              {{ sight("Catamaran cruise", "Swimming in secluded coves with lunch on board.") }}
+              {{ sight("Portara (Temple of Apollo)", "Iconic marble gateway. Beautiful at sunset.", "https://www.google.com/maps/search/?api=1&query=Portara+Temple+of+Apollo+Naxos") }}
+            </div>
+            <h3 class="gr-h3">Paros &amp; Antiparos</h3>
+            <p class="gr-p">Paros has charming <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros" target="_blank" rel="noopener noreferrer">Parikia</a> and pretty <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros" target="_blank" rel="noopener noreferrer">Naoussa</a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Antiparos" target="_blank" rel="noopener noreferrer">Antiparos</a> has a great secluded cliff beach hike. Ask around when you arrive.</p>
+          </div>
+          <aside class="gr-aside">
+            {{ tipList("&#x2728;", "Naxos Essentials", "essentials", [
+              "Best all-around Cycladic island",
+              "Book a guided bus tour",
+              "Catamaran cruise: coves &amp; lunch on board",
+              "<a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Portara+Temple+of+Apollo+Naxos\" target=\"_blank\" rel=\"noopener noreferrer\">Portara</a> at sunset &mdash; unmissable",
+              "Paros: <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Parikia+Paros\" target=\"_blank\" rel=\"noopener noreferrer\">Parikia</a> &amp; <a class=\"gr-inline-link\" href=\"https://www.google.com/maps/search/?api=1&amp;query=Naoussa+Paros\" target=\"_blank\" rel=\"noopener noreferrer\">Naoussa</a> village"
+            ]) }}
+            {{ tipList("&#x1F6A2;", "Getting There", "ferry", [
+              "Ferry from Piraeus: ~5 hrs to Naxos",
+              "Paros &harr; Naxos: 30&ndash;45 min",
+              "Book at <a href=\"https://ferryscanner.com\" target=\"_blank\" rel=\"noopener\">ferryscanner.com</a>"
+            ]) }}
+          </aside>
+        </div>
+{{ islandFooter() }}
+<!-- OTHER ISLANDS -->
+<section id="gr-other-islands" class="gr-section">
+  <h2 class="gr-h2">Other Islands Worth Knowing</h2>
+  <div class="gr-other-list">
+    <div class="gr-other-card">
+      <div class="gr-img" style="aspect-ratio:16/7">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG" alt="Sarakiniko Beach, Milos" loading="lazy">
+      </div>
+      <div class="gr-other-card-body">
+        <h3 class="gr-other-name">Milos</h3>
+        <p class="gr-other-desc">Volcanic coastline, sea caves, colorful beaches. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Sarakiniko+Beach+Milos" target="_blank" rel="noopener noreferrer">Sarakiniko</a>&#8217;s white lunar landscape is iconic. Quieter, rugged &mdash; great for couples.</p>
+      </div>
+    </div>
+    <div class="gr-other-card">
+      <div class="gr-img" style="aspect-ratio:16/7">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg" alt="Rhodes Old Town" loading="lazy">
+      </div>
+      <div class="gr-other-card-body">
+        <h3 class="gr-other-name">Rhodes</h3>
+        <p class="gr-other-desc"><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Rhodes+Old+Town" target="_blank" rel="noopener noreferrer">Medieval Old Town</a> is a UNESCO site &mdash; a walled city for hours. Beaches, <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Lindos+Acropolis+Rhodes" target="_blank" rel="noopener noreferrer">ancient Lindos</a>, different vibe from the Cyclades.</p>
+      </div>
+    </div>
+    <div class="gr-other-card">
+      <div class="gr-img" style="aspect-ratio:16/7">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg" alt="Corfu Old Town" loading="lazy">
+      </div>
+      <div class="gr-other-card-body">
+        <h3 class="gr-other-name">Corfu</h3>
+        <p class="gr-other-desc">Northwest, closer to Italy. Venetian influence, lush green hills, elegant architecture around <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Corfu+Old+Town" target="_blank" rel="noopener noreferrer">Corfu Old Town</a>. Longer journey but completely different.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="gr-footer">
+  <div class="gr-footer-greek">&#x039A;&#x03B1;&#x03BB;&#x03CC; &#x03C4;&#x03B1;&#x03BE;&#x03AF;&#x03B4;&#x03B9;!</div>
+  <p class="gr-footer-sub">Have the best time &mdash; see you in Greece.</p>
+</div>

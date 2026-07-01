@@ -1,0 +1,100 @@
+{% macro venue(icon, name, desc, href) -%}
+<a class="gr-venue" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-venue-inner">
+    <span class="gr-venue-icon">{{ icon | safe }}</span>
+    <div>
+      <div class="gr-venue-name">{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+      <div class="gr-venue-desc">{{ desc | safe }}</div>
+    </div>
+  </div>
+</a>
+{%- endmacro %}
+
+{% macro sight(name, desc, href=None, mapHref=None, ticketHref=None) -%}
+{% if href and not mapHref and not ticketHref %}
+<a class="gr-sight" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-sight-name">{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+</a>
+{% else %}
+<div class="gr-sight{% if mapHref or ticketHref %} gr-sight--ticketed{% endif %}">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+{% if mapHref or ticketHref %}
+  <div class="gr-sight-actions">
+{% if mapHref %}
+    <a class="gr-sight-action gr-sight-action--map" href="{{ mapHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F4CD;</span>Map</a>
+{% endif %}
+{% if ticketHref %}
+    <a class="gr-sight-action gr-sight-action--ticket" href="{{ ticketHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>Official tickets</a>
+{% endif %}
+  </div>
+{% endif %}
+</div>
+{% endif %}
+{%- endmacro %}
+
+{% macro groupedSight(name, desc, links) -%}
+<div class="gr-sight gr-sight--grouped">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+  <div class="gr-sight-links">
+{% for link in links %}
+    <a class="gr-sight-link" href="{{ link.href }}" target="_blank" rel="noopener noreferrer">{{ link.label | safe }} <span class="gr-venue-ext">&#x2197;</span></a>
+{% endfor %}
+  </div>
+</div>
+{%- endmacro %}
+
+{% macro factList(icon, title, facts, kind='facts') -%}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <dl class="gr-fact-list">
+{% for fact in facts %}
+    <div><dt>{{ fact.term | safe }}</dt><dd>{{ fact.desc | safe }}</dd></div>
+{% endfor %}
+  </dl>
+</div>
+{%- endmacro %}
+
+{% macro tipList(icon, title, kind, items) -%}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <ul class="gr-tip-list">
+{% for item in items %}
+    <li>{{ item | safe }}</li>
+{% endfor %}
+  </ul>
+</div>
+{%- endmacro %}
+
+{% macro chips(items, flush=false) -%}
+<div class="gr-chips{% if flush %} gr-chips--flush{% endif %}">
+{% for item in items %}
+{% if item.href %}
+  <a class="gr-chip" href="{{ item.href }}" target="_blank" rel="noopener noreferrer">{{ item.text | safe }}</a>
+{% else %}
+  <span class="gr-chip">{{ item.text | safe }}</span>
+{% endif %}
+{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro islandHeader(id, name, tagline, imgSrc, imgAlt) -%}
+<div id="{{ id }}" class="gr-island">
+  <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+    <img src="{{ imgSrc }}" alt="{{ imgAlt }}" loading="lazy">
+  </div>
+  <div class="gr-island-card">
+    <div class="gr-island-card-inner">
+      <h2 class="gr-island-name">{{ name | safe }}</h2>
+      <p class="gr-island-tagline">{{ tagline | safe }}</p>
+      <div class="gr-island-body">
+{%- endmacro %}
+
+{% macro islandFooter() -%}
+      </div>
+    </div>
+  </div>
+</div>
+{%- endmacro %}
