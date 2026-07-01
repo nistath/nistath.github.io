@@ -1,0 +1,121 @@
+{#
+  Reusable components for the Greece guide (content/greece.njk).
+
+  `name`/`desc`/`term` args accept raw HTML on purpose (mirrors the
+  PROJECTS.bullets trust model in content/portfolio.js) so you can bold a
+  word or link a place inline. This is single-owner authored content, not
+  user input -- don't paste untrusted text into these fields.
+
+  Per CLAUDE.md: .gr-venue and a.gr-sight are full-card anchors. Never put
+  another <a> inside name/desc -- if a row needs multiple destinations, use
+  groupedSight() instead. render-content.js checks for this at render time.
+#}
+
+{# Full-card venue link, e.g. a restaurant or bar. `lang` is optional, for a
+   name written in a script other than the page's default (e.g. Greek). #}
+{% macro venue(icon, name, desc, href, lang=None) %}
+<a class="gr-venue" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-venue-inner">
+    <span class="gr-venue-icon">{{ icon | safe }}</span>
+    <div>
+      <div class="gr-venue-name"{% if lang %} lang="{{ lang }}"{% endif %}>{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+      <div class="gr-venue-desc">{{ desc | safe }}</div>
+    </div>
+  </div>
+</a>
+{% endmacro %}
+
+{#
+  A single sight row. Three shapes depending on which args are given:
+    - href only                    -> plain full-card link, no actions
+    - href omitted, map/ticketHref -> non-link card with action button(s)
+    - none of href/mapHref/ticketHref -> plain non-interactive row
+  mapHref and ticketHref are independent; either, both, or neither may be set.
+#}
+{% macro sight(name, desc, href=None, mapHref=None, ticketHref=None) %}
+{% if href %}
+<a class="gr-sight" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-sight-name">{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+</a>
+{% else %}
+<div class="gr-sight{% if mapHref or ticketHref %} gr-sight--ticketed{% endif %}">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+  {% if mapHref or ticketHref %}
+  <div class="gr-sight-actions">
+    {% if mapHref %}<a class="gr-sight-action gr-sight-action--map" href="{{ mapHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F4CD;</span>Map</a>{% endif %}
+    {% if ticketHref %}<a class="gr-sight-action gr-sight-action--ticket" href="{{ ticketHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>Official tickets</a>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{# Non-clickable row fanning out to multiple destination links -- use this
+   instead of nesting an <a> inside a sight's name/desc. links = [{label, href}] #}
+{% macro groupedSight(name, desc, links) %}
+<div class="gr-sight gr-sight--grouped">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+  <div class="gr-sight-links">
+    {% for link in links %}<a class="gr-sight-link" href="{{ link.href }}" target="_blank" rel="noopener noreferrer">{{ link.label | safe }} <span class="gr-venue-ext">&#x2197;</span></a>{% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{# Definition-list tip box, e.g. quick facts. facts = [{term, desc}] #}
+{% macro factList(icon, title, facts, kind='facts') %}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <dl class="gr-fact-list">
+    {% for f in facts %}<div><dt>{{ f.term | safe }}</dt><dd>{{ f.desc | safe }}</dd></div>{% endfor %}
+  </dl>
+</div>
+{% endmacro %}
+
+{# Bullet-list tip box. items = list of raw-HTML-capable strings. #}
+{% macro tipList(icon, title, kind, items) %}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <ul class="gr-tip-list">
+    {% for item in items %}<li>{{ item | safe }}</li>{% endfor %}
+  </ul>
+</div>
+{% endmacro %}
+
+{# Chip row. items = [{label, href=None}] -- <a> if href given, <span> otherwise. #}
+{% macro chips(items, flush=false) %}
+<div class="gr-chips{% if flush %} gr-chips--flush{% endif %}">
+  {% for item in items %}{% if item.href %}<a class="gr-chip" href="{{ item.href }}" target="_blank" rel="noopener noreferrer">{{ item.label | safe }}</a>{% else %}<span class="gr-chip">{{ item.label | safe }}</span>{% endif %}{% endfor %}
+</div>
+{% endmacro %}
+
+{#
+  Island wrapper, opening half. Nunjucks macros only support a single
+  {% call %} block, but each island needs two independent freeform regions
+  (gr-body and gr-aside), so this is a header/footer bookend pair instead --
+  write the gr-grid/gr-body/gr-aside content (with venue/sight/tip macro
+  calls inside) directly in greece.njk between islandHeader() and
+  islandFooter().
+#}
+{% macro islandHeader(id, name, tagline, imgSrc, imgAlt) %}
+<div id="gr-{{ id }}" class="gr-island">
+  <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+    <img src="{{ imgSrc }}" alt="{{ imgAlt }}" loading="lazy">
+  </div>
+  <div class="gr-island-card">
+    <div class="gr-island-card-inner">
+      <h2 class="gr-island-name">{{ name | safe }}</h2>
+      <p class="gr-island-tagline">{{ tagline | safe }}</p>
+      <div class="gr-island-body">
+        <div class="gr-grid">
+{% endmacro %}
+
+{% macro islandFooter() %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
