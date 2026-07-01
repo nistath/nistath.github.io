@@ -63,7 +63,7 @@ Keep local asset references in `index.html` root-relative, not route-relative. D
 
 ### Portfolio cards
 
-Projects are defined in the `PROJECTS` array in `js/main.js`. Each entry renders through `buildCard()`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
+Projects are defined in the `PROJECTS` array in `content/portfolio.js`. Each entry renders through `buildCard()` in `js/main.js`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
 
 To add a project, append a new object to `PROJECTS` with keys such as `id`, `color`, `icon`, `title`, `subtitle`, `org`, `period`, `tags`, and `bullets`. Optional keys include `links` and `subItems`.
 
@@ -97,3 +97,16 @@ The Greece guide in `index.html` uses two different link patterns that should no
 - `.gr-inline-link` is only for prose, list items, fact rows, and other non-clickable containers.
 - If one row needs multiple destination links, keep the row itself non-clickable and use the grouped pattern already in `css/greece.css`: `.gr-sight.gr-sight--grouped` with child `.gr-sight-links` and `.gr-sight-link` items.
 - When a card is already the link target, keep secondary place mentions in that card as plain text instead of adding more anchors.
+
+### Content authoring workflow
+
+Prose content lives under `content/`, separate from the rendering/behavior code in `js/main.js`:
+
+- `content/portfolio.js` — the `PROJECTS` array and its icon SVGs (see "Portfolio cards" above). Plain classic script, no build step. Edit it and refresh the browser.
+- `content/greece.njk` + `content/macros.njk` — the Greece guide's prose and markup, templated with [Nunjucks](https://mozilla.github.io/nunjucks/). This **is** a build-time template: after editing either file, run `npm run content` to re-render it into `index.html`. `content/macros.njk` defines the reusable card shapes (`venue`, `sight`, `groupedSight`, `factList`, `tipList`, `chips`, `islandHeader`/`islandFooter`) that `content/greece.njk` calls into; most day-to-day edits only touch `content/greece.njk`.
+
+`scripts/render-content.js` (the `npm run content` script) renders `content/greece.njk` and splices the result into `index.html` between the `<!-- BEGIN GENERATED: greece-content -->` / `<!-- END GENERATED: greece-content -->` markers inside `<main class="gr-main">`. It also scans the rendered output for accidental nested anchors (see "Greece Guide Link Patterns" above) and fails loudly if it finds one.
+
+**Never hand-edit the generated region of `index.html` directly** — the next `npm run content` run silently overwrites it. Edit `content/greece.njk` (or `content/macros.njk`) instead, then re-render.
+
+Commit the template source and the regenerated `index.html` together in the same commit, the same pattern as `npm run og` for `img/og/*.png`.

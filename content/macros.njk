@@ -1,0 +1,107 @@
+{#
+  Reusable component macros for content/greece.njk.
+
+  Trust model: `name`/`desc`/`term`/`title`/`label`/`item` text parameters
+  carry authored HTML (entities, the occasional inline `gr-inline-link`) and
+  are emitted with `| safe`, mirroring content/portfolio.js's PROJECTS.bullets
+  trust model — single-owner authored content, not user input.
+
+  `href`/`imgSrc`/`imgAlt`/`lang`/`kind`/`id` are left to Nunjucks'
+  autoescape so `&` in query strings comes out as `&amp;`.
+#}
+
+{% macro venue(icon, name, desc, href, lang=None) %}
+<a class="gr-venue" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-venue-inner">
+    <span class="gr-venue-icon">{{ icon | safe }}</span>
+    <div>
+      <div class="gr-venue-name"{% if lang %} lang="{{ lang }}"{% endif %}>{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+      <div class="gr-venue-desc">{{ desc | safe }}</div>
+    </div>
+  </div>
+</a>
+{% endmacro %}
+
+{% macro sight(name, desc, href=None, mapHref=None, ticketHref=None) %}
+{% if mapHref or ticketHref %}
+<div class="gr-sight gr-sight--ticketed">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+  <div class="gr-sight-actions">
+    {% if mapHref %}<a class="gr-sight-action gr-sight-action--map" href="{{ mapHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F4CD;</span>Map</a>{{ "\n" }}{% endif -%}
+    {% if ticketHref %}<a class="gr-sight-action gr-sight-action--ticket" href="{{ ticketHref }}" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>Official tickets</a>{{ "\n" }}{% endif -%}
+  </div>
+</div>
+{% elif href %}
+<a class="gr-sight" href="{{ href }}" target="_blank" rel="noopener noreferrer">
+  <div class="gr-sight-name">{{ name | safe }} <span class="gr-venue-ext">&#x2197;</span></div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+</a>
+{% else %}
+<div class="gr-sight">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro groupedSight(name, desc, links) %}
+<div class="gr-sight gr-sight--grouped">
+  <div class="gr-sight-name">{{ name | safe }}</div>
+  <div class="gr-sight-desc">{{ desc | safe }}</div>
+  <div class="gr-sight-links">
+    {% for link in links -%}
+    <a class="gr-sight-link" href="{{ link.href }}" target="_blank" rel="noopener noreferrer">{{ link.label | safe }} <span class="gr-venue-ext">&#x2197;</span></a>
+    {% endfor -%}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro factList(icon, title, kind, facts) %}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <dl class="gr-fact-list">
+    {% for f in facts -%}
+    <div><dt>{{ f.term | safe }}</dt><dd>{{ f.desc | safe }}</dd></div>
+    {% endfor -%}
+  </dl>
+</div>
+{% endmacro %}
+
+{% macro tipList(icon, title, kind, items) %}
+<div class="gr-tip gr-tip--{{ kind }}">
+  <div class="gr-tip-title">{{ icon | safe }} {{ title | safe }}</div>
+  <ul class="gr-tip-list">
+    {% for item in items -%}
+    <li>{{ item | safe }}</li>
+    {% endfor -%}
+  </ul>
+</div>
+{% endmacro %}
+
+{% macro chips(items, flush=false) %}
+<div class="gr-chips{% if flush %} gr-chips--flush{% endif %}">
+  {% for item in items -%}
+  {% if item.href %}<a class="gr-chip" href="{{ item.href }}" target="_blank" rel="noopener noreferrer">{{ item.label | safe }}</a>{% else %}<span class="gr-chip">{{ item.label | safe }}</span>{% endif %}{{ "\n" }}
+  {%- endfor -%}
+</div>
+{% endmacro %}
+
+{% macro islandHeader(id, name, tagline, imgSrc, imgAlt) %}
+<div id="gr-{{ id }}" class="gr-island">
+  <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
+    <img src="{{ imgSrc }}" alt="{{ imgAlt | safe }}" loading="lazy">
+  </div>
+  <div class="gr-island-card">
+    <div class="gr-island-card-inner">
+      <h2 class="gr-island-name">{{ name | safe }}</h2>
+      <p class="gr-island-tagline">{{ tagline | safe }}</p>
+      <div class="gr-island-body">
+{% endmacro %}
+
+{% macro islandFooter() %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
