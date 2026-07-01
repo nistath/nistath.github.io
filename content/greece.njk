@@ -246,24 +246,15 @@
 {{ m.islandFooter() }}
 
 <!-- CRETE -->
-<div id="gr-crete" class="gr-island">
-  <div class="gr-img gr-island-img-wrap" style="aspect-ratio:16/9">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900" alt="Chania Venetian harbor, Crete" loading="lazy">
-  </div>
-  <div class="gr-island-card">
-    <div class="gr-island-card-inner">
-      <h2 class="gr-island-name">Crete</h2>
-      <p class="gr-island-tagline">The largest island &mdash; feels like its own country</p>
-      <div class="gr-island-body">
-        <div class="gr-grid">
+{{ m.islandHeader('crete', 'Crete', 'The largest island &mdash; feels like its own country', 'https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900', 'Chania Venetian harbor, Crete') }}
           <div class="gr-body">
             <p class="gr-p">Gorges, beaches, Venetian harbors, ancient palaces, incredible food. Plan at least a full week.</p>
             <h3 class="gr-h3">Getting There</h3>
-            <div class="gr-chips">
-              <a class="gr-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">&#x2708;&#xFE0F; Chania (CHQ)</a>
-              <a class="gr-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">&#x2708;&#xFE0F; Heraklion (HER)</a>
-              <span class="gr-chip">&#x26F4; Overnight ferry</span>
-            </div>
+            {{ m.chips([
+              {label: '&#x2708;&#xFE0F; Chania (CHQ)', href: 'https://www.google.com/maps/search/?api=1&query=Chania+Crete'},
+              {label: '&#x2708;&#xFE0F; Heraklion (HER)', href: 'https://www.google.com/maps/search/?api=1&query=Heraklion+Crete'},
+              {label: '&#x26F4; Overnight ferry'}
+            ]) }}
             <h3 class="gr-h3">Where to Stay</h3>
             <p class="gr-p"><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer"><strong>Chania</strong></a> (west) &mdash; Lively Venetian harbor town, best base for the gorge and beaches. Try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer"><strong>Riviera Suites</strong></a>. <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer"><strong>Elounda</strong></a> (northeast) &mdash; Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island &mdash; pick one based on your itinerary.</p>
             <h3 class="gr-h3">Things to Do</h3>
@@ -271,100 +262,42 @@
               <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900" alt="Samaria Gorge" loading="lazy">
             </div>
             <div class="gr-card gr-card--flush">
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Samaria+Gorge+Crete" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Samari&aacute; Gorge <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">~16 km, one of Europe&#8217;s longest. Full day. Book a tour bus from Chania.</div>
-              </a>
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Elafonisi+Beach+Crete" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Elafonisi Beach <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">Pink-sand lagoon. Almost tropical. Dedicate a full day.</div>
-              </a>
-              <div class="gr-sight gr-sight--ticketed">
-                <div class="gr-sight-name">Palace of Knossos</div>
-                <div class="gr-sight-desc">Center of Minoan civilization, home of the labyrinth. Get a guide.</div>
-                <div class="gr-sight-actions">
-                  <a class="gr-sight-action gr-sight-action--map" href="https://www.google.com/maps/search/?api=1&amp;query=Palace+of+Knossos+Crete" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F4CD;</span>Map</a>
-                  <a class="gr-sight-action gr-sight-action--ticket" href="https://hhticket.gr/" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>Official tickets</a>
-                </div>
-              </div>
-              <div class="gr-sight gr-sight--ticketed">
-                <div class="gr-sight-name">Heraklion Archaeological Museum</div>
-                <div class="gr-sight-desc">Finest Minoan collection in the world.</div>
-                <div class="gr-sight-actions">
-                  <a class="gr-sight-action gr-sight-action--map" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Archaeological+Museum" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F4CD;</span>Map</a>
-                  <a class="gr-sight-action gr-sight-action--ticket" href="https://hhticket.gr/" target="_blank" rel="noopener noreferrer"><span class="gr-sight-action-icon" aria-hidden="true">&#x1F39F;&#xFE0F;</span>Official tickets</a>
-                </div>
-              </div>
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Fortezza+of+Rethymno" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Fortezza (Rethymno) <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.</div>
-              </a>
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Firka+Fortress+Chania" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Firka Fortress (Chania) <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">At Chania&#8217;s old harbor entrance. Great views.</div>
-              </a>
-              <a class="gr-sight" href="https://www.google.com/maps/search/?api=1&amp;query=Spinalonga+Crete" target="_blank" rel="noopener noreferrer">
-                <div class="gr-sight-name">Spinalonga <span class="gr-venue-ext">&#x2197;</span></div>
-                <div class="gr-sight-desc">Fortified island near Elounda. Short boat trip to explore.</div>
-              </a>
+              {{ m.sight('Samari&aacute; Gorge', '~16 km, one of Europe&#8217;s longest. Full day. Book a tour bus from Chania.', href='https://www.google.com/maps/search/?api=1&query=Samaria+Gorge+Crete') }}
+              {{ m.sight('Elafonisi Beach', 'Pink-sand lagoon. Almost tropical. Dedicate a full day.', href='https://www.google.com/maps/search/?api=1&query=Elafonisi+Beach+Crete') }}
+              {{ m.sight('Palace of Knossos', 'Center of Minoan civilization, home of the labyrinth. Get a guide.', mapHref='https://www.google.com/maps/search/?api=1&query=Palace+of+Knossos+Crete', ticketHref='https://hhticket.gr/') }}
+              {{ m.sight('Heraklion Archaeological Museum', 'Finest Minoan collection in the world.', mapHref='https://www.google.com/maps/search/?api=1&query=Heraklion+Archaeological+Museum', ticketHref='https://hhticket.gr/') }}
+              {{ m.sight('Fortezza (Rethymno)', 'Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.', href='https://www.google.com/maps/search/?api=1&query=Fortezza+of+Rethymno') }}
+              {{ m.sight('Firka Fortress (Chania)', 'At Chania&#8217;s old harbor entrance. Great views.', href='https://www.google.com/maps/search/?api=1&query=Firka+Fortress+Chania') }}
+              {{ m.sight('Spinalonga', 'Fortified island near Elounda. Short boat trip to explore.', href='https://www.google.com/maps/search/?api=1&query=Spinalonga+Crete') }}
             </div>
             <h3 class="gr-h3">Eat &amp; Drink</h3>
             <div class="gr-venue-list">
-              <a class="gr-venue" href="https://www.google.com/maps/search/?api=1&amp;query=Red+Jane+Bakery+Chania" target="_blank" rel="noopener noreferrer">
-                <div class="gr-venue-inner">
-                  <span class="gr-venue-icon">&#x1F950;</span>
-                  <div>
-                    <div class="gr-venue-name">Red Jane Bakery <span class="gr-venue-ext">&#x2197;</span></div>
-                    <div class="gr-venue-desc">In Chania &mdash; don&#8217;t skip it.</div>
-                  </div>
-                </div>
-              </a>
-              <a class="gr-venue" href="https://www.google.com/maps/search/?api=1&amp;query=Sinagogi+bar+Chania" target="_blank" rel="noopener noreferrer">
-                <div class="gr-venue-inner">
-                  <span class="gr-venue-icon">&#x1F378;</span>
-                  <div>
-                    <div class="gr-venue-name">Sinagogi <span class="gr-venue-ext">&#x2197;</span></div>
-                    <div class="gr-venue-desc">Best bar in Chania.</div>
-                  </div>
-                </div>
-              </a>
+              {{ m.venue('&#x1F950;', 'Red Jane Bakery', 'In Chania &mdash; don&#8217;t skip it.', 'https://www.google.com/maps/search/?api=1&query=Red+Jane+Bakery+Chania') }}
+              {{ m.venue('&#x1F378;', 'Sinagogi', 'Best bar in Chania.', 'https://www.google.com/maps/search/?api=1&query=Sinagogi+bar+Chania') }}
             </div>
             <div class="gr-note">
               <p>We&#8217;ve barely scratched the surface. Do your own research &mdash; or better yet, ask a local.</p>
             </div>
           </div>
           <aside class="gr-aside">
-            <div class="gr-tip gr-tip--essentials">
-              <div class="gr-tip-title">&#x1F3D4; Essentials</div>
-              <ul class="gr-tip-list">
-                <li>Plan at least a full week</li>
-                <li>Base in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> &mdash; try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer">Riviera Suites</a></li>
-                <li>Book <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Samaria+Gorge+Crete" target="_blank" rel="noopener noreferrer">Samari&aacute; Gorge</a> tour the day before</li>
-                <li>Red Jane Bakery &mdash; don&#8217;t skip it</li>
-                <li>Best bar in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a>: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Sinagogi+bar+Chania" target="_blank" rel="noopener noreferrer">Sinagogi</a></li>
-              </ul>
-            </div>
-            <div class="gr-tip gr-tip--ferry">
-              <div class="gr-tip-title">&#x1F6A2; Getting There</div>
-              <ul class="gr-tip-list">
-                <li>Fly to <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> (CHQ) or <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a> (HER)</li>
-                <li>Overnight ferry from Piraeus &mdash; get a cabin</li>
-              </ul>
-            </div>
-            <div class="gr-tip gr-tip--logistics">
-              <div class="gr-tip-title">&#x1F5FA; Logistics</div>
-              <dl class="gr-fact-list">
-                <div><dt>Car hire</dt><dd>essential to explore</dd></div>
-                <div><dt><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> &harr; <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a></dt><dd>2.5 hrs by car</dd></div>
-                <div><dt><a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer">Elounda</a></dt><dd>1.5 hrs from Heraklion</dd></div>
-              </dl>
-            </div>
+            {{ m.tipList('&#x1F3D4;', 'Essentials', 'essentials', [
+              'Plan at least a full week',
+              'Base in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> &mdash; try <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Riviera+Suites+Chania" target="_blank" rel="noopener noreferrer">Riviera Suites</a>',
+              'Book <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Samaria+Gorge+Crete" target="_blank" rel="noopener noreferrer">Samari&aacute; Gorge</a> tour the day before',
+              'Red Jane Bakery &mdash; don&#8217;t skip it',
+              'Best bar in <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a>: <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Sinagogi+bar+Chania" target="_blank" rel="noopener noreferrer">Sinagogi</a>'
+            ]) }}
+            {{ m.tipList('&#x1F6A2;', 'Getting There', 'ferry', [
+              'Fly to <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> (CHQ) or <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a> (HER)',
+              'Overnight ferry from Piraeus &mdash; get a cabin'
+            ]) }}
+            {{ m.factList('&#x1F5FA;', 'Logistics', [
+              {term: 'Car hire', desc: 'essential to explore'},
+              {term: '<a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Chania+Crete" target="_blank" rel="noopener noreferrer">Chania</a> &harr; <a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Heraklion+Crete" target="_blank" rel="noopener noreferrer">Heraklion</a>', desc: '2.5 hrs by car'},
+              {term: '<a class="gr-inline-link" href="https://www.google.com/maps/search/?api=1&amp;query=Elounda+Crete" target="_blank" rel="noopener noreferrer">Elounda</a>', desc: '1.5 hrs from Heraklion'}
+            ], kind='logistics') }}
           </aside>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{{ m.islandFooter() }}
 
 <!-- PAROS & NAXOS -->
 <div id="gr-paros-naxos" class="gr-island">
