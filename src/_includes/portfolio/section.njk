@@ -1,0 +1,82 @@
+<div class="portfolio-wrap">
+  <div class="portfolio-intro">
+    <h2>{{ siteContent.portfolio.title }}</h2>
+    <p class="section-sub">{{ siteContent.portfolio.subtitle }}</p>
+  </div>
+  <div id="portfolio-cards" class="portfolio-list">
+    {% for project in siteContent.portfolio.projects %}
+      {% set theme = portfolioThemes[project.theme] %}
+      <article class="pcard" id="pcard-{{ project.id }}" style="--card-color:{{ theme.color }}">
+        <div class="pcard-header" role="button" tabindex="0" aria-expanded="false"
+             aria-controls="pcard-body-{{ project.id }}">
+          <div class="pcard-accent"></div>
+          <div class="pcard-icon" style="background:{{ theme.color }}">
+            {% include "portfolio/icons/" + project.theme + ".svg" %}
+          </div>
+          <div class="pcard-info">
+            <div class="pcard-title">{{ project.title }}</div>
+            <div class="pcard-subtitle">{{ project.subtitle }}</div>
+            <div class="pcard-tags">
+              {% for tag in project.tags %}<span class="ptag">{{ tag }}</span>{% endfor %}
+            </div>
+          </div>
+          <div class="pcard-meta">
+            <div class="pcard-org">{{ project.organization }}</div>
+            <div class="pcard-period">{{ project.period }}</div>
+          </div>
+          <div class="pcard-chevron">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="butt" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+        <div class="pcard-body" id="pcard-body-{{ project.id }}" aria-hidden="true" inert>
+          <div class="pcard-body-inner"><div class="pcard-content">
+            <ul class="pcard-bullets">
+              {% for highlight in project.highlights %}
+                <li>{{ highlight | markdownInline | safe }}</li>
+              {% endfor %}
+            </ul>
+            {% if project.links %}
+              <div class="pcard-links">
+                {% for link in project.links %}
+                  <a class="pcard-link" href="{{ link.url }}" target="_blank"
+                     rel="noopener noreferrer">{{ link.label }} →</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% if project.details %}
+              <div class="sub-items">
+                {% for detail in project.details %}
+                  <div class="sub-item" id="subitem-{{ project.id }}-{{ detail.id }}">
+                    <div class="sub-header" role="button" tabindex="0" aria-expanded="false"
+                         aria-controls="subitem-body-{{ project.id }}-{{ detail.id }}">
+                      <span class="sub-title">{{ detail.title }}</span>
+                      <span class="sub-chevron">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="sub-body" id="subitem-body-{{ project.id }}-{{ detail.id }}"
+                         aria-hidden="true" inert>
+                      <div class="sub-body-inner">
+                        {% for paragraph in detail.paragraphs %}
+                          <p>{{ paragraph | markdownInline | safe }}</p>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div></div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</div>

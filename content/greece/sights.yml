@@ -1,0 +1,68 @@
+id: sights
+order: 20
+kind: section
+nav:
+  label: Sights
+  icon: 🏛️
+title: Things to Do in Athens
+
+body:
+  - type: image
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_of_Athens_on_January_30,_2022.jpg?width=900
+    alt: The Acropolis of Athens
+    aspect: 16/9
+
+  - type: tagline
+    text: Ancient history and modern energy sit right on top of each other.
+
+  - type: sights
+    items:
+      - name: Acropolis
+        description: The must-see. Go early to beat crowds and heat. Parthenon, Erechtheion, and Temple of Athena Nike.
+        actions:
+          - kind: map
+            label: Map
+            url: https://www.google.com/maps/search/?api=1&query=Acropolis+of+Athens
+            icon: 📍
+          - kind: ticket
+            label: Official tickets
+            url: https://hhticket.gr/
+            icon: 🎟️
+      - name: Acropolis Museum
+        description: World-class collection at the base of the hill. Top-floor gallery with Parthenon views is unforgettable.
+        url: https://www.google.com/maps/search/?api=1&query=Acropolis+Museum+Athens
+      - name: National Garden
+        description: Leafy escape next to the Parliament building. Great for a break from the sun.
+        url: https://www.google.com/maps/search/?api=1&query=National+Garden+Athens
+      - name: Vrachakia
+        description: Lesser-known rocky area with a local feel. Worth exploring off the beaten path.
+        url: https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D
+      - name: Philopappos Monument
+        description: Best panoramic views of the Acropolis and city. Especially beautiful at sunset.
+        url: https://www.google.com/maps/search/?api=1&query=Philopappos+Monument+Athens
+      - name: Odeon of Herodes Atticus
+        description: Ancient Roman theatre built into the Acropolis slope, still used for summer performances. Catch a concert or show if the season lines up — it's unforgettable.
+        url: https://www.google.com/maps/search/?api=1&query=Odeon+of+Herodes+Atticus+Athens
+
+aside:
+  - variant: itinerary
+    title: 🗓 Suggested Order
+    days:
+      - label: Day 1
+        items:
+          - "[Acropolis](https://www.google.com/maps/search/?api=1&query=Acropolis+of+Athens) — early morning"
+          - "[Acropolis Museum](https://www.google.com/maps/search/?api=1&query=Acropolis+Museum+Athens)"
+          - "[Plaka](https://www.google.com/maps/search/?api=1&query=Plaka+Athens) stroll & dinner with a view"
+      - label: Day 2
+        items:
+          - "[National Garden](https://www.google.com/maps/search/?api=1&query=National+Garden+Athens) & [Parliament](https://www.google.com/maps/search/?api=1&query=Hellenic+Parliament+Athens)"
+          - "[Philopappos Hill](https://www.google.com/maps/search/?api=1&query=Philopappos+Hill+Athens) at sunset"
+          - "[Vrachakia](https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D) if you’re feeling adventurous"
+
+  - variant: tips
+    title: ⏰ Timing Tips
+    items:
+      - Book Acropolis tickets in advance at [hhticket.gr](https://hhticket.gr/) (official)
+      - Go before 9 AM or after 5 PM to beat the heat
+      - Arrive 30 min before sunset for [Philopappos](https://www.google.com/maps/search/?api=1&query=Philopappos+Hill+Athens)
+      - "[Acropolis Museum](https://www.google.com/maps/search/?api=1&query=Acropolis+Museum+Athens) closed Tuesdays — check ahead"

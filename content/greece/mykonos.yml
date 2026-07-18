@@ -1,0 +1,79 @@
+id: mykonos
+order: 40
+kind: island
+nav:
+  label: Mykonos
+  icon: 🎉
+title: Mykonos
+tagline: Glamorous, loud, and unapologetically fun
+image:
+  src: https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg
+  alt: Mykonos windmills
+  aspect: 16/9
+
+body:
+  - type: prose
+    text: >-
+      Beach clubs, DJs, late nights, and beautiful people. But old town [Chora](https://www.google.com/maps/search/?api=1&query=Mykonos+Chora) is genuinely charming, and there’s a real archaeological gem nearby.
+
+  - type: heading
+    text: Beaches
+
+  - type: prose
+    text: >-
+      Good but below average by Greek island standards. You’re here for the scene. [Paradise](https://www.google.com/maps/search/?api=1&query=Paradise+Beach+Mykonos) and [Super Paradise](https://www.google.com/maps/search/?api=1&query=Super+Paradise+Beach+Mykonos) are more party than swim.
+
+  - type: heading
+    text: Don’t Miss
+
+  - type: sights
+    items:
+      - name: Delos
+        description: Short boat ride — one of Greece’s most important archaeological sites. Birthplace of Apollo and Artemis. Visit with a guide.
+        actions:
+          - kind: map
+            label: Map
+            url: https://www.google.com/maps/search/?api=1&query=Delos+Archaeological+Site
+            icon: 📍
+          - kind: ticket
+            label: Official tickets
+            url: https://hhticket.gr/
+            icon: 🎟️
+      - name: The Windmills
+        description: Iconic row overlooking the harbor. Classic photo spot, beautiful at sunset.
+        url: https://www.google.com/maps/search/?api=1&query=Mykonos+Windmills
+
+  - type: heading
+    text: Eat & Drink
+
+  - type: venues
+    items:
+      - icon: 🐦
+        name: Pelican
+        description: Nick’s top pick for a meal on the island.
+        url: https://www.google.com/maps/search/?api=1&query=Pelican+Restaurant+Mykonos
+      - icon: 🥂
+        name: Caprice
+        description: Sunset drinks on the water in Little Venice. Stunning views.
+        url: https://www.google.com/maps/search/?api=1&query=Caprice+Bar+Mykonos
+      - icon: 🎉
+        name: Skandinavian
+        description: The go-to club for a big night out.
+        url: https://www.google.com/maps/search/?api=1&query=Skandinavian+Bar+Mykonos
+
+aside:
+  - variant: essentials
+    title: 🌊 Essentials
+    items:
+      - Stay in old town [Chora](https://www.google.com/maps/search/?api=1&query=Mykonos+Chora), not beach hotels
+      - Visit [Delos](https://www.google.com/maps/search/?api=1&query=Delos+Archaeological+Site) — don’t skip it
+      - "Sunset drinks: [Caprice](https://www.google.com/maps/search/?api=1&query=Caprice+Bar+Mykonos) in [Little Venice](https://www.google.com/maps/search/?api=1&query=Little+Venice+Mykonos)"
+      - "Big night out: [Skandinavian](https://www.google.com/maps/search/?api=1&query=Skandinavian+Bar+Mykonos)"
+      - "Best meal: [Pelican](https://www.google.com/maps/search/?api=1&query=Pelican+Restaurant+Mykonos)"
+
+  - variant: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~2.5–5 hrs"
+      - "Flight: ~45 min from ATH"
+      - Book at [ferryscanner.com](https://ferryscanner.com)

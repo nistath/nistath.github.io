@@ -1,0 +1,64 @@
+{% import "greece/components.njk" as component %}
+<div class="greece-wrap">
+  <header class="gr-hero">
+    <div class="gr-hero-eyebrow">{{ siteContent.greece.meta.hero.eyebrow }}</div>
+    <h1>{{ siteContent.greece.meta.hero.title }} <em>{{ siteContent.greece.meta.hero.emphasis }}</em></h1>
+    <div class="gr-hero-curve"></div>
+  </header>
+
+  <nav class="gr-nav" id="gr-nav" aria-label="Guide sections">
+    {% for section in siteContent.greece.sections %}
+      <button class="gr-nav-btn{% if loop.first %} active{% endif %}" data-gr="{{ section.id }}"{% if loop.first %} aria-current="true"{% endif %}>
+        <span class="gr-nav-icon">{{ section.nav.icon }}</span>
+        <span class="gr-nav-label">{{ section.nav.label }}</span>
+      </button>
+    {% endfor %}
+  </nav>
+
+  <div class="gr-main">
+    <aside class="gr-tickets-banner" role="note" aria-label="Official ticket source">
+      <span class="gr-tickets-banner-icon" aria-hidden="true">{{ siteContent.greece.meta.notice.icon }}</span>
+      <div class="gr-tickets-banner-body">{{ siteContent.greece.meta.notice.text | markdownInline('') | safe }}</div>
+    </aside>
+
+    {% for section in siteContent.greece.sections %}
+      {% if loop.index0 == siteContent.greece.firstIslandIndex %}
+        <div class="gr-islands-intro">
+          <div class="gr-islands-eyebrow">{{ siteContent.greece.meta.islands_intro.eyebrow }}</div>
+          <h2 class="gr-islands-title">{{ siteContent.greece.meta.islands_intro.title }}</h2>
+          <p class="gr-islands-sub">{{ siteContent.greece.meta.islands_intro.subtitle }}</p>
+        </div>
+      {% endif %}
+
+      {% if section.kind == 'island' %}
+        <div id="gr-{{ section.id }}" class="gr-island">
+          {{ component.image({
+            src: section.image.src,
+            alt: section.image.alt,
+            aspect: section.image.aspect,
+            variant: 'island'
+          }) }}
+          <div class="gr-island-card"><div class="gr-island-card-inner">
+            <h2 class="gr-island-name">{{ section.title }}</h2>
+            <p class="gr-island-tagline">{{ section.tagline }}</p>
+            <div class="gr-island-body">{{ component.grid(section) }}</div>
+          </div></div>
+        </div>
+      {% else %}
+        <section id="gr-{{ section.id }}" class="gr-section">
+          <h2 class="gr-h2">{{ section.title }}</h2>
+          {% if section.aside and section.aside.length %}
+            {{ component.grid(section) }}
+          {% else %}
+            {% for item in section.body %}{{ component.block(item) }}{% endfor %}
+          {% endif %}
+        </section>
+      {% endif %}
+    {% endfor %}
+
+    <div class="gr-footer">
+      <div class="gr-footer-greek">{{ siteContent.greece.meta.footer.title }}</div>
+      <p class="gr-footer-sub">{{ siteContent.greece.meta.footer.subtitle }}</p>
+    </div>
+  </div>
+</div>

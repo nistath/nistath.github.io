@@ -1,0 +1,34 @@
+id: other-islands
+order: 80
+kind: section
+nav:
+  label: More Islands
+  icon: 🏝️
+title: Other Islands Worth Knowing
+
+body:
+  - type: other_cards
+    items:
+      - name: Milos
+        description: >-
+          Volcanic coastline, sea caves, colorful beaches. [Sarakiniko](https://www.google.com/maps/search/?api=1&query=Sarakiniko+Beach+Milos)’s white lunar landscape is iconic. Quieter, rugged — great for couples.
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG
+          alt: Sarakiniko Beach, Milos
+          aspect: 16/7
+      - name: Rhodes
+        description: >-
+          [Medieval Old Town](https://www.google.com/maps/search/?api=1&query=Rhodes+Old+Town) is a UNESCO site — a walled city for hours. Beaches, [ancient Lindos](https://www.google.com/maps/search/?api=1&query=Lindos+Acropolis+Rhodes), different vibe from the Cyclades.
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg
+          alt: Rhodes Old Town
+          aspect: 16/7
+      - name: Corfu
+        description: >-
+          Northwest, closer to Italy. Venetian influence, lush green hills, elegant architecture around [Corfu Old Town](https://www.google.com/maps/search/?api=1&query=Corfu+Old+Town). Longer journey but completely different.
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg
+          alt: Corfu Old Town
+          aspect: 16/7
+
+aside: []

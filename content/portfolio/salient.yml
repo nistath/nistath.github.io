@@ -1,0 +1,36 @@
+id: salient
+theme: salient
+title: SALIENT
+subtitle: Distributed multi-GPU graph neural network acceleration
+organization: MIT-IBM Watson AI Lab
+period: 2020 – 2021
+tags:
+  - PyTorch
+  - C++
+  - CUDA
+  - Distributed Systems
+  - GNNs
+  - MLSys 2022
+highlights:
+  - >-
+    Led design and implementation of SALIENT, a distributed multi-GPU system
+    for training and inference of graph neural networks (GNNs) on massive
+    graphs.
+  - >-
+    Achieves a drop-in **3× performance improvement** over an optimized
+    PyTorch Geometric baseline, with notable speedups over competing
+    distributed systems.
+  - >-
+    Optimized PyG’s C++ neighborhood sampling code and designed a GIL-free
+    thread-based parallelization strategy for non-blocking data loading.
+  - >-
+    Co-authored *Accelerating Training and Inference of Graph Neural Networks
+    with Fast Sampling and Pipelining*, presented at **MLSys 2022** and featured
+    in MIT News.
+links:
+  - label: MLSys 2022 Paper
+    url: https://proceedings.mlsys.org/paper_files/paper/2022/hash/35f4a8d465e6e1edc05f3d8ab658c551-Abstract.html
+  - label: GitHub
+    url: https://github.com/MITIBMxGraph/SALIENT
+  - label: MIT News
+    url: https://news.mit.edu/2022/accelerating-graph-neural-network-training-0519

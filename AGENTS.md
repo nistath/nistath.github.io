@@ -2,38 +2,85 @@ Repository guidance for contributors and coding agents working in this repo.
 
 ## Local Development
 
-Production is a plain static site served directly by GitHub Pages. There is no production build step.
-
-For normal development, use the BrowserSync setup in this repo:
+Eleventy builds the authored content and templates into a static site. Node.js
+20 or newer is required.
 
 ```bash
 npm install
 npm run dev
 ```
 
-That serves the site on `http://127.0.0.1:8080` with live reload and a whitelist-based route fallback so direct refreshes on `/about`, `/github`, `/resume`, `/portfolio`, and `/greece` work locally without swallowing unrelated paths.
+The development server runs at `http://127.0.0.1:8080` with live reload.
 
-The local server also normalizes trailing-slash SPA routes like `/greece/` back to `/greece`.
-
-For a quick static sanity check, you can still run:
+Before handing off a change, run the checks appropriate to its scope. For any
+content, template, JavaScript, routing, or build change, run the full check:
 
 ```bash
-python3 -m http.server
+npm run check
 ```
 
-But a plain static server will not emulate direct route refreshes unless it is configured with a fallback.
+Useful commands:
+
+```bash
+npm run build              # validate content and generate _site/
+npm run validate:content   # validate authored YAML only
+npm run check              # build plus generated-site safety checks
+npm run og                 # build and regenerate Open Graph images
+```
+
+`_site/` is generated, ignored, and never an authoring source. Do not edit or
+commit it. For a quick static sanity check, build first and serve `_site/`, not
+the repository root:
+
+```bash
+npm run build
+python3 -m http.server --directory _site
+```
 
 ## Deployment
 
-Push to `master`. GitHub Pages serves the repository contents automatically.
+Pushes to `master` run `.github/workflows/pages.yml`, which installs locked
+dependencies, runs `npm run check`, uploads `_site/`, and deploys the artifact
+to GitHub Pages. Pull requests run the build and checks without deploying.
+
+The repository's one-time GitHub Pages setting must be **Settings → Pages →
+Build and deployment → Source: GitHub Actions**. GitHub Pages must not be
+configured to serve the repository root or `_site/` from a branch.
 
 ## Architecture
 
-This is a zero-dependency static personal site. Runtime behavior is plain HTML, CSS, and JavaScript. `package.json` exists only to support the local BrowserSync workflow.
+The production artifact is zero-framework static HTML, CSS, and JavaScript.
+Eleventy, Nunjucks, YAML parsing, Markdown rendering, and schema validation are
+build-time tools only.
+
+### Source boundaries
+
+- `content/portfolio/` and `content/greece/` are the human-authoring surface.
+  They contain meaning, prose, links, ordering, and basic nesting.
+- `src/index.njk` is the application shell that replaces the old authored root
+  `index.html`.
+- `src/_includes/portfolio/` and `src/_includes/greece/` own generated markup,
+  CSS classes, SVGs, and accessibility attributes.
+- `src/_data/portfolioThemes.json` maps stable portfolio theme keys to visual
+  values. Theme icons live beside the portfolio template.
+- `schemas/` defines every accepted content shape. Unknown fields and invalid
+  combinations should fail validation rather than be silently ignored.
+- `scripts/content/load-content.cjs` parses and validates content for both the
+  build and standalone checks. `scripts/validate-content.cjs` is its CLI.
+- `scripts/check-generated.cjs` checks the built artifact for expected content,
+  unique IDs, valid anchor nesting, copied route files, and JavaScript syntax.
+- `.eleventy.js` wires content into templates and copies runtime assets to
+  `_site/`.
+
+Do not put HTML, entities, Nunjucks, CSS classes, SVG, or ARIA attributes in
+content YAML. Use natural Unicode and Markdown strings. Templates must remain
+responsible for escaping and semantic markup. See
+`docs/content-authoring.md` for the complete authoring contract and recipes.
 
 ### Layout system
 
-The app uses a CSS grid layout with two modes controlled by the `app--browsing` class on `#app`:
+The app uses a CSS grid layout with two modes controlled by the
+`app--browsing` class on `#app`:
 
 - Default (`about`): sidebar plus content
 - Browsing mode (other sections): topbar replaces the desktop sidebar
@@ -43,13 +90,16 @@ The app uses a CSS grid layout with two modes controlled by the `app--browsing` 
 
 `js/main.js` drives section changes through `navigate(section)`, which:
 
-1. Toggles `app--browsing` on `#app`
-2. Swaps active states on the sidebar and topbar navigation controls
-3. Shows and hides `<section>` elements via the `.active` class
-4. Lazy-loads GitHub repos and lazy-renders portfolio content when first needed
-5. Syncs browser history and clean paths like `/portfolio` or `/greece`
+1. Toggles `app--browsing` on `#app`.
+2. Swaps active states on the sidebar and topbar navigation controls.
+3. Shows and hides generated `<section>` elements via the `.active` class.
+4. Lazy-loads GitHub repos and initializes portfolio and Greece interactions
+   once.
+5. Syncs browser history and clean paths such as `/portfolio` and `/greece`.
 
-Production direct-route support on GitHub Pages is handled by `404.html`, not by server rewrites. The fallback only captures the known personal-site routes:
+Production direct-route support is handled by the copied route stubs and
+`404.html`, not server rewrites. The fallback only captures the known
+personal-site routes:
 
 - `/about`
 - `/github`
@@ -57,19 +107,63 @@ Production direct-route support on GitHub Pages is handled by `404.html`, not by
 - `/portfolio`
 - `/greece`
 
-Unknown paths are intentionally left alone so other Pages content under this domain, such as project repos on their own path prefixes, can continue to resolve normally.
+Unknown paths are intentionally left alone so other Pages content under this
+domain, such as project repositories on their own path prefixes, can continue
+to resolve normally.
 
-Keep local asset references in `index.html` root-relative, not route-relative. Direct loads on nested paths depend on that.
+Keep local asset references in `src/index.njk` root-relative, not
+route-relative. Direct loads on nested paths depend on that. When adding a new
+top-level site route, update every route registry and artifact involved: the
+shell navigation and section, `js/main.js`, its redirect stub, `404.html`,
+Eleventy passthrough configuration, generated checks, and social metadata as
+applicable.
 
 ### Portfolio cards
 
-Projects are defined in the `PROJECTS` array in `js/main.js`. Each entry renders through `buildCard()`. Cards support nested `subItems`, and expand/collapse uses the `grid-template-rows: 0fr -> 1fr` transition pattern.
+`content/portfolio/index.yml` defines the portfolio heading and project order.
+Each referenced sibling YAML file defines one project. Projects render at build
+time through `src/_includes/portfolio/section.njk`; runtime JavaScript only
+initializes expand/collapse interactions.
 
-To add a project, append a new object to `PROJECTS` with keys such as `id`, `color`, `icon`, `title`, `subtitle`, `org`, `period`, `tags`, and `bullets`. Optional keys include `links` and `subItems`.
+Portfolio themes are stable presentation keys. Reusing a theme is a content
+change. Adding or changing a theme requires updating
+`src/_data/portfolioThemes.json`, its matching SVG include, and any relevant
+styles or tests.
+
+Cards support optional nested `details`. Expand/collapse uses the existing
+`grid-template-rows: 0fr -> 1fr` transition pattern. Preserve the generated
+`aria-expanded`, `aria-controls`, `aria-hidden`, and `inert` relationships when
+refactoring interactions.
+
+### Greece guide
+
+`content/greece/index.yml` contains guide-wide hero, notice, island-intro, and
+footer text. Every other YAML file is one nav target. Its `order` controls both
+rendering and generated Greece navigation; there is no separate nav registry.
+
+`src/_includes/greece/guide.njk` owns the guide-level layout and
+`src/_includes/greece/components.njk` renders the schema's typed body and aside
+blocks. To add prose or an entry using an existing visual type, edit YAML only.
+To add a new visual type or variant, update the schema, renderer, validation,
+example content, tests, and authoring documentation together.
+
+Greece link shapes must not be mixed:
+
+- A venue, chip, or sight with `url` renders as a full-card or full-item anchor.
+  Its name and description/text must not contain a Markdown link.
+- A sight with several peer links uses `links`; map/ticket buttons use
+  `actions`. These render a non-anchor container with child anchors.
+- Inline Markdown links belong in prose, notes, facts, tips, and other
+  non-clickable containers.
+
+`scripts/content/load-content.cjs` rejects Markdown links nested inside known
+full-card fields. Keep this validation aligned with template changes. Never
+work around it by inserting raw HTML.
 
 ### Email obfuscation
 
-The email address in `js/main.js` is ROT13-encoded to reduce scraping. It is decoded at runtime and injected into:
+The email address in `js/main.js` is ROT13-encoded to reduce scraping. It is
+decoded at runtime and injected into:
 
 - `#email`
 - `#email-topbar`
@@ -87,13 +181,30 @@ The shell and hero treatment are controlled by the shell theme variables:
 - `--shell-bg-image`
 - `--shell-bg-size`
 
-The sidebar, topbar, and sticky header use the moving `img/background-blue.png` texture directly. Do not rely on CSS blend-mode tinting for shell color, since Safari renders it inconsistently.
+The sidebar, topbar, and sticky header use the moving
+`img/background-blue.png` texture directly. Do not rely on CSS blend-mode
+tinting for shell color, since Safari renders it inconsistently.
 
-### Greece Guide Link Patterns
+## Extension checklist
 
-The Greece guide in `index.html` uses two different link patterns that should not be mixed:
+For ordinary factual, prose, ordering, link, image, or existing-shape changes:
 
-- `.gr-venue` and `a.gr-sight` are full-card anchors. Do not place another `<a>` anywhere inside them, including inside names or descriptions. Nested anchors are invalid HTML and browsers will reparse the markup in inconsistent ways.
-- `.gr-inline-link` is only for prose, list items, fact rows, and other non-clickable containers.
-- If one row needs multiple destination links, keep the row itself non-clickable and use the grouped pattern already in `css/greece.css`: `.gr-sight.gr-sight--grouped` with child `.gr-sight-links` and `.gr-sight-link` items.
-- When a card is already the link target, keep secondary place mentions in that card as plain text instead of adding more anchors.
+1. Edit only the relevant file under `content/`.
+2. Preserve IDs unless intentionally migrating references.
+3. Run `npm run validate:content` and `npm run check`.
+
+For a new field, block type, presentation variant, or component:
+
+1. Update the appropriate schema in `schemas/` first.
+2. Update the Nunjucks renderer under `src/_includes/`.
+3. Extend `scripts/content/load-content.cjs` for cross-file or semantic rules
+   that JSON Schema cannot express.
+4. Add or update generated-site checks and interaction code if needed.
+5. Add representative content and update `docs/content-authoring.md`.
+6. Run `npm run check` and verify the affected routes at desktop and mobile
+   widths.
+
+Keep content and presentation separate throughout: a future author should be
+able to revise prose and basic nesting from a phone without touching template
+syntax, while an agent can safely evolve the rendering contract behind the
+validated schema.

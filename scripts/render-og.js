@@ -4,7 +4,7 @@
  *
  *   npm run og        # regenerate img/og/og-default.png and img/og/og-greece.png
  *
- * Boots a tiny static server against the repo, drives headless Chromium with
+ * Boots a tiny static server against the generated site, drives headless Chromium with
  * Playwright, and captures two real elements verbatim:
  *
  *   - og-default.png — the mobile topbar (.topbar) at a phone viewport, which
@@ -26,6 +26,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
+const SITE_ROOT = path.join(ROOT, '_site');
 const OUT_DIR = path.join(ROOT, 'img', 'og');
 const CACHE_DIR = path.join(ROOT, 'img', 'cache');
 const ATHENS_UPSTREAM = 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg';
@@ -46,8 +47,8 @@ function startServer() {
     const normalized = urlPath.replace(/\/+$/, '') || '/';
     if (SPA_ROUTES.has(normalized)) urlPath = '/index.html';
     if (urlPath === '/') urlPath = '/index.html';
-    const filePath = path.join(ROOT, urlPath);
-    if (!filePath.startsWith(ROOT)) { res.writeHead(403).end(); return; }
+    const filePath = path.join(SITE_ROOT, urlPath);
+    if (!filePath.startsWith(SITE_ROOT)) { res.writeHead(403).end(); return; }
     fs.readFile(filePath, (err, data) => {
       if (err) { res.writeHead(404).end(); return; }
       res.writeHead(200, { 'Content-Type': MIME[path.extname(filePath)] || 'application/octet-stream' });
@@ -87,7 +88,7 @@ async function main() {
   const server = await startServer();
   const port = server.address().port;
   const origin = `http://127.0.0.1:${port}`;
-  console.log('serving', ROOT, 'on', origin);
+  console.log('serving', SITE_ROOT, 'on', origin);
 
   const browser = await chromium.launch({ args: ['--ignore-certificate-errors'] });
 
