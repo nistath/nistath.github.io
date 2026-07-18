@@ -1,0 +1,19 @@
+# ────────────────────────────────────────────────────────────────────
+# Small site-wide content: the GitHub section and the resume embed.
+# See content/README.md for the full editing guide.
+# ────────────────────────────────────────────────────────────────────
+
+github:
+  title: GitHub
+  sub: "Pinned repositories from [@nistath](https://github.com/nistath)"
+  # Keep this list in the same order as the GitHub profile's pinned repos.
+  pinned_repos:
+    - MITIBMxGraph/SALIENT
+    - nistath/arpp
+    - nistath/o2p2_vizdoom
+    - MITMotorsports/MY18
+    - MITMotorsports/ParseCAN
+    - nistath/lidar_raycaster
+
+resume:
+  pdf_url: "https://www.dropbox.com/scl/fi/d1e7agwsxeq2i67ctfni0/Nick_Stathas_Resume.pdf?rlkey=62hsxcdpka3mh9gakokisj11a&st=s0g5y8mn&raw=1#page=1&view=FitH"

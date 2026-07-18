@@ -1,0 +1,62 @@
+# Rebuilds the generated pages (index.html + route stubs) whenever the
+# content or the build system changes on master, and commits the result
+# back so GitHub Pages — which serves the repository directly — picks it
+# up. This is what makes phone edits to content/*.yaml deploy themselves.
+#
+# The commit-back step only touches generated files, which are excluded
+# from the `paths` filters below, so it cannot retrigger this workflow
+# ([skip ci] in the commit message is a second guard).
+#
+# On pull requests the job just builds, acting as content validation: a
+# broken YAML edit fails the check and never reaches the live site.
+
+name: Rebuild generated pages
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'content/**'
+      - 'build/**'
+      - 'js/**'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    paths:
+      - 'content/**'
+      - 'build/**'
+      - 'js/**'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Commit regenerated pages
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet; then
+            echo "Generated pages already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html github/index.html resume/index.html portfolio/index.html greece/index.html
+          git commit -m "Rebuild generated pages from content [skip ci]"
+          git push

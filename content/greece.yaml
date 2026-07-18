@@ -1,0 +1,582 @@
+# ────────────────────────────────────────────────────────────────────
+# Nick's Guide to Athens & Beyond — all guide content lives here.
+#
+# How to edit this file (full guide in content/README.md):
+#   *bold* / links:  **bold**, *italic*, [label](https://example.com)
+#   Google Maps:     [label](map:Place Name City) — expands to a Maps search
+#   New lines that start with "[" or "*" must be wrapped "in quotes".
+#   Long prose uses ">-" blocks: indent the following lines two spaces
+#   deeper and they fold into one paragraph.
+# ────────────────────────────────────────────────────────────────────
+
+hero:
+  eyebrow: Nick’s Guide to
+  title: Athens *& Beyond*
+
+banner:
+  icon: "🎟️"
+  text: >-
+    **Buy archaeological-site tickets at [hhticket.gr](https://hhticket.gr/)**
+    — the official Hellenic Ministry of Culture source. Skip resellers: they
+    cost more and timed-entry slots only count if booked here.
+
+sections:
+
+  # ── ATHENS ──────────────────────────────────────────────────────
+
+  - id: travel
+    type: guide
+    nav: { icon: "✈️", label: Travel }
+    title: Getting There & Around
+    body:
+      - feature_image:
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900
+          alt: Athens city view at sunset
+      - card:
+          style: city-intro
+          blocks:
+            - h3: Getting In
+            - p: >-
+                Fly into **Athens International Airport (ATH)**. Taxi (~€40
+                flat rate, ~40 min), metro Line 3 to
+                [Syntagma Square](map:Syntagma Square Athens) (~40 min), or
+                private transfer. If you’re heading straight to an island,
+                many have direct international flights — worth checking
+                before defaulting to ATH.
+            - chips:
+                - "🚕 Taxi ~€40"
+                - "🚇 Metro ~40 min"
+                - "📱 Uber / FreeNow"
+            - h3: Getting Around
+            - p: >-
+                Athens is very walkable in the center.
+                [**FreeNow**](https://free-now.com) has the best local driver
+                availability. The metro is clean, cheap, and efficient.
+                Google Maps works great for transit.
+            - h3: Where to Stay
+            - p: >-
+                We recommend [**Plaka**](map:Plaka Athens) (charming village
+                feel, narrow streets) and [**Thiseio**](map:Thiseio Athens)
+                (laid-back, beautiful Acropolis views from the promenade).
+                Both are centrally located.
+            - chips:
+                flush: true
+                items:
+                  - { label: "📍 Plaka", map: Plaka Athens }
+                  - { label: "📍 Thiseio", map: Thiseio Athens }
+    aside:
+      - style: facts
+        title: 🛬 Quick Facts
+        facts:
+          - { term: Airport, def: ATH — Eleftherios Venizelos }
+          - { term: Metro to centre, def: ~40 min }
+          - { term: Taxi flat rate, def: ~€40 }
+          - { term: Currency, def: Euro (€) }
+          - { term: Language, def: Greek }
+          - { term: SIM cards, def: At airport arrivals }
+      - style: tips
+        title: 💡 Pro Tips
+        items:
+          - Validate your metro ticket before boarding
+          - FreeNow usually beats Uber on price & availability
+          - "Hotels in [Plaka](map:Plaka Athens) are walkable to almost everything"
+          - Most restaurants open for dinner at 8–9 PM
+          - "Book island ferries at [ferryscanner.com](https://ferryscanner.com)"
+
+  - id: sights
+    type: guide
+    nav: { icon: "🏛️", label: Sights }
+    title: Things to Do in Athens
+    body:
+      - image:
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_of_Athens_on_January_30,_2022.jpg?width=900
+          alt: The Acropolis of Athens
+      - tagline: Ancient history and modern energy sit right on top of each other.
+      - sights:
+          - name: Acropolis
+            map: Acropolis of Athens
+            tickets: true
+            desc: >-
+              The must-see. Go early to beat crowds and heat. Parthenon,
+              Erechtheion, and Temple of Athena Nike.
+          - name: Acropolis Museum
+            map: Acropolis Museum Athens
+            desc: >-
+              World-class collection at the base of the hill. Top-floor
+              gallery with Parthenon views is unforgettable.
+          - name: National Garden
+            map: National Garden Athens
+            desc: >-
+              Leafy escape next to the Parliament building. Great for a break
+              from the sun.
+          - name: Vrachakia
+            url: https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D
+            desc: >-
+              Lesser-known rocky area with a local feel. Worth exploring off
+              the beaten path.
+          - name: Philopappos Monument
+            map: Philopappos Monument Athens
+            desc: >-
+              Best panoramic views of the Acropolis and city. Especially
+              beautiful at sunset.
+          - name: Odeon of Herodes Atticus
+            map: Odeon of Herodes Atticus Athens
+            desc: >-
+              Ancient Roman theatre built into the Acropolis slope, still
+              used for summer performances. Catch a concert or show if the
+              season lines up — it's unforgettable.
+    aside:
+      - style: itinerary
+        title: 🗓 Suggested Order
+        days:
+          - label: Day 1
+            items:
+              - "[Acropolis](map:Acropolis of Athens) — early morning"
+              - "[Acropolis Museum](map:Acropolis Museum Athens)"
+              - "[Plaka](map:Plaka Athens) stroll & dinner with a view"
+          - label: Day 2
+            items:
+              - "[National Garden](map:National Garden Athens) & [Parliament](map:Hellenic Parliament Athens)"
+              - "[Philopappos Hill](map:Philopappos Hill Athens) at sunset"
+              - "[Vrachakia](https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D) if you’re feeling adventurous"
+      - style: tips
+        title: ⏰ Timing Tips
+        items:
+          - "Book Acropolis tickets in advance at [hhticket.gr](https://hhticket.gr/) (official)"
+          - Go before 9 AM or after 5 PM to beat the heat
+          - "Arrive 30 min before sunset for [Philopappos](map:Philopappos Hill Athens)"
+          - "[Acropolis Museum](map:Acropolis Museum Athens) closed Tuesdays — check ahead"
+
+  - id: food
+    type: guide
+    nav: { icon: "🫒", label: Eat & Drink }
+    title: Nick’s Restaurants & Bars
+    body:
+      - intro: Tried and true picks in Athens.
+      - h3: Restaurants
+      - venues:
+          - icon: "🍽️"
+            name: Strofi Athenian Restaurant
+            url: https://maps.app.goo.gl/MmdW2hYJR4kPLk5V9
+            desc: >-
+              Refined traditional Greek with rooftop Acropolis views. Book a
+              terrace table. Great before or after a show at the Herodion.
+          - icon: "🥩"
+            name: Basegrill Athens
+            url: https://maps.app.goo.gl/TuuheUo7c9UeZJmS6
+            desc: >-
+              One of Athens’ best steakhouses. Premium cuts, egg nest
+              potatoes, great wine list.
+          - icon: "🫕"
+            name: Barbadimos
+            url: https://maps.app.goo.gl/pMdBjwyFk8QpfxVz9
+            desc: Authentic, no-frills Greek cooking. The kind of place locals go.
+          - icon: "🥙"
+            name: Gyristroula
+            url: https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6
+            desc: Solid souvlaki — quick, delicious, and cheap.
+          - icon: "🥙"
+            name: Street Souvlaki
+            url: https://maps.app.goo.gl/dsEzw2CS7NDqNAva8
+            desc: Another go-to for fast, excellent souvlaki.
+          - icon: "🍦"
+            name: Lartecono Davinci Gelato
+            url: https://maps.app.goo.gl/oLmuDNnoERDjQYA88
+            desc: For when you need a gelato break (you will).
+          - icon: "🍩"
+            name: Loukoumadaki Athens
+            url: https://maps.app.goo.gl/TmMjRhbJWTNM21aF6
+            desc: >-
+              Greek donuts (loukoumades) with honey and cinnamon. A
+              must-try.
+          - icon: "☕"
+            name: City ZEN All Day Bar Restaurant
+            url: https://maps.app.goo.gl/HVo2Ka9dJLPXXRLk8
+            desc: Relaxed meal or drinks any time of day.
+      - h3: Bars & Nightlife
+      - venues:
+          - icon: "🌿"
+            name: six d.o.g.s
+            url: https://maps.app.goo.gl/yPNufsHcREnSA1C87
+            desc: >-
+              All-day bar & live music with a hidden garden. Cocktails, DJs,
+              diverse crowd.
+          - icon: "🏙️"
+            name: Bios
+            url: https://maps.app.goo.gl/i7qomXPkvD9t7DJ79
+            desc: >-
+              Legendary rooftop bar on Pireos St. Deck chairs, DJs,
+              incredible Acropolis views. Try the popsicle cocktail.
+          - icon: "🎶"
+            name: Drachmi
+            url: https://maps.app.goo.gl/dxBLrnwPHm3ZHs4k7
+            desc: >-
+              Lively cocktail bar on Kolokotroni Square. Packed on weekends.
+              Great drinks, funky music, young crowd.
+          - icon: "🧺"
+            name: Πλυντήριο
+            lang: el
+            url: https://maps.app.goo.gl/Z3bNF4B6Wus1hACc7
+            desc: Club themed as a laundromat. Fun, irreverent, young crowd.
+    aside:
+      - style: eats
+        title: 🍋 Must-Eat
+        items:
+          - Souvlaki — the Greek street staple
+          - Loukoumades — honey-drizzled donuts
+          - Spanakopita — spinach & feta pastry
+          - Greek yogurt with thyme honey
+          - Fresh seafood near Piraeus
+      - style: tips
+        title: 🍷 Drink Like a Local
+        items:
+          - Freddo espresso = iced espresso
+          - Tsipouro — the Greek grappa
+          - Ouzo with seafood meze
+          - >-
+            In Greece, rounding up or leaving a couple of euros is normal;
+            5–10% is more for especially good service
+      - style: facts
+        title: 📍 Neighbourhoods
+        facts:
+          - { term: Monastiraki, def: street food hub }
+          - { term: Psyrri, def: artsy bars & mezedopolia }
+          - { term: Kolonaki, def: upscale dining }
+          - { term: Gazi, def: nightlife district }
+
+  # ── ISLANDS ─────────────────────────────────────────────────────
+
+  - type: divider
+    eyebrow: Beyond Athens
+    title: Island Escapes
+    sub: Each island has its own personality.
+
+  - id: mykonos
+    type: island
+    nav: { icon: "🎉", label: Mykonos }
+    name: Mykonos
+    tagline: Glamorous, loud, and unapologetically fun
+    image:
+      src: https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg
+      alt: Mykonos windmills
+    body:
+      - p: >-
+          Beach clubs, DJs, late nights, and beautiful people. But old town
+          [Chora](map:Mykonos Chora) is genuinely charming, and there’s a
+          real archaeological gem nearby.
+      - h3: Beaches
+      - p: >-
+          Good but below average by Greek island standards. You’re here for
+          the scene. [Paradise](map:Paradise Beach Mykonos) and
+          [Super Paradise](map:Super Paradise Beach Mykonos) are more party
+          than swim.
+      - h3: Don’t Miss
+      - sights:
+          - name: Delos
+            map: Delos Archaeological Site
+            tickets: true
+            desc: >-
+              Short boat ride — one of Greece’s most important
+              archaeological sites. Birthplace of Apollo and Artemis. Visit
+              with a guide.
+          - name: The Windmills
+            map: Mykonos Windmills
+            desc: >-
+              Iconic row overlooking the harbor. Classic photo spot,
+              beautiful at sunset.
+      - h3: Eat & Drink
+      - venues:
+          - icon: "🐦"
+            name: Pelican
+            map: Pelican Restaurant Mykonos
+            desc: Nick’s top pick for a meal on the island.
+          - icon: "🥂"
+            name: Caprice
+            map: Caprice Bar Mykonos
+            desc: Sunset drinks on the water in Little Venice. Stunning views.
+          - icon: "🎉"
+            name: Skandinavian
+            map: Skandinavian Bar Mykonos
+            desc: The go-to club for a big night out.
+    aside:
+      - style: essentials
+        title: 🌊 Essentials
+        items:
+          - "Stay in old town [Chora](map:Mykonos Chora), not beach hotels"
+          - "Visit [Delos](map:Delos Archaeological Site) — don’t skip it"
+          - "Sunset drinks: [Caprice](map:Caprice Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
+          - "Big night out: [Skandinavian](map:Skandinavian Bar Mykonos)"
+          - "Best meal: [Pelican](map:Pelican Restaurant Mykonos)"
+      - style: ferry
+        title: 🚢 Getting There
+        items:
+          - "Ferry from Piraeus: ~2.5–5 hrs"
+          - "Flight: ~45 min from ATH"
+          - "Book at [ferryscanner.com](https://ferryscanner.com)"
+
+  - id: santorini
+    type: island
+    nav: { icon: "🌅", label: Santorini }
+    name: Santorini
+    tagline: Dramatic cliffs, legendary sunsets, real depth
+    image:
+      src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900
+      alt: Oia blue domes at sunset, Santorini
+    body:
+      - p: >-
+          Built on a volcanic caldera — cliffs into deep blue water, white
+          buildings stacked together. Romantic, photogenic, historically
+          rich.
+      - h3: Where to Stay
+      - p: >-
+          [**Fira**](map:Fira Santorini) is lively.
+          [**Oia**](map:Oia Santorini) is fancier with the iconic sunset.
+          Stay along the caldera coast between them for a middle ground.
+      - h3: Things to Do
+      - image:
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900
+          alt: Fira to Oia caldera hike
+          aspect: 16/7
+          gap: true
+      - sights:
+          - name: Oia Castle (Agios Nikolaos)
+            map: Castle of Oia Agios Nikolaos Santorini
+            desc: >-
+              15th-century Venetian fortress ruins. The sunset spot — arrive
+              early.
+          - name: Fira to Oia Hike
+            map: Fira to Oia Hike Santorini
+            desc: >-
+              ~10 km caldera rim trail. Very little shade — go early, bring
+              water.
+          - name: Akrotiri
+            map: Akrotiri Archaeological Site Santorini
+            tickets: true
+            desc: >-
+              Bronze Age settlement — the “Pompeii of the Aegean.” Over
+              3,500 years old.
+          - name: Ancient Thira
+            map: Ancient Thera Santorini
+            tickets: true
+            desc: Hellenistic ruins on a ridge between Kamari and Perissa beaches.
+          - name: Museums in Fira
+            desc: Good indoor stop before or after Akrotiri.
+            links:
+              - { label: Fira, map: Fira Santorini }
+              - { label: Museum of Prehistoric Thera, map: Museum of Prehistoric Thera Fira }
+              - { label: Archaeological Museum of Thera, map: Archaeological Museum of Thera Fira }
+          - name: Red & White Beach
+            desc: >-
+              Dramatic colored cliffs. Red Beach on foot, White Beach by
+              boat.
+            links:
+              - { label: Red Beach, map: Red Beach Santorini }
+              - { label: White Beach, map: White Beach Santorini }
+          - name: Ammoudi Bay
+            map: Ammoudi Bay Santorini
+            desc: >-
+              Hidden harbor below Oia. Hike or donkey down for swimming and
+              seafood.
+      - h3: Eat & Drink
+      - venues:
+          - icon: "🥙"
+            name: Yogi Gyro
+            map: Yogi Gyro Santorini
+            desc: In Fira — best gyros on the island.
+          - icon: "🌅"
+            name: PK Cocktail Bar
+            map: PK Cocktail Bar Santorini
+            desc: The spot for sunset drinks.
+    aside:
+      - style: essentials
+        title: 🌅 Essentials
+        items:
+          - "Stay in [Oia](map:Oia Santorini) for iconic sunset views"
+          - Book caldera-view hotels early
+          - "Hike [Fira → Oia](map:Fira to Oia Hike Santorini) (10 km, go early)"
+          - "Visit [Akrotiri](map:Akrotiri Archaeological Site Santorini) archaeological site"
+          - "Sunset drinks: [PK Cocktail Bar](map:PK Cocktail Bar Santorini)"
+          - "Best gyros: [Yogi Gyro](map:Yogi Gyro Santorini) in [Fira](map:Fira Santorini)"
+      - style: ferry
+        title: 🚢 Getting There
+        items:
+          - "Ferry from Piraeus: ~8 hrs (overnight)"
+          - "High-speed ferry: ~5 hrs"
+          - "Flight: ~45 min from ATH"
+
+  - id: crete
+    type: island
+    nav: { icon: "🏔️", label: Crete }
+    name: Crete
+    tagline: The largest island — feels like its own country
+    image:
+      src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900
+      alt: Chania Venetian harbor, Crete
+    body:
+      - p: >-
+          Gorges, beaches, Venetian harbors, ancient palaces, incredible
+          food. Plan at least a full week.
+      - h3: Getting There
+      - chips:
+          - { label: "✈️ Chania (CHQ)", map: Chania Crete }
+          - { label: "✈️ Heraklion (HER)", map: Heraklion Crete }
+          - "⛴ Overnight ferry"
+      - h3: Where to Stay
+      - p: >-
+          [**Chania**](map:Chania Crete) (west) — Lively Venetian harbor
+          town, best base for the gorge and beaches. Try
+          [**Riviera Suites**](map:Riviera Suites Chania).
+          [**Elounda**](map:Elounda Crete) (northeast) — Quieter, upscale,
+          closer to Knossos and Spinalonga. These are opposite ends of the
+          island — pick one based on your itinerary.
+      - h3: Things to Do
+      - image:
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900
+          alt: Samaria Gorge
+          aspect: 16/7
+          gap: true
+      - sights:
+          - name: Samariá Gorge
+            map: Samaria Gorge Crete
+            desc: >-
+              ~16 km, one of Europe’s longest. Full day. Book a tour bus
+              from Chania.
+          - name: Elafonisi Beach
+            map: Elafonisi Beach Crete
+            desc: Pink-sand lagoon. Almost tropical. Dedicate a full day.
+          - name: Palace of Knossos
+            map: Palace of Knossos Crete
+            tickets: true
+            desc: >-
+              Center of Minoan civilization, home of the labyrinth. Get a
+              guide.
+          - name: Heraklion Archaeological Museum
+            map: Heraklion Archaeological Museum
+            tickets: true
+            desc: Finest Minoan collection in the world.
+          - name: Fortezza (Rethymno)
+            map: Fortezza of Rethymno
+            desc: >-
+              Venetian fortress. Stop for a visit and lunch between
+              Heraklion and Chania.
+          - name: Firka Fortress (Chania)
+            map: Firka Fortress Chania
+            desc: At Chania’s old harbor entrance. Great views.
+          - name: Spinalonga
+            map: Spinalonga Crete
+            desc: Fortified island near Elounda. Short boat trip to explore.
+      - h3: Eat & Drink
+      - venues:
+          - icon: "🥐"
+            name: Red Jane Bakery
+            map: Red Jane Bakery Chania
+            desc: In Chania — don’t skip it.
+          - icon: "🍸"
+            name: Sinagogi
+            map: Sinagogi bar Chania
+            desc: Best bar in Chania.
+      - note: >-
+          We’ve barely scratched the surface. Do your own research — or
+          better yet, ask a local.
+    aside:
+      - style: essentials
+        title: 🏔 Essentials
+        items:
+          - Plan at least a full week
+          - "Base in [Chania](map:Chania Crete) — try [Riviera Suites](map:Riviera Suites Chania)"
+          - "Book [Samariá Gorge](map:Samaria Gorge Crete) tour the day before"
+          - Red Jane Bakery — don’t skip it
+          - "Best bar in [Chania](map:Chania Crete): [Sinagogi](map:Sinagogi bar Chania)"
+      - style: ferry
+        title: 🚢 Getting There
+        items:
+          - "Fly to [Chania](map:Chania Crete) (CHQ) or [Heraklion](map:Heraklion Crete) (HER)"
+          - Overnight ferry from Piraeus — get a cabin
+      - style: logistics
+        title: 🗺 Logistics
+        facts:
+          - { term: Car hire, def: essential to explore }
+          - term: "[Chania](map:Chania Crete) ↔ [Heraklion](map:Heraklion Crete)"
+            def: 2.5 hrs by car
+          - term: "[Elounda](map:Elounda Crete)"
+            def: 1.5 hrs from Heraklion
+
+  - id: paros-naxos
+    type: island
+    nav: { icon: "⛵", label: Paros & Naxos }
+    name: Paros & Naxos
+    tagline: Close neighbors, easy to visit together
+    image:
+      src: https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg
+      alt: Portara, Temple of Apollo, Naxos
+    body:
+      - p: >-
+          Ferries between them take 30–45 minutes. Either is great on its
+          own.
+      - h3: Naxos
+      - p: >-
+          The most well-rounded island — beaches, history, mountain
+          villages, great food, youthful energy.
+      - sights:
+          - name: Guided bus tour
+            desc: Hit the island’s major sights with a local guide.
+          - name: Catamaran cruise
+            desc: Swimming in secluded coves with lunch on board.
+          - name: Portara (Temple of Apollo)
+            map: Portara Temple of Apollo Naxos
+            desc: Iconic marble gateway. Beautiful at sunset.
+      - h3: Paros & Antiparos
+      - p: >-
+          Paros has charming [Parikia](map:Parikia Paros) and pretty
+          [Naoussa](map:Naoussa Paros). [Antiparos](map:Antiparos) has a
+          great secluded cliff beach hike. Ask around when you arrive.
+    aside:
+      - style: essentials
+        title: ✨ Naxos Essentials
+        items:
+          - Best all-around Cycladic island
+          - Book a guided bus tour
+          - "Catamaran cruise: coves & lunch on board"
+          - "[Portara](map:Portara Temple of Apollo Naxos) at sunset — unmissable"
+          - "Paros: [Parikia](map:Parikia Paros) & [Naoussa](map:Naoussa Paros) village"
+      - style: ferry
+        title: 🚢 Getting There
+        items:
+          - "Ferry from Piraeus: ~5 hrs to Naxos"
+          - "Paros ↔ Naxos: 30–45 min"
+          - "Book at [ferryscanner.com](https://ferryscanner.com)"
+
+  - id: other-islands
+    type: cards
+    nav: { icon: "🏝️", label: More Islands }
+    title: Other Islands Worth Knowing
+    cards:
+      - name: Milos
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG
+          alt: Sarakiniko Beach, Milos
+        desc: >-
+          Volcanic coastline, sea caves, colorful beaches.
+          [Sarakiniko](map:Sarakiniko Beach Milos)’s white lunar landscape
+          is iconic. Quieter, rugged — great for couples.
+      - name: Rhodes
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg
+          alt: Rhodes Old Town
+        desc: >-
+          [Medieval Old Town](map:Rhodes Old Town) is a UNESCO site — a
+          walled city for hours. Beaches,
+          [ancient Lindos](map:Lindos Acropolis Rhodes), different vibe
+          from the Cyclades.
+      - name: Corfu
+        image:
+          src: https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg
+          alt: Corfu Old Town
+        desc: >-
+          Northwest, closer to Italy. Venetian influence, lush green hills,
+          elegant architecture around [Corfu Old Town](map:Corfu Old Town).
+          Longer journey but completely different.
+
+footer:
+  greek: Καλό ταξίδι!
+  sub: Have the best time — see you in Greece.

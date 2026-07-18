@@ -1,45 +1,60 @@
 # Nick's Personal Website
 
-This repository now hosts a plain static site served directly by GitHub Pages. There is no build pipeline for production deployment.
+A static personal site served directly by GitHub Pages, generated from
+hand-editable YAML content by a small dependency-light build.
+
+## Editing content (the common case)
+
+All prose — the about page, portfolio cards, and the Greece guide — lives
+in [`content/`](content/) as YAML with a tiny inline-Markdown dialect.
+Edit a file (the GitHub mobile app works great for this), commit to
+`master`, and a GitHub Action rebuilds and publishes the site
+automatically. Bad edits fail the build with a precise error instead of
+breaking the live site.
+
+**Start here: [`content/README.md`](content/README.md)** — the full
+authoring guide.
 
 ## Local development
-
-For normal development, use the BrowserSync setup in this repo. It gives you:
-
-- live reload on file changes
-- local serving on `http://127.0.0.1:8080`
-- route fallback for the site's direct SPA paths: `/about`, `/github`, `/resume`, `/portfolio`, and `/greece`
-- slash normalization for those SPA paths so `/greece/` resolves back to `/greece`
-
-### Recommended
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open [http://127.0.0.1:8080](http://127.0.0.1:8080).
+Builds the site, serves it on [http://127.0.0.1:8080](http://127.0.0.1:8080)
+with live reload, watches `content/` and `build/` and rebuilds on save.
+The dev server includes a whitelist-based fallback (`bs-config.js`) so the
+site's direct SPA paths — `/about`, `/github`, `/resume`, `/portfolio`,
+`/greece` — refresh correctly, and trailing slashes like `/greece/`
+normalize back to `/greece`.
 
-This local dev server uses a whitelist-based fallback in `bs-config.js`, so the known site routes above are served from `index.html` during development. Unknown routes are left alone instead of being swallowed, which keeps local behavior closer to production where GitHub Pages routing is implemented via `404.html`.
-
-If you want a reproducible clean install in CI or a fresh checkout, `npm ci` also works.
-
-### Quick static check
-
-If you only want to sanity-check files without live reload, you can still run:
+Other scripts:
 
 ```bash
-python3 -m http.server
+npm run build    # one-shot build: renders index.html + route stubs
+npm run check    # validate content without writing anything
+npm run serve    # serve only, no build/watch
 ```
 
-But note that a plain static server will not correctly emulate direct route refreshes unless it is configured with a fallback.
+`python3 -m http.server` still works for a quick static sanity check
+(generated pages are committed), but it won't rebuild or emulate direct
+route refreshes.
+
+## How it fits together
+
+- `content/*.yaml` — the words (human-owned)
+- `build/` — templates and build script that render them into HTML
+  (agent-owned; see [`AGENTS.md`](AGENTS.md))
+- `index.html`, `github/`, `resume/`, `portfolio/`, `greece/` —
+  **generated output**, checked in so GitHub Pages can serve the repo
+  directly; never edited by hand
+- `js/main.js`, `css/` — runtime behavior and styling (plain JS/CSS,
+  zero runtime dependencies)
 
 ## Deployment
 
-Commit your changes to the `master` branch and push. GitHub Pages automatically serves the contents of this repository.
-
-Known direct routes are normalized to slashless paths like `/greece`, and local assets in `index.html` should stay root-relative so direct loads and GitHub Pages fallbacks do not break styling.
-
-## Next steps
-
-With the Ruby and Gulp dependencies removed, the repository is ready for a static site generator such as [Kaihan](https://github.com/Mononofu/kaihan). Generate your blog into a folder (for example `blog/`) and publish the resulting static files alongside the rest of the site.
+Commit to `master` and push. GitHub Pages serves the repository contents
+as-is. The `Rebuild generated pages` workflow regenerates the HTML
+whenever `content/` or `build/` change and commits the result back, so
+content edits made in the GitHub UI deploy without any local tooling.

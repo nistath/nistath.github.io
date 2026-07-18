@@ -1,0 +1,294 @@
+'use strict';
+
+/* Assembles the full index.html: page chrome (head, sidebar, mobile
+   topbar/sticky header) plus every section. Chrome markup is structural
+   and lives here; prose lives in content/. Behavioral JS stays in
+   js/main.js — keep IDs and data-section attributes in sync with it. */
+
+var { esc, md } = require('../lib/text');
+var { renderPortfolioSection } = require('./portfolio');
+var { renderGreeceSection } = require('./greece');
+
+var ICON_GITHUB_PATH = 'M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z';
+var ICON_LINKEDIN_PATH = 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z';
+
+function githubSvg(size) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">\n'
+    + '              <path d="' + ICON_GITHUB_PATH + '"/>\n'
+    + '            </svg>';
+}
+
+function linkedinSvg(size) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">\n'
+    + '              <path d="' + ICON_LINKEDIN_PATH + '"/>\n'
+    + '            </svg>';
+}
+
+var EMAIL_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true">\n'
+  + '              <rect x="2" y="4" width="20" height="16"/>\n'
+  + '              <polyline points="2,4 12,13 22,4"/>\n'
+  + '            </svg>';
+
+var GENERATED_BANNER = [
+  '<!--',
+  '  ██ GENERATED FILE — DO NOT EDIT BY HAND ██',
+  '',
+  '  This page is rendered by `npm run build` from:',
+  '    content/*.yaml       — the prose and structured content (edit freely)',
+  '    build/templates/*.js — the markup (coding-agent territory)',
+  '',
+  '  Hand edits here WILL be overwritten by the next build.',
+  '-->',
+].join('\n');
+
+function renderHead() {
+  return `<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Nick Stathas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2b4557">
+  <meta name="author" content="Nick Stathas">
+  <link rel="canonical" href="https://nistath.com/">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="mask-icon" href="/favicon.svg" color="#2b4557">
+
+  <!-- Open Graph / Facebook / Messenger / iMessage -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nick Stathas">
+  <meta property="og:title" content="Nick Stathas">
+  <meta property="og:url" content="https://nistath.com/">
+  <meta property="og:image" content="https://nistath.com/img/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Nick Stathas">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nick Stathas">
+  <meta name="twitter:image" content="https://nistath.com/img/og/og-default.png">
+  <meta name="twitter:image:alt" content="Nick Stathas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/greece.css">
+</head>`;
+}
+
+function renderSidebar() {
+  return `    <!-- ── SIDEBAR (desktop default view) ── -->
+    <aside id="sidebar" class="sidebar" aria-label="Profile">
+      <div class="sidebar-inner">
+
+        <div class="profile-block">
+          <div class="avatar-wrap">
+            <img class="avatar" src="https://github.com/nistath.png" alt="Nick Stathas" width="200" height="200">
+          </div>
+          <h1 class="profile-name">Nick<br>Stathas</h1>
+          <a id="email" class="email-link" href="#">
+            ${EMAIL_SVG}
+            <span id="email-text">Turn on JavaScript!</span>
+          </a>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Sections">
+          <a class="nav-btn active" href="/about" data-section="about" aria-current="page">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <rect x="8" y="2" width="8" height="9"/>
+            </svg>
+            About
+          </a>
+          <a class="nav-btn" href="/github" data-section="github">
+            ${githubSvg(15)}
+            GitHub
+          </a>
+          <a class="nav-btn" href="/resume" data-section="resume">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+            Resume
+          </a>
+          <a class="nav-btn" href="/portfolio" data-section="portfolio">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            Portfolio
+          </a>
+          <a class="nav-btn" href="/greece" data-section="greece">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <line x1="12" y1="2" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+              <line x1="2" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="22" y2="12"/>
+              <line x1="4.9" y1="4.9" x2="7" y2="7"/>
+              <line x1="17" y1="17" x2="19.1" y2="19.1"/>
+              <line x1="4.9" y1="19.1" x2="7" y2="17"/>
+              <line x1="17" y1="7" x2="19.1" y2="4.9"/>
+            </svg>
+            Greece
+          </a>
+        </nav>
+
+        <div class="social-links">
+          <a class="social-link" href="https://github.com/nistath" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+            ${githubSvg(18)}
+          </a>
+          <a class="social-link" href="https://www.linkedin.com/in/nistath" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+            ${linkedinSvg(18)}
+          </a>
+        </div>
+
+      </div>
+    </aside>`;
+}
+
+function renderMobileChrome() {
+  return `      <!-- Hero + sticky nav live INSIDE #content on mobile so they scroll
+           as a single unit. The hero scrolls away naturally; the nav sticks.
+           Both are display:none on desktop (sidebar handles that layout). -->
+      <header id="topbar" class="topbar">
+        <div class="topbar-hero-wrap">
+          <div class="topbar-hero">
+            <img class="avatar-hero" src="https://github.com/nistath.png" alt="Nick Stathas" width="90" height="90">
+            <div class="hero-name">Nick<br>Stathas</div>
+            <div class="hero-social-row social-links">
+              <a id="email-topbar" class="email-link hero-email-inline" href="#">
+                ${EMAIL_SVG}
+                <span id="email-text-topbar">Turn on JavaScript!</span>
+              </a>
+              <a class="social-link" href="https://github.com/nistath" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                ${githubSvg(18)}
+              </a>
+              <a class="social-link" href="https://www.linkedin.com/in/nistath" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                ${linkedinSvg(18)}
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="sticky-header">
+        <div class="topbar-compact-wrap">
+          <a id="topbar-home" class="topbar-left" href="/about" aria-label="Go to about">
+            <img class="avatar-mini" src="https://github.com/nistath.png" alt="" width="32" height="32" aria-hidden="true">
+            <span class="topbar-name">Nick Stathas</span>
+          </a>
+          <div class="topbar-compact-social" aria-label="Contact links">
+            <a id="email-topbar-compact" class="social-link topbar-compact-social-link" href="#" aria-label="Email Nick">
+              ${EMAIL_SVG}
+            </a>
+            <a class="social-link topbar-compact-social-link" href="https://github.com/nistath" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+              ${githubSvg(18)}
+            </a>
+            <a class="social-link topbar-compact-social-link" href="https://www.linkedin.com/in/nistath" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+              ${linkedinSvg(18)}
+            </a>
+          </div>
+        </div>
+        <nav class="topbar-nav" aria-label="Sections">
+          <a class="tab active" href="/about" data-section="about">About</a>
+          <a class="tab" href="/github" data-section="github">GitHub</a>
+          <a class="tab" href="/resume" data-section="resume">Resume</a>
+          <a class="tab" href="/portfolio" data-section="portfolio">Portfolio</a>
+          <a class="tab" href="/greece" data-section="greece">Greece</a>
+        </nav>
+      </div>`;
+}
+
+function renderAboutSection(about) {
+  return [
+    '      <section id="section-about" class="section active">',
+    '        <div class="section-inner">',
+    '          <h1>' + esc(about.heading) + '</h1>',
+    about.paragraphs.map(function(p) {
+      return '          <p>' + md(p) + '</p>';
+    }).join('\n'),
+    '          <p class="farewell">' + md(about.farewell) + '</p>',
+    '        </div>',
+    '      </section>',
+  ].join('\n');
+}
+
+function renderGithubSection(github) {
+  return `      <section id="section-github" class="section">
+        <div class="section-inner section-inner--wide">
+          <h2>${esc(github.title)}</h2>
+          <p class="section-sub">${md(github.sub)}</p>
+          <div id="github-repos" class="repo-grid">
+            <p class="status-msg">Loading repositories&hellip;</p>
+          </div>
+        </div>
+      </section>`;
+}
+
+function renderResumeSection(resume) {
+  return `      <section id="section-resume" class="section">
+        <div class="resume-wrap">
+          <iframe
+            src="${esc(resume.pdf_url)}"
+            frameborder="0"
+            title="Nick Stathas Resume"
+          ></iframe>
+        </div>
+      </section>`;
+}
+
+function renderPage(content) {
+  /* Runtime data consumed by js/main.js (kept out of the hand-written
+     script so content edits do not touch code). */
+  var siteData = JSON.stringify({ pinnedRepos: content.site.github.pinned_repos }).replace(/</g, '\\u003c');
+
+  return `<!DOCTYPE html>
+${GENERATED_BANNER}
+<html lang="en">
+${renderHead()}
+<body>
+  <!-- Mobile-only: real DOM element for iOS Safari chrome-color sampling.
+       Safari ignores ::before/::after for dynamic chrome tinting, so this
+       fixed element ensures the darkened hero blue is always detectable. -->
+  <div id="mobile-spill" aria-hidden="true"></div>
+
+  <div id="app" class="app">
+
+${renderSidebar()}
+
+    <!-- ── CONTENT ── -->
+    <main id="content" class="content">
+
+${renderMobileChrome()}
+
+${renderAboutSection(content.about)}
+
+${renderGithubSection(content.site.github)}
+
+${renderResumeSection(content.site.resume)}
+
+${renderPortfolioSection(content.portfolio)}
+
+${renderGreeceSection(content.greece)}
+
+    </main>
+  </div>
+
+  <script>window.SITE_CONTENT = ${siteData};</script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
+`;
+}
+
+module.exports = { renderPage: renderPage };
