@@ -1,0 +1,8 @@
+<div class="section-inner section-inner--wide">
+  <h2>{{ siteContent.github.title }}</h2>
+  <p class="section-sub">{{ siteContent.github.subtitle | markdownInline | safe }}</p>
+  <div id="github-repos" class="repo-grid">
+    <p class="status-msg">{{ siteContent.github.loading }}</p>
+  </div>
+</div>
+<script id="github-content" type="application/json">{{ siteContent.github | jsonForScript | safe }}</script>

@@ -10,16 +10,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages-${{ github.ref == 'refs/heads/master' && 'production' || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -36,18 +32,14 @@ jobs:
       - name: Validate and build
         run: npm run check
 
-      - name: Configure GitHub Pages
-        if: github.event_name != 'pull_request'
-        uses: actions/configure-pages@v5
-
       - name: Upload site artifact
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
         with:
           path: _site
 
   deploy:
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -57,6 +49,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

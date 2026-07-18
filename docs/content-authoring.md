@@ -6,7 +6,10 @@ remain practical to edit in the GitHub mobile app.
 
 - Portfolio projects live in `content/portfolio/`.
 - Greece guide sections live in `content/greece/`.
-- Templates own HTML, CSS classes, icons, and ARIA behavior.
+- About, GitHub, and resume content live in `content/about.yml`,
+  `content/github.yml`, and `content/resume.yml`.
+- Templates own HTML, CSS classes, renderer-owned SVGs/icons, and ARIA
+  behavior. Visible Greece emoji such as `nav.icon` remain editable content.
 - The generated site is build output. Do not edit `_site/` or generated HTML.
 
 Most factual or prose changes require editing only one content file. Copy a
@@ -18,9 +21,11 @@ blank file.
 1. Open the repository, then browse to the relevant file under `content/`.
 2. Use the pencil action to edit it.
 3. Preserve the surrounding indentation and field names.
-4. Commit the change to `master`, or to a branch if you want review first.
-5. Check the GitHub Actions result. A successful check builds and deploys the
-   site; a failed check leaves the previously deployed site in place.
+4. Commit directly to `master` to deploy, or commit to a branch and open a pull
+   request for checks and review first.
+5. Check the GitHub Actions result. Pull requests validate without deploying;
+   merging to `master` builds and deploys the site. A failed deployment leaves
+   the previously deployed site in place.
 
 For a small wording correction, change only the text. There is no need to run
 the project locally.
@@ -43,7 +48,11 @@ YAML describes the structure; Markdown formats prose within that structure.
 - Do not add HTML, Nunjucks/Liquid, CSS classes, SVG, or ARIA attributes to
   content files.
 
-Normal Markdown is supported in prose fields:
+Prose fields support inline Markdown: links, bold, emphasis, and inline code.
+Use YAML arrays or typed blocks for separate paragraphs, headings, and lists;
+Markdown headings and list blocks are not supported inside one string.
+Titles, IDs, status/fallback messages, and most short labels are plain text, so
+follow the neighboring field's example rather than adding formatting blindly.
 
 ```yaml
 text: >-
@@ -66,6 +75,27 @@ body:
 The schemas reject unknown fields, missing required fields, invalid block
 shapes, duplicate IDs, and other structural mistakes. `npm run check` is the
 authoritative validation command.
+
+## About, GitHub, and resume
+
+These smaller pages each have one file at the root of `content/`:
+
+- `about.yml` contains the heading, one Markdown string per paragraph, and the
+  farewell line.
+- `github.yml` contains the section copy, pinned repository order, and the
+  messages shown if GitHub metadata is unavailable.
+- `resume.yml` contains the PDF URL and accessible iframe title.
+
+To reorder pinned repositories, move the complete `owner/repository` lines:
+
+```yaml
+pinned_repositories:
+  - MITIBMxGraph/SALIENT
+  - nistath/arpp
+```
+
+Use exactly one `owner/repository` slug per item. The runtime reads this list
+from generated JSON; do not duplicate it in JavaScript.
 
 ## Portfolio
 
@@ -145,8 +175,9 @@ details:
         Describe this part of the project.
 ```
 
-Creating a new `theme`, icon, card layout, or detail behavior requires a coding
-change; see [When to use a coding agent](#when-to-use-a-coding-agent).
+Creating a new `theme`, renderer-owned SVG icon, card layout, or detail
+behavior requires a coding change; see
+[When to use a coding agent](#when-to-use-a-coding-agent).
 
 ## Greece guide
 
@@ -197,9 +228,48 @@ of the same type when adding content.
 | `card` | A nested group of other body `blocks` |
 | `other_cards` | Compact cards for additional islands |
 
-Presentation variants are a closed set defined by the templates and schemas.
-Reuse one visible in a neighboring file; inventing a new variant requires a
-coding change.
+The less-common block shapes are:
+
+- `chips`: `items` with `text` and optionally exactly one of `map` or `url`;
+  `flush` is an optional boolean.
+- `image`: `src`, `alt`, optional `aspect`, and optional `variant: inset`.
+  `city_image` uses `src` and `alt` without a variant.
+- `card`: nested `blocks`, optionally with `variant: city_intro`.
+- `other_cards`: `items` containing `name`, `description`, and an `image`
+  object with `src`, `alt`, and optional `aspect`.
+
+Presentation variants are a closed set defined by the templates and schemas:
+`prose` supports `intro`; `image` supports `inset`; `card` supports
+`city_intro`; and asides support `facts`, `tips`, `itinerary`, `eats`,
+`essentials`, `ferry`, and `logistics`. Reuse one visible in a neighboring file;
+inventing a new variant requires a coding change. Visible emoji values such as
+`nav.icon`, venue/action `icon`, and emoji in aside titles can be edited by hand.
+
+### Google Maps shorthand
+
+For a Google Maps search, write the place name rather than a long search URL.
+In structured entries, use `map`:
+
+```yaml
+- icon: "🍽️"
+  name: Example Taverna
+  description: Traditional cooking in a relaxed neighborhood setting.
+  map: Example Taverna Athens
+```
+
+In prose, use the same query after `map:` inside a normal Markdown link:
+
+```yaml
+text: >-
+  Stay near [Syntagma Square](map:Syntagma Square Athens).
+```
+
+The build expands both forms to
+`https://www.google.com/maps/search/?api=1&query=...`. Keep the query under 200
+characters, with no leading or trailing spaces. If a destination needs an
+exact pin, coordinates, a short `maps.app.goo.gl` link, or a URL from another
+site, keep its full `https://` URL instead. Inline `map:` queries cannot contain
+parentheses; use a structured `map` field or a full URL for those destinations.
 
 ### Add prose or a heading
 
@@ -224,7 +294,7 @@ Add an item to an existing `venues` block:
       name: Example Taverna
       description: >-
         Traditional cooking in a relaxed neighborhood setting.
-      url: https://maps.example.com/example-taverna
+      map: Example Taverna Athens
 ```
 
 A venue is one full-card link. Do not put a Markdown link inside its `name` or
@@ -232,7 +302,7 @@ A venue is one full-card link. Do not put a Markdown link inside its `name` or
 
 ### Add a sight
 
-For one destination, use `url`:
+For one searchable place, use `map`:
 
 ```yaml
 - type: sights
@@ -240,10 +310,14 @@ For one destination, use `url`:
     - name: Example Museum
       description: >-
         A focused collection that takes about an hour to visit.
-      url: https://maps.example.com/example-museum
+      map: Example Museum Athens
 ```
 
-For separate map and ticket destinations, use `actions` instead of `url`:
+Use `url` instead when the exact destination cannot be represented as a Maps
+search.
+
+For separate map and ticket destinations, use `actions` instead of a full-card
+destination:
 
 ```yaml
 - name: Example Archaeological Site
@@ -253,7 +327,7 @@ For separate map and ticket destinations, use `actions` instead of `url`:
     - kind: map
       label: Map
       icon: "📍"
-      url: https://maps.example.com/example-site
+      map: Example Archaeological Site Athens
     - kind: ticket
       label: Official tickets
       icon: "🎟️"
@@ -267,13 +341,14 @@ For several peer destinations, use grouped `links`:
   description: Good indoor options for the afternoon.
   links:
     - label: History Museum
-      url: https://maps.example.com/history
+      map: History Museum Athens
     - label: Archaeology Museum
-      url: https://maps.example.com/archaeology
+      map: Archaeology Museum Athens
 ```
 
-Use only one link shape on an item: `url`, `actions`, or `links`. The templates
-choose valid full-card or grouped markup from that shape.
+Use only one link shape on an item: `map` or `url`, `actions`, or `links`.
+Within a destination, use exactly one of `map` and `url`. The templates choose
+valid full-card or grouped markup from that shape.
 
 ### Add a tip, fact list, or day plan
 
@@ -367,7 +442,8 @@ links, images, and new entries that follow an existing shape.
 
 Use a coding agent when a change needs any of the following:
 
-- a new visual component, block type, theme, icon, or presentation variant
+- a new visual component, block type, theme, renderer-owned SVG/icon, or
+  presentation variant
 - different card nesting, columns, expansion behavior, navigation behavior, or
   responsive layout
 - a new data field or a change to a schema

@@ -1,0 +1,7 @@
+<div class="section-inner">
+  <h1>{{ siteContent.about.heading }}</h1>
+  {% for paragraph in siteContent.about.paragraphs %}
+    <p>{{ paragraph | markdownInline | safe }}</p>
+  {% endfor %}
+  <p class="farewell">{{ siteContent.about.farewell | markdownInline | safe }}</p>
+</div>

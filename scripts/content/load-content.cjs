@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
 const YAML = require('yaml');
+const { isValidMapQuery, mapMarkdownError } = require('./links.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const CONTENT_ROOT = path.join(ROOT, 'content');
@@ -52,7 +53,14 @@ function createValidators() {
       }
     },
   });
+  ajv.addFormat('map-query', {
+    type: 'string',
+    validate: isValidMapQuery,
+  });
   return {
+    about: ajv.compile(readJson('schemas/about.schema.json')),
+    github: ajv.compile(readJson('schemas/github.schema.json')),
+    resume: ajv.compile(readJson('schemas/resume.schema.json')),
     portfolioIndex: ajv.compile(readJson('schemas/portfolio-index.schema.json')),
     portfolioProject: ajv.compile(readJson('schemas/portfolio-project.schema.json')),
     greeceIndex: ajv.compile(readJson('schemas/greece-index.schema.json')),
@@ -91,6 +99,9 @@ function rejectMarkup(value, relativePath) {
     if (HTML_TAG.test(text) || HTML_ENTITY.test(text)) {
       throw new Error(`${relativePath}:${trail.join('.')}: use Markdown and natural Unicode, not HTML or entities`);
     }
+
+    const mapError = mapMarkdownError(text);
+    if (mapError) throw new Error(`${relativePath}:${trail.join('.')}: ${mapError}`);
   });
 }
 
@@ -107,7 +118,9 @@ function checkGreeceBlocks(blocks, relativePath, trail = 'body') {
 
     if (block.type === 'chips') {
       block.items.forEach((item, itemIndex) => {
-        if (item.url) rejectNestedLinkText(item.text, relativePath, `${current}.items[${itemIndex}].text`);
+        if (item.url || item.map) {
+          rejectNestedLinkText(item.text, relativePath, `${current}.items[${itemIndex}].text`);
+        }
       });
     }
 
@@ -120,7 +133,7 @@ function checkGreeceBlocks(blocks, relativePath, trail = 'body') {
 
     if (block.type === 'sights') {
       block.items.forEach((item, itemIndex) => {
-        if (item.url) {
+        if (item.url || item.map) {
           rejectNestedLinkText(item.name, relativePath, `${current}.items[${itemIndex}].name`);
           rejectNestedLinkText(item.description, relativePath, `${current}.items[${itemIndex}].description`);
         }
@@ -136,6 +149,14 @@ function checkGreeceBlocks(blocks, relativePath, trail = 'body') {
       });
     }
   });
+}
+
+function loadStandalone(validators, name) {
+  const relativePath = `content/${name}.yml`;
+  const value = readYaml(relativePath);
+  validate(validators[name], value, relativePath);
+  rejectMarkup(value, relativePath);
+  return value;
 }
 
 function assertUnique(values, label) {
@@ -202,7 +223,15 @@ function loadGreece(validators) {
 function loadContent() {
   if (!fs.existsSync(CONTENT_ROOT)) throw new Error('Missing content directory');
   const validators = createValidators();
+  const authoredRootFiles = listYaml('content');
+  const expectedRootFiles = ['about.yml', 'github.yml', 'resume.yml'];
+  if (authoredRootFiles.join('\n') !== expectedRootFiles.join('\n')) {
+    throw new Error('content/ must contain exactly about.yml, github.yml, and resume.yml at its root');
+  }
   return {
+    about: loadStandalone(validators, 'about'),
+    github: loadStandalone(validators, 'github'),
+    resume: loadStandalone(validators, 'resume'),
     portfolio: loadPortfolio(validators),
     greece: loadGreece(validators),
   };

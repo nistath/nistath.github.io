@@ -21,9 +21,9 @@ body:
   - type: chips
     items:
       - text: ✈️ Chania (CHQ)
-        url: https://www.google.com/maps/search/?api=1&query=Chania+Crete
+        map: Chania Crete
       - text: ✈️ Heraklion (HER)
-        url: https://www.google.com/maps/search/?api=1&query=Heraklion+Crete
+        map: Heraklion Crete
       - text: ⛴ Overnight ferry
 
   - type: heading
@@ -31,7 +31,7 @@ body:
 
   - type: prose
     text: >-
-      [**Chania**](https://www.google.com/maps/search/?api=1&query=Chania+Crete) (west) — Lively Venetian harbor town, best base for the gorge and beaches. Try [**Riviera Suites**](https://www.google.com/maps/search/?api=1&query=Riviera+Suites+Chania). [**Elounda**](https://www.google.com/maps/search/?api=1&query=Elounda+Crete) (northeast) — Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island — pick one based on your itinerary.
+      [**Chania**](map:Chania Crete) (west) — Lively Venetian harbor town, best base for the gorge and beaches. Try [**Riviera Suites**](map:Riviera Suites Chania). [**Elounda**](map:Elounda Crete) (northeast) — Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island — pick one based on your itinerary.
 
   - type: heading
     text: Things to Do
@@ -46,16 +46,16 @@ body:
     items:
       - name: Samariá Gorge
         description: ~16 km, one of Europe’s longest. Full day. Book a tour bus from Chania.
-        url: https://www.google.com/maps/search/?api=1&query=Samaria+Gorge+Crete
+        map: Samaria Gorge Crete
       - name: Elafonisi Beach
         description: Pink-sand lagoon. Almost tropical. Dedicate a full day.
-        url: https://www.google.com/maps/search/?api=1&query=Elafonisi+Beach+Crete
+        map: Elafonisi Beach Crete
       - name: Palace of Knossos
         description: Center of Minoan civilization, home of the labyrinth. Get a guide.
         actions:
           - kind: map
             label: Map
-            url: https://www.google.com/maps/search/?api=1&query=Palace+of+Knossos+Crete
+            map: Palace of Knossos Crete
             icon: 📍
           - kind: ticket
             label: Official tickets
@@ -66,7 +66,7 @@ body:
         actions:
           - kind: map
             label: Map
-            url: https://www.google.com/maps/search/?api=1&query=Heraklion+Archaeological+Museum
+            map: Heraklion Archaeological Museum
             icon: 📍
           - kind: ticket
             label: Official tickets
@@ -74,13 +74,13 @@ body:
             icon: 🎟️
       - name: Fortezza (Rethymno)
         description: Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.
-        url: https://www.google.com/maps/search/?api=1&query=Fortezza+of+Rethymno
+        map: Fortezza of Rethymno
       - name: Firka Fortress (Chania)
         description: At Chania’s old harbor entrance. Great views.
-        url: https://www.google.com/maps/search/?api=1&query=Firka+Fortress+Chania
+        map: Firka Fortress Chania
       - name: Spinalonga
         description: Fortified island near Elounda. Short boat trip to explore.
-        url: https://www.google.com/maps/search/?api=1&query=Spinalonga+Crete
+        map: Spinalonga Crete
 
   - type: heading
     text: Eat & Drink
@@ -90,11 +90,11 @@ body:
       - icon: 🥐
         name: Red Jane Bakery
         description: In Chania — don’t skip it.
-        url: https://www.google.com/maps/search/?api=1&query=Red+Jane+Bakery+Chania
+        map: Red Jane Bakery Chania
       - icon: 🍸
         name: Sinagogi
         description: Best bar in Chania.
-        url: https://www.google.com/maps/search/?api=1&query=Sinagogi+bar+Chania
+        map: Sinagogi bar Chania
 
   - type: note
     text: We’ve barely scratched the surface. Do your own research — or better yet, ask a local.
@@ -104,15 +104,15 @@ aside:
     title: 🏔 Essentials
     items:
       - Plan at least a full week
-      - Base in [Chania](https://www.google.com/maps/search/?api=1&query=Chania+Crete) — try [Riviera Suites](https://www.google.com/maps/search/?api=1&query=Riviera+Suites+Chania)
-      - Book [Samariá Gorge](https://www.google.com/maps/search/?api=1&query=Samaria+Gorge+Crete) tour the day before
+      - Base in [Chania](map:Chania Crete) — try [Riviera Suites](map:Riviera Suites Chania)
+      - Book [Samariá Gorge](map:Samaria Gorge Crete) tour the day before
       - Red Jane Bakery — don’t skip it
-      - "Best bar in [Chania](https://www.google.com/maps/search/?api=1&query=Chania+Crete): [Sinagogi](https://www.google.com/maps/search/?api=1&query=Sinagogi+bar+Chania)"
+      - "Best bar in [Chania](map:Chania Crete): [Sinagogi](map:Sinagogi bar Chania)"
 
   - variant: ferry
     title: 🚢 Getting There
     items:
-      - Fly to [Chania](https://www.google.com/maps/search/?api=1&query=Chania+Crete) (CHQ) or [Heraklion](https://www.google.com/maps/search/?api=1&query=Heraklion+Crete) (HER)
+      - Fly to [Chania](map:Chania Crete) (CHQ) or [Heraklion](map:Heraklion Crete) (HER)
       - Overnight ferry from Piraeus — get a cabin
 
   - variant: logistics
@@ -120,7 +120,7 @@ aside:
     facts:
       - term: Car hire
         description: essential to explore
-      - term: "[Chania](https://www.google.com/maps/search/?api=1&query=Chania+Crete) ↔ [Heraklion](https://www.google.com/maps/search/?api=1&query=Heraklion+Crete)"
+      - term: "[Chania](map:Chania Crete) ↔ [Heraklion](map:Heraklion Crete)"
         description: 2.5 hrs by car
-      - term: "[Elounda](https://www.google.com/maps/search/?api=1&query=Elounda+Crete)"
+      - term: "[Elounda](map:Elounda Crete)"
         description: 1.5 hrs from Heraklion

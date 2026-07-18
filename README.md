@@ -8,13 +8,17 @@ is still plain HTML, CSS, and JavaScript.
 
 The main hand-authored content is split into small files:
 
+- `content/about.yml`, `content/github.yml`, and `content/resume.yml` contain
+  the remaining page prose, pinned repository list, and resume embed details.
 - `content/portfolio/` contains the portfolio index and one YAML file per
   project.
 - `content/greece/` contains the Greece guide metadata and one YAML file per
   guide section or island.
 
-Prose fields support Markdown. Templates, HTML structure, CSS classes, icons,
-and accessibility behavior remain separate from the content. See
+Prose fields support inline Markdown, plus a concise `map:` shorthand for
+Google Maps searches in the Greece guide. Templates, HTML structure, CSS
+classes, renderer-owned SVGs, and accessibility behavior remain separate from
+the content; schema-approved visible emoji remain editable content. See
 [Editing site content](docs/content-authoring.md) for the field reference,
 mobile workflow, and copy/paste recipes.
 
@@ -62,9 +66,11 @@ The workflow in `.github/workflows/pages.yml` runs checks and deploys `_site/`
 to GitHub Pages after a successful push to `master`. Pull requests run the same
 checks without deploying.
 
-One repository setting is mandatory: in **Settings → Pages → Build and
-deployment**, set **Source** to **GitHub Actions**. This is a one-time setup;
-without it, the workflow cannot publish the generated site.
+One repository setting is mandatory before the first Actions deployment: in
+**Settings → Pages → Build and deployment**, set **Source** to **GitHub
+Actions** if it is not already configured. Without it, the workflow cannot
+publish the generated site and branch-based Pages would no longer find a root
+`index.html`.
 
 The workflow deploys a build artifact rather than committing generated files.
 The `CNAME`, clean-route stubs, `404.html`, and static assets are copied into
@@ -74,7 +80,7 @@ that artifact by Eleventy.
 
 - `content/` — human-authored YAML and Markdown strings
 - `src/index.njk` — application shell
-- `src/_includes/` — portfolio and Greece rendering components
+- `src/_includes/` — page and component renderers
 - `schemas/` — schemas for every content file shape
 - `scripts/content/` — validated content loader used by Eleventy and checks
 - `css/`, `js/`, `img/`, `fonts/`, `files/` — static runtime assets

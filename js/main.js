@@ -386,15 +386,9 @@ var LANG_COLORS = {
   'Verilog':         '#b2b7f8'
 };
 
-/* Keep this list in the same order as the profile's pinned repos. */
-var PINNED_REPOS = [
-  'MITIBMxGraph/SALIENT',
-  'nistath/arpp',
-  'nistath/o2p2_vizdoom',
-  'MITMotorsports/MY18',
-  'MITMotorsports/ParseCAN',
-  'nistath/lidar_raycaster'
-];
+var githubContentNode = document.getElementById('github-content');
+var GITHUB_CONTENT = JSON.parse(githubContentNode.textContent);
+var PINNED_REPOS = GITHUB_CONTENT.pinned_repositories;
 
 function escapeHtml(str) {
   return String(str)
@@ -406,6 +400,13 @@ function escapeHtml(str) {
 
 function loadGitHubRepos() {
   var container = document.getElementById('github-repos');
+
+  function showError() {
+    var error = GITHUB_CONTENT.fallback.error;
+    container.innerHTML = '<p class="status-msg">' + escapeHtml(error.message)
+      + ' <a href="' + escapeHtml(error.link.url) + '" target="_blank" rel="noopener">'
+      + escapeHtml(error.link.label) + '</a></p>';
+  }
 
   Promise.all(
     PINNED_REPOS.map(function(fullName) {
@@ -419,7 +420,7 @@ function loadGitHubRepos() {
             full_name: fullName,
             name: fullName.split('/')[1] || fullName,
             html_url: 'https://github.com/' + fullName,
-            description: 'Pinned repository (metadata temporarily unavailable)',
+            description: GITHUB_CONTENT.fallback.metadata_unavailable,
             language: null,
             stargazers_count: 0
           };
@@ -441,7 +442,7 @@ function loadGitHubRepos() {
 
           var desc = repo.description
             ? escapeHtml(repo.description)
-            : '<span style="opacity:0.35">No description</span>';
+            : '<span style="opacity:0.35">' + escapeHtml(GITHUB_CONTENT.fallback.no_description) + '</span>';
 
           return '<a class="repo-card" href="' + escapeHtml(repo.html_url) + '" target="_blank" rel="noopener noreferrer">'
             + '<div class="repo-name">' + escapeHtml(repo.full_name) + '</div>'
@@ -451,11 +452,13 @@ function loadGitHubRepos() {
         })
         .join('');
 
-      container.innerHTML = cards || '<p class="status-msg">Could not load pinned repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
+      if (cards) {
+        container.innerHTML = cards;
+      } else {
+        showError();
+      }
     })
-    .catch(function() {
-      container.innerHTML = '<p class="status-msg">Could not load pinned repositories. <a href="https://github.com/nistath" target="_blank" rel="noopener">Visit GitHub directly \u2192</a></p>';
-    });
+    .catch(showError);
 }
 
 /* =====================================================

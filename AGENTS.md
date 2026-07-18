@@ -55,18 +55,22 @@ build-time tools only.
 
 ### Source boundaries
 
-- `content/portfolio/` and `content/greece/` are the human-authoring surface.
-  They contain meaning, prose, links, ordering, and basic nesting.
+- `content/about.yml`, `content/github.yml`, `content/resume.yml`,
+  `content/portfolio/`, and `content/greece/` are the human-authoring surface.
+  They contain meaning, prose, links, ordering, runtime repository choices,
+  and basic nesting.
 - `src/index.njk` is the application shell that replaces the old authored root
   `index.html`.
-- `src/_includes/portfolio/` and `src/_includes/greece/` own generated markup,
-  CSS classes, SVGs, and accessibility attributes.
+- `src/_includes/` owns generated markup, CSS classes, SVGs, and accessibility
+  attributes for every authored page.
 - `src/_data/portfolioThemes.json` maps stable portfolio theme keys to visual
   values. Theme icons live beside the portfolio template.
 - `schemas/` defines every accepted content shape. Unknown fields and invalid
   combinations should fail validation rather than be silently ignored.
 - `scripts/content/load-content.cjs` parses and validates content for both the
   build and standalone checks. `scripts/validate-content.cjs` is its CLI.
+- `scripts/content/links.cjs` is the sole implementation of the Greece `map:`
+  shorthand and structured destination resolution.
 - `scripts/check-generated.cjs` checks the built artifact for expected content,
   unique IDs, valid anchor nesting, copied route files, and JavaScript syntax.
 - `.eleventy.js` wires content into templates and copies runtime assets to
@@ -127,8 +131,8 @@ initializes expand/collapse interactions.
 
 Portfolio themes are stable presentation keys. Reusing a theme is a content
 change. Adding or changing a theme requires updating
-`src/_data/portfolioThemes.json`, its matching SVG include, and any relevant
-styles or tests.
+`schemas/portfolio-project.schema.json`, `src/_data/portfolioThemes.json`, its
+matching SVG include, and any relevant styles or tests.
 
 Cards support optional nested `details`. Expand/collapse uses the existing
 `grid-template-rows: 0fr -> 1fr` transition pattern. Preserve the generated
@@ -149,16 +153,31 @@ example content, tests, and authoring documentation together.
 
 Greece link shapes must not be mixed:
 
-- A venue, chip, or sight with `url` renders as a full-card or full-item anchor.
-  Its name and description/text must not contain a Markdown link.
+- A venue, chip, or sight with exactly one of `map` or `url` renders as a
+  full-card or full-item anchor. Its name and description/text must not contain
+  a Markdown link.
 - A sight with several peer links uses `links`; map/ticket buttons use
   `actions`. These render a non-anchor container with child anchors.
 - Inline Markdown links belong in prose, notes, facts, tips, and other
   non-clickable containers.
 
+Use `map: Place Name City` for Google Maps searches and full `https://` URLs
+for exact pins, short Maps links, tickets, and other sites. Inline prose uses
+`[label](map:Place Name City)`. Keep the schema, semantic validation,
+`contentHref` filter, Markdown pre-transform, generated checks, and authoring
+documentation aligned when changing this extension.
+
 `scripts/content/load-content.cjs` rejects Markdown links nested inside known
 full-card fields. Keep this validation aligned with template changes. Never
 work around it by inserting raw HTML.
+
+### GitHub runtime content
+
+`content/github.yml` owns the pinned repository list and every user-visible
+loading or fallback message. The GitHub include emits this validated object as
+non-executable JSON in `#github-content`; `js/main.js` parses it before loading
+repository metadata. Do not duplicate these values in JavaScript or replace
+the JSON block with executable content injection.
 
 ### Email obfuscation
 

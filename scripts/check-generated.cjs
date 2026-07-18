@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const assert = require('assert/strict');
 const { execFileSync } = require('child_process');
 const { loadContent } = require('./content/load-content.cjs');
 
@@ -14,6 +15,22 @@ function fail(message) {
 
 function countMatches(source, pattern) {
   return Array.from(source.matchAll(pattern)).length;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sliceBetween(source, start, end) {
+  const startIndex = source.indexOf(start);
+  const endIndex = source.indexOf(end, startIndex + start.length);
+  if (startIndex < 0 || endIndex < 0) fail(`Could not find generated section boundary: ${start}`);
+  return source.slice(startIndex, endIndex);
 }
 
 function checkNoNestedAnchors(html) {
@@ -43,10 +60,30 @@ function main() {
   const content = loadContent();
 
   if (html.includes('{%') || html.includes('{{')) fail('Unrendered template syntax remains in index.html');
+  if (html.includes('href="map:') || html.includes('](map:')) {
+    fail('Generated HTML contains unexpanded map: shorthand');
+  }
   if (countMatches(html, /<main\b/g) !== 1) fail('The generated page must contain exactly one main landmark');
 
   checkNoNestedAnchors(html);
   checkUniqueIds(html);
+
+  const aboutHtml = sliceBetween(html, 'id="section-about"', 'id="section-github"');
+  if (!aboutHtml.includes(`<h1>${escapeHtml(content.about.heading)}</h1>`)) fail('Missing About heading');
+  if (!aboutHtml.includes('class="farewell"')) fail('Missing About farewell');
+  if (countMatches(aboutHtml, /<p(?:\s|>)/g) !== content.about.paragraphs.length + 1) {
+    fail('Generated About paragraph count does not match content');
+  }
+
+  const githubDataMatch = html.match(
+    /<script id="github-content" type="application\/json">([\s\S]*?)<\/script>/,
+  );
+  if (!githubDataMatch) fail('Missing generated GitHub runtime content');
+  assert.deepStrictEqual(JSON.parse(githubDataMatch[1]), content.github);
+
+  const resumeHtml = sliceBetween(html, 'id="section-resume"', 'id="section-portfolio"');
+  if (!resumeHtml.includes(`src="${escapeHtml(content.resume.url)}"`)) fail('Missing resume URL');
+  if (!resumeHtml.includes(`title="${escapeHtml(content.resume.title)}"`)) fail('Missing resume title');
 
   for (const project of content.portfolio.projects) {
     if (!html.includes(`id="pcard-${project.id}"`)) fail(`Missing portfolio card: ${project.id}`);
@@ -68,9 +105,11 @@ function main() {
     'CNAME',
     'about/index.html',
     'css/main.css',
+    'github/index.html',
     'greece/index.html',
     'js/main.js',
     'portfolio/index.html',
+    'resume/index.html',
   ]) {
     if (!fs.existsSync(path.join(SITE, required))) fail(`Build output is missing ${required}`);
   }

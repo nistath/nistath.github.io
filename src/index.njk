@@ -196,34 +196,15 @@
       </div>
 
       <section id="section-about" class="section active">
-        <div class="section-inner">
-          <h1>Hello!</h1>
-          <p>You have reached my personal webpage. It was hastily hand-coded in 2017 and further vibe-coded in 2026, though I assure you this prose is all painstakingly handwritten.</p>
-          <p>My place of employment is OpenAI, where I design LLMs, train them on massive supercomputers, and help get them deployed in case they are useful to you.</p>
-          <p>I hail from Greece and now live with my partner in the Mission District of San Francisco. In my spare time, I go on long walks with friends, cycle, and lift weights – but all of that is really only cross-training for my Brazilian Jiu-Jitsu competitions.</p>
-          <p>Previously, I worked on high-frequency trading, on <a href="https://www.linkedin.com/posts/lukekulik_ces2023-activity-7017864526037487616-Ebcb" target="_blank" rel="noopener">high</a>-<a href="https://youtu.be/EZ0pnAGQmGI?t=16127" target="_blank" rel="noopener">speed</a> <a href="https://youtu.be/gcnngFyWnFQ?t=4419" target="_blank" rel="noopener">autonomous</a> <a href="https://www.facebook.com/mitfsae/videos/10155235513547131/" target="_blank" rel="noopener">racecars</a>, and on <a href="https://proceedings.mlsys.org/paper/2022/hash/35f4a8d465e6e1edc05f3d8ab658c551-Abstract.html" target="_blank" rel="noopener">high-performance machine learning</a>.</p>
-          <p class="farewell">Take a looksie and have a nice day!</p>
-        </div>
+        {% include "about/section.njk" %}
       </section>
 
       <section id="section-github" class="section">
-        <div class="section-inner section-inner--wide">
-          <h2>GitHub</h2>
-          <p class="section-sub">Pinned repositories from <a href="https://github.com/nistath" target="_blank" rel="noopener">@nistath</a></p>
-          <div id="github-repos" class="repo-grid">
-            <p class="status-msg">Loading repositories&hellip;</p>
-          </div>
-        </div>
+        {% include "github/section.njk" %}
       </section>
 
       <section id="section-resume" class="section">
-        <div class="resume-wrap">
-          <iframe
-            src="https://www.dropbox.com/scl/fi/d1e7agwsxeq2i67ctfni0/Nick_Stathas_Resume.pdf?rlkey=62hsxcdpka3mh9gakokisj11a&st=s0g5y8mn&raw=1#page=1&view=FitH"
-            frameborder="0"
-            title="Nick Stathas Resume"
-          ></iframe>
-        </div>
+        {% include "resume/section.njk" %}
       </section>
 
       <section id="section-portfolio" class="section">

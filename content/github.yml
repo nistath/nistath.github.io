@@ -1,0 +1,21 @@
+title: GitHub
+subtitle: Pinned repositories from [@nistath](https://github.com/nistath)
+loading: Loading repositories…
+
+fallback:
+  metadata_unavailable: Pinned repository (metadata temporarily unavailable)
+  no_description: No description
+  error:
+    message: Could not load pinned repositories.
+    link:
+      label: Visit GitHub directly →
+      url: https://github.com/nistath
+
+# Keep this in the same order as the GitHub profile's pinned repositories.
+pinned_repositories:
+  - MITIBMxGraph/SALIENT
+  - nistath/arpp
+  - nistath/o2p2_vizdoom
+  - MITMotorsports/MY18
+  - MITMotorsports/ParseCAN
+  - nistath/lidar_raycaster
