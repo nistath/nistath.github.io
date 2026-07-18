@@ -22,31 +22,31 @@ body:
         url: https://maps.app.goo.gl/MmdW2hYJR4kPLk5V9
       - icon: 🥩
         name: Basegrill Athens
-        description: One of Athens’ best steakhouses. Premium cuts, egg nest potatoes, great wine list.
+        description: One of Athens’ best steakhouses. Premium cuts, great wine list.
         url: https://maps.app.goo.gl/TuuheUo7c9UeZJmS6
       - icon: 🫕
         name: Barbadimos
-        description: Authentic, no-frills Greek cooking. The kind of place locals go.
+        description: Authentic Greek restaurant.
         url: https://maps.app.goo.gl/pMdBjwyFk8QpfxVz9
       - icon: 🥙
         name: Gyristroula
-        description: Solid souvlaki — quick, delicious, and cheap.
+        description: Solid souvlaki next to Thisio station.
         url: https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6
       - icon: 🥙
         name: Street Souvlaki
-        description: Another go-to for fast, excellent souvlaki.
+        description: Go-to for fast, excellent souvlaki.
         url: https://maps.app.goo.gl/dsEzw2CS7NDqNAva8
       - icon: 🍦
         name: Lartecono Davinci Gelato
-        description: For when you need a gelato break (you will).
+        description: Great waffles, gelato, and chocolate fountain. They really pump out that waffle scent. They have multiple locations but this one is the largest.
         url: https://maps.app.goo.gl/oLmuDNnoERDjQYA88
       - icon: 🍩
         name: Loukoumadaki Athens
-        description: Greek donuts (loukoumades) with honey and cinnamon. A must-try.
+        description: Greek donut holes (loukoumades) with family-made honey and cinnamon. Chocolate and other flavors also available.
         url: https://maps.app.goo.gl/TmMjRhbJWTNM21aF6
       - icon: ☕
         name: City ZEN All Day Bar Restaurant
-        description: Relaxed meal or drinks any time of day.
+        description: Great spot for evening rooftop drinks with an Acropolis view.
         url: https://maps.app.goo.gl/HVo2Ka9dJLPXXRLk8
 
   - type: heading
@@ -56,19 +56,19 @@ body:
     items:
       - icon: 🌿
         name: six d.o.g.s
-        description: All-day bar & live music with a hidden garden. Cocktails, DJs, diverse crowd.
+        description: Ruin bar with a hidden garden and great cocktails. Unfortunately closed and might be replaced by some restaurant.
         url: https://maps.app.goo.gl/yPNufsHcREnSA1C87
       - icon: 🏙️
         name: Bios
-        description: Legendary rooftop bar on Pireos St. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
+        description: Legendary rooftop bar near Psiri. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
         url: https://maps.app.goo.gl/i7qomXPkvD9t7DJ79
       - icon: 🎶
         name: Drachmi
-        description: Lively cocktail bar on Kolokotroni Square. Packed on weekends. Great drinks, funky music, young crowd.
+        description: Lively cocktail bar close to Syntagma. Packed on weekends. Great drinks, people dancing, young crowd.
         url: https://maps.app.goo.gl/dxBLrnwPHm3ZHs4k7
       - icon: 🧺
         name: Πλυντήριο
-        description: Club themed as a laundromat. Fun, irreverent, young crowd.
+        description: Laundromat-themed club for the youngins.
         url: https://maps.app.goo.gl/Z3bNF4B6Wus1hACc7
         lang: el
 
@@ -76,8 +76,9 @@ aside:
   - variant: eats
     title: 🍋 Must-Eat
     items:
-      - Souvlaki — the Greek street staple
-      - Loukoumades — honey-drizzled donuts
+      - Souvlaki – meat on a stick
+      - Gyros – classic Greek wrap with shaved meat
+      - Loukoumades – honey-drizzled donuts
       - Spanakopita — spinach & feta pastry
       - Greek yogurt with thyme honey
       - Fresh seafood near Piraeus
