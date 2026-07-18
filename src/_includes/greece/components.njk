@@ -6,8 +6,8 @@
 {% endmacro %}
 
 {% macro sight(item) %}
-  {% if item.url %}
-    <a class="gr-sight" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">
+  {% if item.url or item.map %}
+    <a class="gr-sight" href="{{ item | contentHref }}" target="_blank" rel="noopener noreferrer">
       <div class="gr-sight-name">{{ item.name | markdownInline | safe }} <span class="gr-venue-ext">↗</span></div>
       <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
     </a>
@@ -17,7 +17,7 @@
       <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
       <div class="gr-sight-links">
         {% for link in item.links %}
-          <a class="gr-sight-link" href="{{ link.url }}" target="_blank"
+          <a class="gr-sight-link" href="{{ link | contentHref }}" target="_blank"
              rel="noopener noreferrer">{{ link.label | markdownInline | safe }} <span class="gr-venue-ext">↗</span></a>
         {% endfor %}
       </div>
@@ -28,7 +28,7 @@
       <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
       <div class="gr-sight-actions">
         {% for action in item.actions %}
-          <a class="gr-sight-action gr-sight-action--{{ action.kind }}" href="{{ action.url }}"
+          <a class="gr-sight-action gr-sight-action--{{ action.kind }}" href="{{ action | contentHref }}"
              target="_blank" rel="noopener noreferrer">
             <span class="gr-sight-action-icon" aria-hidden="true">{{ action.icon }}</span>{{ action.label }}
           </a>
@@ -44,7 +44,7 @@
 {% endmacro %}
 
 {% macro venue(item) %}
-  <a class="gr-venue" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">
+  <a class="gr-venue" href="{{ item | contentHref }}" target="_blank" rel="noopener noreferrer">
     <div class="gr-venue-inner">
       <span class="gr-venue-icon">{{ item.icon }}</span>
       <div>
@@ -76,8 +76,8 @@
   {% elif item.type == 'chips' %}
     <div class="gr-chips{% if item.flush %} gr-chips--flush{% endif %}">
       {% for chip in item.items %}
-        {% if chip.url %}
-          <a class="gr-chip" href="{{ chip.url }}" target="_blank" rel="noopener noreferrer">{{ chip.text | markdownInline | safe }}</a>
+        {% if chip.url or chip.map %}
+          <a class="gr-chip" href="{{ chip | contentHref }}" target="_blank" rel="noopener noreferrer">{{ chip.text | markdownInline | safe }}</a>
         {% else %}
           <span class="gr-chip">{{ chip.text | markdownInline | safe }}</span>
         {% endif %}

@@ -48,6 +48,12 @@ function main() {
   checkNoNestedAnchors(html);
   checkUniqueIds(html);
 
+  if (html.includes('href="map:')) fail('Generated HTML contains an unresolved map: link');
+  if (!html.includes(`<h1>${content.about.heading}</h1>`)) fail('Missing authored About heading');
+  for (const repository of content.github.pinned_repositories) {
+    if (!html.includes(repository)) fail(`Missing injected pinned repository: ${repository}`);
+  }
+
   for (const project of content.portfolio.projects) {
     if (!html.includes(`id="pcard-${project.id}"`)) fail(`Missing portfolio card: ${project.id}`);
   }

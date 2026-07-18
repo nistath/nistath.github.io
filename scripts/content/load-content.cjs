@@ -52,7 +52,16 @@ function createValidators() {
       }
     },
   });
+  ajv.addFormat('map-query', {
+    type: 'string',
+    validate(value) {
+      return value.trim().length > 0 && !/[\u0000-\u001f\u007f]/.test(value);
+    },
+  });
   return {
+    about: ajv.compile(readJson('schemas/about.schema.json')),
+    github: ajv.compile(readJson('schemas/github.schema.json')),
+    resume: ajv.compile(readJson('schemas/resume.schema.json')),
     portfolioIndex: ajv.compile(readJson('schemas/portfolio-index.schema.json')),
     portfolioProject: ajv.compile(readJson('schemas/portfolio-project.schema.json')),
     greeceIndex: ajv.compile(readJson('schemas/greece-index.schema.json')),
@@ -107,7 +116,7 @@ function checkGreeceBlocks(blocks, relativePath, trail = 'body') {
 
     if (block.type === 'chips') {
       block.items.forEach((item, itemIndex) => {
-        if (item.url) rejectNestedLinkText(item.text, relativePath, `${current}.items[${itemIndex}].text`);
+        if (item.url || item.map) rejectNestedLinkText(item.text, relativePath, `${current}.items[${itemIndex}].text`);
       });
     }
 
@@ -120,7 +129,7 @@ function checkGreeceBlocks(blocks, relativePath, trail = 'body') {
 
     if (block.type === 'sights') {
       block.items.forEach((item, itemIndex) => {
-        if (item.url) {
+        if (item.url || item.map) {
           rejectNestedLinkText(item.name, relativePath, `${current}.items[${itemIndex}].name`);
           rejectNestedLinkText(item.description, relativePath, `${current}.items[${itemIndex}].description`);
         }
@@ -144,6 +153,14 @@ function assertUnique(values, label) {
     if (seen.has(value)) throw new Error(`Duplicate ${label}: ${value}`);
     seen.add(value);
   }
+}
+
+function loadSingle(validators, name) {
+  const relativePath = `content/${name}.yml`;
+  const value = readYaml(relativePath);
+  validate(validators[name], value, relativePath);
+  rejectMarkup(value, relativePath);
+  return value;
 }
 
 function loadPortfolio(validators) {
@@ -203,6 +220,9 @@ function loadContent() {
   if (!fs.existsSync(CONTENT_ROOT)) throw new Error('Missing content directory');
   const validators = createValidators();
   return {
+    about: loadSingle(validators, 'about'),
+    github: loadSingle(validators, 'github'),
+    resume: loadSingle(validators, 'resume'),
     portfolio: loadPortfolio(validators),
     greece: loadGreece(validators),
   };

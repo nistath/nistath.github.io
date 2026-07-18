@@ -18,7 +18,7 @@ body:
         text: Getting In
       - type: prose
         text: >-
-          Fly into **Athens International Airport (ATH)**. Taxi (~€40 flat rate, ~40 min), metro Line 3 to [Syntagma Square](https://www.google.com/maps/search/?api=1&query=Syntagma+Square+Athens) (~40 min), or private transfer. If you’re heading straight to an island, many have direct international flights — worth checking before defaulting to ATH.
+          Fly into **Athens International Airport (ATH)**. Taxi (~€40 flat rate, ~40 min), metro Line 3 to [Syntagma Square](map:Syntagma Square Athens) (~40 min), or private transfer. If you’re heading straight to an island, many have direct international flights — worth checking before defaulting to ATH.
       - type: chips
         items:
           - text: 🚕 Taxi ~€40
@@ -33,14 +33,14 @@ body:
         text: Where to Stay
       - type: prose
         text: >-
-          We recommend [**Plaka**](https://www.google.com/maps/search/?api=1&query=Plaka+Athens) (charming village feel, narrow streets) and [**Thiseio**](https://www.google.com/maps/search/?api=1&query=Thiseio+Athens) (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.
+          We recommend [**Plaka**](map:Plaka Athens) (charming village feel, narrow streets) and [**Thiseio**](map:Thiseio Athens) (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.
       - type: chips
         flush: true
         items:
           - text: 📍 Plaka
-            url: https://www.google.com/maps/search/?api=1&query=Plaka+Athens
+            map: Plaka Athens
           - text: 📍 Thiseio
-            url: https://www.google.com/maps/search/?api=1&query=Thiseio+Athens
+            map: Thiseio Athens
 
 aside:
   - variant: facts
@@ -64,6 +64,6 @@ aside:
     items:
       - Validate your metro ticket before boarding
       - FreeNow usually beats Uber on price & availability
-      - Hotels in [Plaka](https://www.google.com/maps/search/?api=1&query=Plaka+Athens) are walkable to almost everything
+      - Hotels in [Plaka](map:Plaka Athens) are walkable to almost everything
       - Most restaurants open for dinner at 8–9 PM
       - Book island ferries at [ferryscanner.com](https://ferryscanner.com)

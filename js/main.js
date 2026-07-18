@@ -386,15 +386,8 @@ var LANG_COLORS = {
   'Verilog':         '#b2b7f8'
 };
 
-/* Keep this list in the same order as the profile's pinned repos. */
-var PINNED_REPOS = [
-  'MITIBMxGraph/SALIENT',
-  'nistath/arpp',
-  'nistath/o2p2_vizdoom',
-  'MITMotorsports/MY18',
-  'MITMotorsports/ParseCAN',
-  'nistath/lidar_raycaster'
-];
+/* The build injects this list from content/github.yml. */
+var PINNED_REPOS = (window.SITE_CONTENT && window.SITE_CONTENT.pinnedRepos) || [];
 
 function escapeHtml(str) {
   return String(str)

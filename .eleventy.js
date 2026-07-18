@@ -1,5 +1,6 @@
 const MarkdownIt = require('markdown-it');
 const { loadContent } = require('./scripts/content/load-content.cjs');
+const { contentHref, expandMapLinks } = require('./scripts/content/links.cjs');
 
 const markdown = new MarkdownIt({
   html: false,
@@ -27,8 +28,10 @@ module.exports = function configureEleventy(eleventyConfig) {
   });
 
   eleventyConfig.addFilter('markdownInline', (value, linkClass) => (
-    markdown.renderInline(String(value), { linkClass: linkClass || '' })
+    markdown.renderInline(expandMapLinks(value), { linkClass: linkClass || '' })
   ));
+  eleventyConfig.addFilter('contentHref', contentHref);
+  eleventyConfig.addFilter('json', (value) => JSON.stringify(value).replace(/</g, '\\u003c'));
 
   eleventyConfig.addGlobalData('siteContent', () => loadContent());
   eleventyConfig.addWatchTarget('content');

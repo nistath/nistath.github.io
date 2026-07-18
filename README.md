@@ -8,13 +8,16 @@ is still plain HTML, CSS, and JavaScript.
 
 The main hand-authored content is split into small files:
 
+- `content/about.yml`, `content/github.yml`, and `content/resume.yml` contain
+  the other page prose, the pinned-repository order, and the resume source.
 - `content/portfolio/` contains the portfolio index and one YAML file per
   project.
 - `content/greece/` contains the Greece guide metadata and one YAML file per
   guide section or island.
 
-Prose fields support Markdown. Templates, HTML structure, CSS classes, icons,
-and accessibility behavior remain separate from the content. See
+Prose fields support Markdown plus a short `map:` form for Google Maps links.
+Templates, HTML structure, CSS classes, icons, and accessibility behavior
+remain separate from the content. See
 [Editing site content](docs/content-authoring.md) for the field reference,
 mobile workflow, and copy/paste recipes.
 

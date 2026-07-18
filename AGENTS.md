@@ -55,8 +55,10 @@ build-time tools only.
 
 ### Source boundaries
 
-- `content/portfolio/` and `content/greece/` are the human-authoring surface.
-  They contain meaning, prose, links, ordering, and basic nesting.
+- `content/*.yml`, `content/portfolio/`, and `content/greece/` are the
+  human-authoring surface. They contain meaning, prose, links, ordering, and
+  basic nesting. About, GitHub, Resume, and pinned-repository configuration
+  must stay here rather than in templates or runtime JavaScript.
 - `src/index.njk` is the application shell that replaces the old authored root
   `index.html`.
 - `src/_includes/portfolio/` and `src/_includes/greece/` own generated markup,
@@ -67,6 +69,8 @@ build-time tools only.
   combinations should fail validation rather than be silently ignored.
 - `scripts/content/load-content.cjs` parses and validates content for both the
   build and standalone checks. `scripts/validate-content.cjs` is its CLI.
+- `scripts/content/links.cjs` owns the `map:` shorthand and conversion to
+  canonical Google Maps search URLs.
 - `scripts/check-generated.cjs` checks the built artifact for expected content,
   unique IDs, valid anchor nesting, copied route files, and JavaScript syntax.
 - `.eleventy.js` wires content into templates and copies runtime assets to
@@ -149,12 +153,14 @@ example content, tests, and authoring documentation together.
 
 Greece link shapes must not be mixed:
 
-- A venue, chip, or sight with `url` renders as a full-card or full-item anchor.
-  Its name and description/text must not contain a Markdown link.
+- A venue, chip, or sight with `map` or `url` renders as a full-card or
+  full-item anchor. Its name and description/text must not contain a Markdown
+  link. `map` is a search query; `url` is a specific HTTPS destination.
 - A sight with several peer links uses `links`; map/ticket buttons use
   `actions`. These render a non-anchor container with child anchors.
 - Inline Markdown links belong in prose, notes, facts, tips, and other
-  non-clickable containers.
+  non-clickable containers. `[label](map:Place Name City)` is expanded by the
+  Markdown filter before rendering.
 
 `scripts/content/load-content.cjs` rejects Markdown links nested inside known
 full-card fields. Keep this validation aligned with template changes. Never

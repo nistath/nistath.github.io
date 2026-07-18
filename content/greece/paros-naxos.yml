@@ -29,14 +29,14 @@ body:
         description: Swimming in secluded coves with lunch on board.
       - name: Portara (Temple of Apollo)
         description: Iconic marble gateway. Beautiful at sunset.
-        url: https://www.google.com/maps/search/?api=1&query=Portara+Temple+of+Apollo+Naxos
+        map: Portara Temple of Apollo Naxos
 
   - type: heading
     text: Paros & Antiparos
 
   - type: prose
     text: >-
-      Paros has charming [Parikia](https://www.google.com/maps/search/?api=1&query=Parikia+Paros) and pretty [Naoussa](https://www.google.com/maps/search/?api=1&query=Naoussa+Paros). [Antiparos](https://www.google.com/maps/search/?api=1&query=Antiparos) has a great secluded cliff beach hike. Ask around when you arrive.
+      Paros has charming [Parikia](map:Parikia Paros) and pretty [Naoussa](map:Naoussa Paros). [Antiparos](map:Antiparos) has a great secluded cliff beach hike. Ask around when you arrive.
 
 aside:
   - variant: essentials
@@ -45,8 +45,8 @@ aside:
       - Best all-around Cycladic island
       - Book a guided bus tour
       - "Catamaran cruise: coves & lunch on board"
-      - "[Portara](https://www.google.com/maps/search/?api=1&query=Portara+Temple+of+Apollo+Naxos) at sunset — unmissable"
-      - "Paros: [Parikia](https://www.google.com/maps/search/?api=1&query=Parikia+Paros) & [Naoussa](https://www.google.com/maps/search/?api=1&query=Naoussa+Paros) village"
+      - "[Portara](map:Portara Temple of Apollo Naxos) at sunset — unmissable"
+      - "Paros: [Parikia](map:Parikia Paros) & [Naoussa](map:Naoussa Paros) village"
 
   - variant: ferry
     title: 🚢 Getting There

@@ -14,14 +14,14 @@ image:
 body:
   - type: prose
     text: >-
-      Beach clubs, DJs, late nights, and beautiful people. But old town [Chora](https://www.google.com/maps/search/?api=1&query=Mykonos+Chora) is genuinely charming, and there’s a real archaeological gem nearby.
+      Beach clubs, DJs, late nights, and beautiful people. But old town [Chora](map:Mykonos Chora) is genuinely charming, and there’s a real archaeological gem nearby.
 
   - type: heading
     text: Beaches
 
   - type: prose
     text: >-
-      Good but below average by Greek island standards. You’re here for the scene. [Paradise](https://www.google.com/maps/search/?api=1&query=Paradise+Beach+Mykonos) and [Super Paradise](https://www.google.com/maps/search/?api=1&query=Super+Paradise+Beach+Mykonos) are more party than swim.
+      Good but below average by Greek island standards. You’re here for the scene. [Paradise](map:Paradise Beach Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are more party than swim.
 
   - type: heading
     text: Don’t Miss
@@ -33,7 +33,7 @@ body:
         actions:
           - kind: map
             label: Map
-            url: https://www.google.com/maps/search/?api=1&query=Delos+Archaeological+Site
+            map: Delos Archaeological Site
             icon: 📍
           - kind: ticket
             label: Official tickets
@@ -41,7 +41,7 @@ body:
             icon: 🎟️
       - name: The Windmills
         description: Iconic row overlooking the harbor. Classic photo spot, beautiful at sunset.
-        url: https://www.google.com/maps/search/?api=1&query=Mykonos+Windmills
+        map: Mykonos Windmills
 
   - type: heading
     text: Eat & Drink
@@ -51,25 +51,25 @@ body:
       - icon: 🐦
         name: Pelican
         description: Nick’s top pick for a meal on the island.
-        url: https://www.google.com/maps/search/?api=1&query=Pelican+Restaurant+Mykonos
+        map: Pelican Restaurant Mykonos
       - icon: 🥂
         name: Caprice
         description: Sunset drinks on the water in Little Venice. Stunning views.
-        url: https://www.google.com/maps/search/?api=1&query=Caprice+Bar+Mykonos
+        map: Caprice Bar Mykonos
       - icon: 🎉
         name: Skandinavian
         description: The go-to club for a big night out.
-        url: https://www.google.com/maps/search/?api=1&query=Skandinavian+Bar+Mykonos
+        map: Skandinavian Bar Mykonos
 
 aside:
   - variant: essentials
     title: 🌊 Essentials
     items:
-      - Stay in old town [Chora](https://www.google.com/maps/search/?api=1&query=Mykonos+Chora), not beach hotels
-      - Visit [Delos](https://www.google.com/maps/search/?api=1&query=Delos+Archaeological+Site) — don’t skip it
-      - "Sunset drinks: [Caprice](https://www.google.com/maps/search/?api=1&query=Caprice+Bar+Mykonos) in [Little Venice](https://www.google.com/maps/search/?api=1&query=Little+Venice+Mykonos)"
-      - "Big night out: [Skandinavian](https://www.google.com/maps/search/?api=1&query=Skandinavian+Bar+Mykonos)"
-      - "Best meal: [Pelican](https://www.google.com/maps/search/?api=1&query=Pelican+Restaurant+Mykonos)"
+      - Stay in old town [Chora](map:Mykonos Chora), not beach hotels
+      - Visit [Delos](map:Delos Archaeological Site) — don’t skip it
+      - "Sunset drinks: [Caprice](map:Caprice Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
+      - "Big night out: [Skandinavian](map:Skandinavian Bar Mykonos)"
+      - "Best meal: [Pelican](map:Pelican Restaurant Mykonos)"
 
   - variant: ferry
     title: 🚢 Getting There

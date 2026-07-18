@@ -50,15 +50,21 @@
     "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "text": { "type": "string", "minLength": 1 },
     "url": { "type": "string", "format": "https-url" },
+    "map": { "type": "string", "format": "map-query" },
     "aspect": { "type": "string", "pattern": "^[1-9][0-9]*/[1-9][0-9]*$" },
     "link": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["label", "url"],
+      "required": ["label"],
       "properties": {
         "label": { "$ref": "#/definitions/text" },
-        "url": { "$ref": "#/definitions/url" }
-      }
+        "url": { "$ref": "#/definitions/url" },
+        "map": { "$ref": "#/definitions/map" }
+      },
+      "oneOf": [
+        { "required": ["url"] },
+        { "required": ["map"] }
+      ]
     },
     "image": {
       "type": "object",
@@ -90,19 +96,39 @@
         "name": { "$ref": "#/definitions/text" },
         "description": { "$ref": "#/definitions/text" },
         "url": { "$ref": "#/definitions/url" },
+        "map": { "$ref": "#/definitions/map" },
         "actions": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["kind", "label", "url", "icon"],
+            "required": ["kind", "label", "icon"],
             "properties": {
               "kind": { "enum": ["map", "ticket"] },
               "label": { "$ref": "#/definitions/text" },
               "url": { "$ref": "#/definitions/url" },
+              "map": { "$ref": "#/definitions/map" },
               "icon": { "$ref": "#/definitions/text" }
-            }
+            },
+            "allOf": [
+              {
+                "if": { "properties": { "kind": { "const": "map" } } },
+                "then": {
+                  "oneOf": [
+                    { "required": ["url"] },
+                    { "required": ["map"] }
+                  ]
+                }
+              },
+              {
+                "if": { "properties": { "kind": { "const": "ticket" } } },
+                "then": {
+                  "required": ["url"],
+                  "properties": { "map": false }
+                }
+              }
+            ]
           }
         },
         "links": {
@@ -113,10 +139,12 @@
       },
       "oneOf": [
         { "required": ["url"] },
+        { "required": ["map"] },
         { "required": ["actions"] },
         { "required": ["links"] },
         { "not": { "anyOf": [
           { "required": ["url"] },
+          { "required": ["map"] },
           { "required": ["actions"] },
           { "required": ["links"] }
         ] } }
@@ -193,8 +221,17 @@
                 "required": ["text"],
                 "properties": {
                   "text": { "$ref": "#/definitions/text" },
-                  "url": { "$ref": "#/definitions/url" }
-                }
+                  "url": { "$ref": "#/definitions/url" },
+                  "map": { "$ref": "#/definitions/map" }
+                },
+                "oneOf": [
+                  { "required": ["url"] },
+                  { "required": ["map"] },
+                  { "not": { "anyOf": [
+                    { "required": ["url"] },
+                    { "required": ["map"] }
+                  ] } }
+                ]
               }
             }
           }
@@ -224,14 +261,19 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["icon", "name", "description", "url"],
+                "required": ["icon", "name", "description"],
                 "properties": {
                   "icon": { "$ref": "#/definitions/text" },
                   "name": { "$ref": "#/definitions/text" },
                   "description": { "$ref": "#/definitions/text" },
                   "url": { "$ref": "#/definitions/url" },
+                  "map": { "$ref": "#/definitions/map" },
                   "lang": { "type": "string", "pattern": "^[a-z]{2,3}$" }
-                }
+                },
+                "oneOf": [
+                  { "required": ["url"] },
+                  { "required": ["map"] }
+                ]
               }
             }
           }

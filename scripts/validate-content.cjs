@@ -4,7 +4,7 @@ const { loadContent } = require('./content/load-content.cjs');
 try {
   const content = loadContent();
   console.log(
-    `Content is valid: ${content.portfolio.projects.length} portfolio projects, `
+    `Content is valid: About, GitHub, Resume, ${content.portfolio.projects.length} portfolio projects, `
       + `${content.greece.sections.length} Greece sections.`,
   );
 } catch (error) {

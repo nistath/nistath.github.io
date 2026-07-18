@@ -4,6 +4,8 @@ The files under `content/` are the source of truth for the words and basic
 nesting on the site. They are intentionally split into small YAML files so they
 remain practical to edit in the GitHub mobile app.
 
+- About, GitHub, and Resume content live in `content/about.yml`,
+  `content/github.yml`, and `content/resume.yml`.
 - Portfolio projects live in `content/portfolio/`.
 - Greece guide sections live in `content/greece/`.
 - Templates own HTML, CSS classes, icons, and ARIA behavior.
@@ -51,6 +53,24 @@ text: >-
   [official site](https://example.com/) for current details.
 ```
 
+For a Google Maps search, use the phone-friendly `map:` shorthand instead of
+finding and pasting a long URL:
+
+```yaml
+text: Meet at [Syntagma Square](map:Syntagma Square Athens).
+```
+
+Structured place entries use the same idea:
+
+```yaml
+name: Acropolis Museum
+description: World-class collection at the base of the hill.
+map: Acropolis Museum Athens
+```
+
+The build converts both forms to a normal Google Maps search URL. Use `url:`
+instead when a specific shared pin, official site, or ticket page matters.
+
 For multiple paragraphs, use separate blocks:
 
 ```yaml
@@ -66,6 +86,16 @@ body:
 The schemas reject unknown fields, missing required fields, invalid block
 shapes, duplicate IDs, and other structural mistakes. `npm run check` is the
 authoritative validation command.
+
+## About, GitHub, and Resume
+
+- `content/about.yml` contains the About heading, paragraphs, and farewell.
+- `content/github.yml` contains the GitHub heading, subtitle, loading text,
+  and ordered pinned-repository list.
+- `content/resume.yml` contains the resume PDF URL and iframe title.
+
+Routine wording, link, repository-order, and resume-source changes belong in
+these files. The template and JavaScript consume them automatically.
 
 ## Portfolio
 
@@ -224,7 +254,7 @@ Add an item to an existing `venues` block:
       name: Example Taverna
       description: >-
         Traditional cooking in a relaxed neighborhood setting.
-      url: https://maps.example.com/example-taverna
+      map: Example Taverna Athens
 ```
 
 A venue is one full-card link. Do not put a Markdown link inside its `name` or
@@ -232,7 +262,7 @@ A venue is one full-card link. Do not put a Markdown link inside its `name` or
 
 ### Add a sight
 
-For one destination, use `url`:
+For one destination, use `map`:
 
 ```yaml
 - type: sights
@@ -240,10 +270,11 @@ For one destination, use `url`:
     - name: Example Museum
       description: >-
         A focused collection that takes about an hour to visit.
-      url: https://maps.example.com/example-museum
+      map: Example Museum Athens
 ```
 
-For separate map and ticket destinations, use `actions` instead of `url`:
+For separate map and ticket destinations, use `actions` instead of a direct
+`map` or `url` target:
 
 ```yaml
 - name: Example Archaeological Site
@@ -253,7 +284,7 @@ For separate map and ticket destinations, use `actions` instead of `url`:
     - kind: map
       label: Map
       icon: "📍"
-      url: https://maps.example.com/example-site
+      map: Example Archaeological Site Athens
     - kind: ticket
       label: Official tickets
       icon: "🎟️"
@@ -267,12 +298,13 @@ For several peer destinations, use grouped `links`:
   description: Good indoor options for the afternoon.
   links:
     - label: History Museum
-      url: https://maps.example.com/history
+      map: History Museum Athens
     - label: Archaeology Museum
-      url: https://maps.example.com/archaeology
+      map: Archaeology Museum Athens
 ```
 
-Use only one link shape on an item: `url`, `actions`, or `links`. The templates
+Use only one link shape on an item: a direct `map`/`url` target, `actions`, or
+`links`. Within a target, choose exactly one of `map` or `url`. The templates
 choose valid full-card or grouped markup from that shape.
 
 ### Add a tip, fact list, or day plan
