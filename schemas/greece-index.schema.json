@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["hero", "notice", "islands_intro", "footer"],
+  "properties": {
+    "hero": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eyebrow", "title", "emphasis"],
+      "properties": {
+        "eyebrow": { "$ref": "#/definitions/text" },
+        "title": { "$ref": "#/definitions/text" },
+        "emphasis": { "$ref": "#/definitions/text" }
+      }
+    },
+    "notice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["icon", "text"],
+      "properties": {
+        "icon": { "$ref": "#/definitions/text" },
+        "text": { "$ref": "#/definitions/text" }
+      }
+    },
+    "islands_intro": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eyebrow", "title", "subtitle"],
+      "properties": {
+        "eyebrow": { "$ref": "#/definitions/text" },
+        "title": { "$ref": "#/definitions/text" },
+        "subtitle": { "$ref": "#/definitions/text" }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "subtitle"],
+      "properties": {
+        "title": { "$ref": "#/definitions/text" },
+        "subtitle": { "$ref": "#/definitions/text" }
+      }
+    }
+  },
+  "definitions": {
+    "text": { "type": "string", "minLength": 1 }
+  }
+}

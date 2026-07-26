@@ -1,0 +1,56 @@
+id: paros-naxos
+order: 70
+kind: island
+nav:
+  label: Paros & Naxos
+  icon: ⛵
+title: Paros & Naxos
+tagline: Two islands, 30–45 minutes apart
+image:
+  src: https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg
+  alt: Portara, Temple of Apollo, Naxos
+  aspect: 16/9
+
+body:
+  - type: prose
+    text: Easy to combine, but don’t rush them. Either island works on its own.
+
+  - type: heading
+    text: Naxos
+
+  - type: prose
+    text: The most well-rounded island, with beaches, history, mountain villages, great food, and youthful energy. Also the greenest of the Cyclades, so the produce and cheese are a step up.
+
+  - type: sights
+    items:
+      - name: Guided bus tour
+        description: The easy way to see the mountain villages and the marble quarries inland without renting a car.
+      - name: Catamaran cruise
+        description: A full day of swimming in secluded coves, with lunch on board.
+      - name: Portara (Temple of Apollo)
+        description: Marble doorway of a temple that was never finished, on the islet by the port. Walk out for sunset.
+        map: Portara Temple of Apollo Naxos
+
+  - type: heading
+    text: Paros & Antiparos
+
+  - type: prose
+    text: >-
+      Paros has charming [Parikia](map:Parikia Paros) and pretty [Naoussa](map:Naoussa Paros). [Antiparos](map:Antiparos) has a great secluded cliff beach hike. Ask around when you arrive.
+
+aside:
+  - variant: essentials
+    title: ✨ Naxos Essentials
+    items:
+      - Best all-around Cycladic island
+      - Book a guided bus tour
+      - "Catamaran cruise: coves & lunch on board"
+      - "[Portara](map:Portara Temple of Apollo Naxos) at sunset"
+      - "Paros: [Parikia](map:Parikia Paros) & [Naoussa](map:Naoussa Paros) village"
+
+  - variant: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~5 hrs to Naxos"
+      - "Paros ↔ Naxos: 30–45 min"
+      - Book at [ferryscanner.com](https://ferryscanner.com)

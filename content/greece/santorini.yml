@@ -1,0 +1,114 @@
+id: santorini
+order: 50
+kind: island
+nav:
+  label: Santorini
+  icon: 🌅
+title: Santorini
+tagline: The caldera is the whole point
+image:
+  src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900
+  alt: Oia blue domes at sunset, Santorini
+  aspect: 16/9
+
+body:
+  - type: prose
+    text: White villages stacked on the edge of a volcanic caldera.
+
+  - type: heading
+    text: Where to Stay
+
+  - type: prose
+    text: >-
+      Choose [**Fira**](map:Fira Santorini) for more restaurants and nightlife, or [**Oia**](map:Oia Santorini) for the famous sunset and higher prices. The caldera coast between them is a good middle ground.
+
+  - type: heading
+    text: Things to Do
+
+  - type: image
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900
+    alt: Fira to Oia caldera hike
+    aspect: 16/7
+    variant: inset
+
+  - type: sights
+    items:
+      - name: Oia Castle (Agios Nikolaos)
+        description: Venetian fortress ruins at the tip of Oia. The sunset spot, so it packs out an hour ahead.
+        map: Castle of Oia Agios Nikolaos Santorini
+      - name: Fira to Oia Hike
+        description: ~10 km caldera rim trail. Very little shade. Start early, bring water.
+        map: Fira to Oia Hike Santorini
+      - name: Akrotiri
+        description: Bronze Age settlement, the “Pompeii of the Aegean.” Over 3,500 years old.
+        actions:
+          - kind: map
+            label: Map
+            map: Akrotiri Archaeological Site Santorini
+            icon: 📍
+          - kind: ticket
+            label: Official tickets
+            url: https://hhticket.gr/
+            icon: 🎟️
+      - name: Ancient Thira
+        description: Hellenistic ruins high on the ridge between Kamari and Perissa.
+        actions:
+          - kind: map
+            label: Map
+            map: Ancient Thera Santorini
+            icon: 📍
+          - kind: ticket
+            label: Official tickets
+            url: https://hhticket.gr/
+            icon: 🎟️
+      - name: Museums in Fira
+        description: Small museums in Fira covering prehistoric and archaeological finds from Santorini.
+        links:
+          - label: Fira
+            map: Fira Santorini
+          - label: Museum of Prehistoric Thera
+            map: Museum of Prehistoric Thera Fira
+          - label: Archaeological Museum of Thera
+            map: Archaeological Museum of Thera Fira
+      - name: Red & White Beach
+        description: Red Beach is reached on foot; White Beach by boat.
+        links:
+          - label: Red Beach
+            map: Red Beach Santorini
+          - label: White Beach
+            map: White Beach Santorini
+      - name: Ammoudi Bay
+        description: Hidden harbor below Oia. Hike or donkey down for swimming and seafood. Ironically not a sand (άμμος) beach.
+        map: Ammoudi Bay Santorini
+
+  - type: heading
+    text: Eat & Drink
+
+  - type: venues
+    items:
+      - icon: 🥙
+        name: Yogi Gyro
+        description: Best gyros on the island. Located in Fira.
+        map: Yogi Gyro Santorini
+      - icon: 🌅
+        name: PK Cocktail Bar
+        description: Caldera-edge cocktails in Fira. Come well before sunset if you want a seat at the rail.
+        map: PK Cocktail Bar Santorini
+
+aside:
+  - variant: essentials
+    title: 🌅 Essentials
+    items:
+      - "[Fira](map:Fira Santorini) for nightlife, [Oia](map:Oia Santorini) for the sunset, between them for both"
+      - Book caldera-view hotels early
+      - Hike [Fira → Oia](map:Fira to Oia Hike Santorini) (10 km, go early)
+      - Visit [Akrotiri](map:Akrotiri Archaeological Site Santorini) archaeological site
+      - "Sunset drinks: [PK Cocktail Bar](map:PK Cocktail Bar Santorini)"
+      - "Best gyros: [Yogi Gyro](map:Yogi Gyro Santorini) in [Fira](map:Fira Santorini)"
+
+  - variant: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~8 hrs (overnight)"
+      - "High-speed ferry: ~5 hrs"
+      - "Flight: ~45 min from ATH"

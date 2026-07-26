@@ -1,0 +1,148 @@
+{% macro image(block) %}
+  <div class="gr-img{% if block.variant == 'island' %} gr-island-img-wrap{% endif %}"
+       style="aspect-ratio:{{ block.aspect or '16/9' }}{% if block.variant == 'inset' %};margin-bottom:12px{% endif %}">
+    <img src="{{ block.src }}" alt="{{ block.alt }}" loading="lazy">
+  </div>
+{% endmacro %}
+
+{% macro sight(item) %}
+  {% if item.url or item.map %}
+    <a class="gr-sight" href="{{ item | contentHref }}" target="_blank" rel="noopener noreferrer">
+      <div class="gr-sight-name">{{ item.name | markdownInline | safe }} <span class="gr-venue-ext">↗</span></div>
+      <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
+    </a>
+  {% elif item.links %}
+    <div class="gr-sight gr-sight--grouped">
+      <div class="gr-sight-name">{{ item.name | markdownInline | safe }}</div>
+      <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
+      <div class="gr-sight-links">
+        {% for link in item.links %}
+          <a class="gr-sight-link" href="{{ link | contentHref }}" target="_blank"
+             rel="noopener noreferrer">{{ link.label | markdownInline | safe }} <span class="gr-venue-ext">↗</span></a>
+        {% endfor %}
+      </div>
+    </div>
+  {% elif item.actions %}
+    <div class="gr-sight gr-sight--ticketed">
+      <div class="gr-sight-name">{{ item.name | markdownInline | safe }}</div>
+      <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
+      <div class="gr-sight-actions">
+        {% for action in item.actions %}
+          <a class="gr-sight-action gr-sight-action--{{ action.kind }}" href="{{ action | contentHref }}"
+             target="_blank" rel="noopener noreferrer">
+            <span class="gr-sight-action-icon" aria-hidden="true">{{ action.icon }}</span>{{ action.label }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="gr-sight">
+      <div class="gr-sight-name">{{ item.name | markdownInline | safe }}</div>
+      <div class="gr-sight-desc">{{ item.description | markdownInline | safe }}</div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro venue(item) %}
+  <a class="gr-venue" href="{{ item | contentHref }}" target="_blank" rel="noopener noreferrer">
+    <div class="gr-venue-inner">
+      <span class="gr-venue-icon">{{ item.icon }}</span>
+      <div>
+        <div class="gr-venue-name"{% if item.lang %} lang="{{ item.lang }}"{% endif %}>{{ item.name | markdownInline | safe }} <span class="gr-venue-ext">↗</span></div>
+        <div class="gr-venue-desc">{{ item.description | markdownInline | safe }}</div>
+      </div>
+    </div>
+  </a>
+{% endmacro %}
+
+{% macro block(item) %}
+  {% if item.type == 'city_image' %}
+    <div class="gr-city-feature">
+      <div class="gr-img gr-city-image" role="img" aria-label="{{ item.alt }}"
+           style="--gr-city-image:url('{{ item.src }}')"></div>
+    </div>
+  {% elif item.type == 'image' %}
+    {{ image(item) }}
+  {% elif item.type == 'card' %}
+    <div class="gr-card{% if item.variant == 'city_intro' %} gr-card--city-intro{% endif %}">
+      {% for child in item.blocks %}{{ block(child) }}{% endfor %}
+    </div>
+  {% elif item.type == 'heading' %}
+    <h3 class="gr-h3">{{ item.text | markdownInline | safe }}</h3>
+  {% elif item.type == 'prose' %}
+    <p class="gr-p{% if item.variant == 'intro' %} gr-intro-copy{% endif %}">{{ item.text | markdownInline('gr-inline-link') | safe }}</p>
+  {% elif item.type == 'tagline' %}
+    <p class="gr-tagline">{{ item.text | markdownInline('gr-inline-link') | safe }}</p>
+  {% elif item.type == 'chips' %}
+    <div class="gr-chips{% if item.flush %} gr-chips--flush{% endif %}">
+      {% for chip in item.items %}
+        {% if chip.url or chip.map %}
+          <a class="gr-chip" href="{{ chip | contentHref }}" target="_blank" rel="noopener noreferrer">{{ chip.text | markdownInline | safe }}</a>
+        {% else %}
+          <span class="gr-chip">{{ chip.text | markdownInline | safe }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% elif item.type == 'sights' %}
+    <div class="gr-card gr-card--flush">
+      {% for entry in item.items %}{{ sight(entry) }}{% endfor %}
+    </div>
+  {% elif item.type == 'venues' %}
+    <div class="gr-venue-list">
+      {% for entry in item.items %}{{ venue(entry) }}{% endfor %}
+    </div>
+  {% elif item.type == 'note' %}
+    <div class="gr-note"><p>{{ item.text | markdownInline('gr-inline-link') | safe }}</p></div>
+  {% elif item.type == 'other_cards' %}
+    <div class="gr-other-list">
+      {% for entry in item.items %}
+        <div class="gr-other-card">
+          {{ image(entry.image) }}
+          <div class="gr-other-card-body">
+            <h3 class="gr-other-name">{{ entry.name | markdownInline | safe }}</h3>
+            <p class="gr-other-desc">{{ entry.description | markdownInline('gr-inline-link') | safe }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro tip(card) %}
+  <div class="gr-tip gr-tip--{{ card.variant }}">
+    <div class="gr-tip-title">{{ card.title | markdownInline | safe }}</div>
+    {% if card.items %}
+      <ul class="gr-tip-list">
+        {% for item in card.items %}<li>{{ item | markdownInline('gr-inline-link') | safe }}</li>{% endfor %}
+      </ul>
+    {% elif card.facts %}
+      <dl class="gr-fact-list">
+        {% for fact in card.facts %}
+          <div><dt>{{ fact.term | markdownInline('gr-inline-link') | safe }}</dt><dd>{{ fact.description | markdownInline('gr-inline-link') | safe }}</dd></div>
+        {% endfor %}
+      </dl>
+    {% elif card.days %}
+      <div class="gr-day-plan">
+        {% for day in card.days %}
+          <div>
+            <span class="gr-day-label">{{ day.label | markdownInline | safe }}</span>
+            <ul class="gr-tip-list">
+              {% for item in day.items %}<li>{{ item | markdownInline('gr-inline-link') | safe }}</li>{% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro grid(section) %}
+  <div class="gr-grid">
+    <div class="gr-body">
+      {% for item in section.body %}{{ block(item) }}{% endfor %}
+    </div>
+    <aside class="gr-aside">
+      {% for card in section.aside %}{{ tip(card) }}{% endfor %}
+    </aside>
+  </div>
+{% endmacro %}

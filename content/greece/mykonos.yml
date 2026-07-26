@@ -1,0 +1,79 @@
+id: mykonos
+order: 40
+kind: island
+nav:
+  label: Mykonos
+  icon: 🎉
+title: Mykonos
+tagline: Come for the party; stay in Chora
+image:
+  src: https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg
+  alt: Mykonos windmills
+  aspect: 16/9
+
+body:
+  - type: prose
+    text: >-
+      Yes, it’s expensive and loud. Old town [Chora](map:Mykonos Chora) is still beautiful, and Delos is a short boat ride away.
+
+  - type: heading
+    text: Beaches
+
+  - type: prose
+    text: >-
+      Good but below average by Greek island standards. You’re here to party. [Paradise](map:Paradise Beach Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are fun beaches.
+
+  - type: heading
+    text: Don’t Miss
+
+  - type: sights
+    items:
+      - name: Delos
+        description: One of Greece’s most important archaeological sites, only a short boat ride away. Birthplace of Apollo and Artemis. Visit with a guide.
+        actions:
+          - kind: map
+            label: Map
+            map: Delos Archaeological Site
+            icon: 📍
+          - kind: ticket
+            label: Official tickets
+            url: https://hhticket.gr/
+            icon: 🎟️
+      - name: The Windmills
+        description: Iconic row on the hill above Chora. Best light at sunset.
+        map: Mykonos Windmills
+
+  - type: heading
+    text: Eat & Drink
+
+  - type: venues
+    items:
+      - icon: 🐦
+        name: Pelican
+        description: The restaurant that cooked Nick’s second “best meal ever”.
+        map: Pelican Restaurant Mykonos
+      - icon: 🥂
+        name: Cerise
+        description: Sunset drinks on the water in Little Venice.
+        map: Cerise Bar Mykonos
+      - icon: 🎉
+        name: Skandinavian
+        description: Raucous bi-level nightclub with three bars, a courtyard, and a dance floor.
+        map: Skandinavian Bar Mykonos
+
+aside:
+  - variant: essentials
+    title: 🌊 Essentials
+    items:
+      - Stay in old town [Chora](map:Mykonos Chora), not beach hotels
+      - "[Delos](map:Delos Archaeological Site) boat trip, with a guide"
+      - "Sunset drinks: [Cerise](map:Cerise Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
+      - "Big night out: [Skandinavian](map:Skandinavian Bar Mykonos)"
+      - "Best meal: [Pelican](map:Pelican Restaurant Mykonos)"
+
+  - variant: ferry
+    title: 🚢 Getting There
+    items:
+      - "Ferry from Piraeus: ~2.5–5 hrs"
+      - "Flight: ~45 min from ATH"
+      - Book at [ferryscanner.com](https://ferryscanner.com)

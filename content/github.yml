@@ -1,0 +1,10 @@
+title: GitHub
+subtitle: Pinned repositories from [@nistath](https://github.com/nistath)
+loading_text: Loading repositories…
+pinned_repositories:
+  - MITIBMxGraph/SALIENT
+  - nistath/arpp
+  - nistath/o2p2_vizdoom
+  - MITMotorsports/MY18
+  - MITMotorsports/ParseCAN
+  - nistath/lidar_raycaster

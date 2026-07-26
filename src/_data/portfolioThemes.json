@@ -1,0 +1,6 @@
+{
+  "salient": { "color": "#7c3aed" },
+  "car": { "color": "#c0392b" },
+  "bms": { "color": "#0a7c5c" },
+  "dash": { "color": "#1a56a0" }
+}

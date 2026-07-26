@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "theme", "title", "subtitle", "organization", "period", "tags", "highlights"],
+  "properties": {
+    "id": { "$ref": "#/definitions/slug" },
+    "theme": { "enum": ["salient", "car", "bms", "dash"] },
+    "title": { "$ref": "#/definitions/text" },
+    "subtitle": { "$ref": "#/definitions/text" },
+    "organization": { "$ref": "#/definitions/text" },
+    "period": { "$ref": "#/definitions/text" },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/text" }
+    },
+    "highlights": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/text" }
+    },
+    "links": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/link" }
+    },
+    "details": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "paragraphs"],
+        "properties": {
+          "id": { "$ref": "#/definitions/slug" },
+          "title": { "$ref": "#/definitions/text" },
+          "paragraphs": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/text" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1 },
+    "url": { "type": "string", "format": "https-url" },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "url"],
+      "properties": {
+        "label": { "$ref": "#/definitions/text" },
+        "url": { "$ref": "#/definitions/url" }
+      }
+    }
+  }
+}

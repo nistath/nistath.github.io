@@ -6,3 +6,10 @@ Thumbs.db
 
 # Node.js
 node_modules/
+
+# Generated static site
+_site/
+
+# Local browser-verification artifacts
+.playwright-cli/
+output/playwright/

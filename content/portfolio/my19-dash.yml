@@ -1,0 +1,46 @@
+id: my19-dash
+theme: dash
+title: MY19 Dashboard & Telemetry
+subtitle: Real-time driver HUD and live pit-side telemetry system
+organization: MIT Motorsports
+period: 2017 – 2020
+tags:
+  - kdb+
+  - Q
+  - Kx Dashboards
+  - Python
+  - CAN Bus
+  - Real-time
+  - Embedded
+highlights:
+  - >-
+    Designed the driver-facing dashboard display surfacing battery state, motor
+    metrics, system alerts, and lap data in a glanceable layout.
+  - >-
+    Developed a kdb+/Q real-time telemetry pipeline ingesting live CAN bus data
+    wirelessly to a pit-side system during competition.
+links:
+  - label: MIT Motorsports
+    url: https://www.mitmotorsports.com/
+details:
+  - id: pit-telemetry
+    title: Pit Telemetry System
+    paragraphs:
+      - >-
+        Built a real-time telemetry pipeline using kdb+/Q that ingests live CAN
+        bus data wirelessly from the car to a pit-side laptop throughout dynamic
+        events.
+      - >-
+        Visualised vehicle state (motor temperatures, battery cell voltages,
+        current draw, and fault codes) using Kx Dashboards, enabling engineers
+        to monitor and diagnose the car live from the pits.
+  - id: driver-display
+    title: Driver Dashboard Display
+    paragraphs:
+      - >-
+        Designed and implemented the embedded dashboard display shown to the
+        driver throughout competition.
+      - >-
+        The display surfaces critical alerts, battery state of charge, lap
+        timing, and key motor metrics within a clear layout optimised for
+        high-vibration, high-G environments.

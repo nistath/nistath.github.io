@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "subtitle", "loading_text", "pinned_repositories"],
+  "properties": {
+    "title": { "$ref": "#/definitions/text" },
+    "subtitle": { "$ref": "#/definitions/text" },
+    "loading_text": { "$ref": "#/definitions/text" },
+    "pinned_repositories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+      }
+    }
+  },
+  "definitions": {
+    "text": { "type": "string", "minLength": 1 }
+  }
+}

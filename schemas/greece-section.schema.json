@@ -1,0 +1,364 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "order", "kind", "nav", "title", "body", "aside"],
+  "properties": {
+    "id": { "$ref": "#/definitions/slug" },
+    "order": { "type": "integer", "minimum": 1 },
+    "kind": { "enum": ["section", "island"] },
+    "nav": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "icon"],
+      "properties": {
+        "label": { "$ref": "#/definitions/text" },
+        "icon": { "$ref": "#/definitions/text" }
+      }
+    },
+    "title": { "$ref": "#/definitions/text" },
+    "tagline": { "$ref": "#/definitions/text" },
+    "image": { "$ref": "#/definitions/image" },
+    "body": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/block" }
+    },
+    "aside": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/tip" }
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "kind": { "const": "section" },
+        "tagline": false,
+        "image": false
+      }
+    },
+    {
+      "properties": {
+        "kind": { "const": "island" },
+        "tagline": {},
+        "image": {}
+      },
+      "required": ["tagline", "image"]
+    }
+  ],
+  "definitions": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1 },
+    "url": { "type": "string", "format": "https-url" },
+    "map": { "type": "string", "format": "map-query" },
+    "aspect": { "type": "string", "pattern": "^[1-9][0-9]*/[1-9][0-9]*$" },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label": { "$ref": "#/definitions/text" },
+        "url": { "$ref": "#/definitions/url" },
+        "map": { "$ref": "#/definitions/map" }
+      },
+      "oneOf": [
+        { "required": ["url"] },
+        { "required": ["map"] }
+      ]
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src", "alt"],
+      "properties": {
+        "src": { "$ref": "#/definitions/url" },
+        "alt": { "$ref": "#/definitions/text" },
+        "aspect": { "$ref": "#/definitions/aspect" }
+      }
+    },
+    "blockImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "src", "alt"],
+      "properties": {
+        "type": { "const": "image" },
+        "src": { "$ref": "#/definitions/url" },
+        "alt": { "$ref": "#/definitions/text" },
+        "aspect": { "$ref": "#/definitions/aspect" },
+        "variant": { "enum": ["inset"] }
+      }
+    },
+    "sight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "$ref": "#/definitions/text" },
+        "description": { "$ref": "#/definitions/text" },
+        "url": { "$ref": "#/definitions/url" },
+        "map": { "$ref": "#/definitions/map" },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "label", "icon"],
+            "properties": {
+              "kind": { "enum": ["map", "ticket"] },
+              "label": { "$ref": "#/definitions/text" },
+              "url": { "$ref": "#/definitions/url" },
+              "map": { "$ref": "#/definitions/map" },
+              "icon": { "$ref": "#/definitions/text" }
+            },
+            "allOf": [
+              {
+                "if": { "properties": { "kind": { "const": "map" } } },
+                "then": {
+                  "oneOf": [
+                    { "required": ["url"] },
+                    { "required": ["map"] }
+                  ]
+                }
+              },
+              {
+                "if": { "properties": { "kind": { "const": "ticket" } } },
+                "then": {
+                  "required": ["url"],
+                  "properties": { "map": false }
+                }
+              }
+            ]
+          }
+        },
+        "links": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/definitions/link" }
+        }
+      },
+      "oneOf": [
+        { "required": ["url"] },
+        { "required": ["map"] },
+        { "required": ["actions"] },
+        { "required": ["links"] },
+        { "not": { "anyOf": [
+          { "required": ["url"] },
+          { "required": ["map"] },
+          { "required": ["actions"] },
+          { "required": ["links"] }
+        ] } }
+      ]
+    },
+    "block": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "src", "alt"],
+          "properties": {
+            "type": { "const": "city_image" },
+            "src": { "$ref": "#/definitions/url" },
+            "alt": { "$ref": "#/definitions/text" }
+          }
+        },
+        { "$ref": "#/definitions/blockImage" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "blocks"],
+          "properties": {
+            "type": { "const": "card" },
+            "variant": { "enum": ["city_intro"] },
+            "blocks": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/definitions/block" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "heading" },
+            "text": { "$ref": "#/definitions/text" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "prose" },
+            "text": { "$ref": "#/definitions/text" },
+            "variant": { "enum": ["intro"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "tagline" },
+            "text": { "$ref": "#/definitions/text" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "chips" },
+            "flush": { "type": "boolean" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["text"],
+                "properties": {
+                  "text": { "$ref": "#/definitions/text" },
+                  "url": { "$ref": "#/definitions/url" },
+                  "map": { "$ref": "#/definitions/map" }
+                },
+                "oneOf": [
+                  { "required": ["url"] },
+                  { "required": ["map"] },
+                  { "not": { "anyOf": [
+                    { "required": ["url"] },
+                    { "required": ["map"] }
+                  ] } }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "sights" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/definitions/sight" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "venues" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["icon", "name", "description"],
+                "properties": {
+                  "icon": { "$ref": "#/definitions/text" },
+                  "name": { "$ref": "#/definitions/text" },
+                  "description": { "$ref": "#/definitions/text" },
+                  "url": { "$ref": "#/definitions/url" },
+                  "map": { "$ref": "#/definitions/map" },
+                  "lang": { "type": "string", "pattern": "^[a-z]{2,3}$" }
+                },
+                "oneOf": [
+                  { "required": ["url"] },
+                  { "required": ["map"] }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "note" },
+            "text": { "$ref": "#/definitions/text" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "other_cards" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "description", "image"],
+                "properties": {
+                  "name": { "$ref": "#/definitions/text" },
+                  "description": { "$ref": "#/definitions/text" },
+                  "image": { "$ref": "#/definitions/image" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["variant", "title"],
+      "properties": {
+        "variant": { "enum": ["facts", "tips", "itinerary", "eats", "essentials", "ferry", "logistics"] },
+        "title": { "$ref": "#/definitions/text" },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/text" }
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["term", "description"],
+            "properties": {
+              "term": { "$ref": "#/definitions/text" },
+              "description": { "$ref": "#/definitions/text" }
+            }
+          }
+        },
+        "days": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "items"],
+            "properties": {
+              "label": { "$ref": "#/definitions/text" },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "$ref": "#/definitions/text" }
+              }
+            }
+          }
+        }
+      },
+      "oneOf": [
+        { "required": ["items"] },
+        { "required": ["facts"] },
+        { "required": ["days"] }
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+id: my18
+theme: car
+title: MY18 Electric Race Car
+subtitle: Software lead for MIT’s Formula SAE championship entry
+organization: MIT Motorsports
+period: Nov. 2017 – June 2018
+tags:
+  - C++
+  - CAN Bus
+  - Embedded
+  - Team Lead
+  - Formula SAE
+highlights:
+  - >-
+    Led and coordinated 8 engineers across 9 software subsystems of MIT’s
+    electric race car.
+  - >-
+    The car finished the 22 km Formula SAE Electric 2018 endurance race **113
+    seconds ahead** of the next fastest competitor.
+  - >-
+    Built *CANlib*, a code-generated CAN bus serialization library, alongside
+    Makefile improvements, automated toolchain installation, and Git-versioned
+    binary flashing.
+  - >-
+    Developed documentation, unit and integration tests, and verification
+    procedures for the car’s electrical systems.
+  - >-
+    Held regular individual status reviews and all-hands architecture sessions.
+links:
+  - label: MIT Motorsports
+    url: https://www.mitmotorsports.com/

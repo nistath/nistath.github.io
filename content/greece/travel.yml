@@ -1,0 +1,69 @@
+id: travel
+order: 10
+kind: section
+nav:
+  label: Travel
+  icon: ✈️
+title: Getting There & Around
+
+body:
+  - type: city_image
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900
+    alt: Athens city view at sunset
+
+  - type: card
+    variant: city_intro
+    blocks:
+      - type: heading
+        text: Getting In
+      - type: prose
+        text: >-
+          Fly into **Athens International Airport (ATH)**. Taxi (~€40 flat rate to the centre, ~40 min, higher at night), metro Line 3 to [Syntagma Square](map:Syntagma Square Athens) (~40 min), or private transfer. If you’re heading straight to an island, many have direct international flights, worth checking before defaulting to ATH.
+      - type: chips
+        items:
+          - text: 🚕 Taxi ~€40
+          - text: 🚇 Metro ~40 min
+          - text: 📱 Uber / FreeNow
+      - type: heading
+        text: Getting Around
+      - type: prose
+        text: >-
+          Athens is very walkable in the center, with the main sights a pedestrian promenade apart. [**FreeNow**](https://free-now.com) has the best local driver availability. The metro is clean, cheap, and efficient. Google Maps works great for transit.
+      - type: heading
+        text: Where to Stay
+      - type: prose
+        text: >-
+          Stay in [**Plaka**](map:Plaka Athens) for narrow streets and old-Athens charm, or [**Thiseio**](map:Thiseio Athens) for a quieter neighborhood and Acropolis views from the promenade. Both keep you within walking distance of the center.
+      - type: chips
+        flush: true
+        items:
+          - text: 📍 Plaka
+            map: Plaka Athens
+          - text: 📍 Thiseio
+            map: Thiseio Athens
+
+aside:
+  - variant: facts
+    title: 🛬 Quick Facts
+    facts:
+      - term: Airport
+        description: Eleftherios Venizelos (ATH)
+      - term: Metro to centre
+        description: ~40 min
+      - term: Taxi flat rate
+        description: ~€40 by day, more at night
+      - term: Currency
+        description: Euro (€)
+      - term: Language
+        description: Greek
+      - term: SIM cards
+        description: At airport arrivals
+
+  - variant: tips
+    title: 💡 Pro Tips
+    items:
+      - Validate your metro ticket before boarding
+      - FreeNow usually beats Uber on price & availability
+      - Hotels in [Plaka](map:Plaka Athens) are walkable to almost everything
+      - Greeks eat dinner at 9–10 PM; show up at 7 and you’ll have the room to yourself
+      - Book island ferries at [ferryscanner.com](https://ferryscanner.com)
