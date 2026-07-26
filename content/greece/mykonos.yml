@@ -5,7 +5,7 @@ nav:
   label: Mykonos
   icon: 🎉
 title: Mykonos
-tagline: Glamorous, loud, and unapologetically fun
+tagline: Come for the party; stay in Chora
 image:
   src: https://upload.wikimedia.org/wikipedia/commons/7/77/The_windmills_in_Mykonos%2C_Greece_-_50661524068.jpg
   alt: Mykonos windmills
@@ -14,7 +14,7 @@ image:
 body:
   - type: prose
     text: >-
-      Beach clubs, DJs, late nights, and beautiful people. But old town [Chora](map:Mykonos Chora) is genuinely charming, and there’s a real archaeological gem nearby.
+      Yes, it’s expensive and loud. Old town [Chora](map:Mykonos Chora) is still beautiful, and Delos is a short boat ride away.
 
   - type: heading
     text: Beaches
@@ -29,7 +29,7 @@ body:
   - type: sights
     items:
       - name: Delos
-        description: One of Greece’s most important archaeological sites only a short boat ride away. Birthplace of Apollo and Artemis. Visit with a guide.
+        description: One of Greece’s most important archaeological sites, only a short boat ride away. Birthplace of Apollo and Artemis. Visit with a guide.
         actions:
           - kind: map
             label: Map
@@ -54,7 +54,7 @@ body:
         map: Pelican Restaurant Mykonos
       - icon: 🥂
         name: Cerise
-        description: Sunset drinks on the water in Little Venice. Stunning views.
+        description: Sunset drinks on the water in Little Venice.
         map: Cerise Bar Mykonos
       - icon: 🎉
         name: Skandinavian

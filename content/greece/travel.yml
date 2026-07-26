@@ -33,7 +33,7 @@ body:
         text: Where to Stay
       - type: prose
         text: >-
-          We recommend [**Plaka**](map:Plaka Athens) (charming village feel, narrow streets) and [**Thiseio**](map:Thiseio Athens) (laid-back, beautiful Acropolis views from the promenade). Both are centrally located.
+          Stay in [**Plaka**](map:Plaka Athens) for narrow streets and old-Athens charm, or [**Thiseio**](map:Thiseio Athens) for a quieter neighborhood and Acropolis views from the promenade. Both keep you within walking distance of the center.
       - type: chips
         flush: true
         items:

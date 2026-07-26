@@ -5,7 +5,7 @@ nav:
   label: Paros & Naxos
   icon: ⛵
 title: Paros & Naxos
-tagline: Close neighbors, easy to visit together
+tagline: Two islands, 30–45 minutes apart
 image:
   src: https://upload.wikimedia.org/wikipedia/commons/6/69/The_Portara_of_Naxos_at_Sunset.jpg
   alt: Portara, Temple of Apollo, Naxos
@@ -13,7 +13,7 @@ image:
 
 body:
   - type: prose
-    text: Ferries between them take 30–45 minutes. Either is great on its own.
+    text: Easy to combine, but don’t rush them. Either island works on its own.
 
   - type: heading
     text: Naxos
@@ -26,7 +26,7 @@ body:
       - name: Guided bus tour
         description: The easy way to see the mountain villages and the marble quarries inland without renting a car.
       - name: Catamaran cruise
-        description: Swimming in secluded coves with lunch on board.
+        description: A full day of swimming in secluded coves, with lunch on board.
       - name: Portara (Temple of Apollo)
         description: Marble doorway of a temple that was never finished, on the islet by the port. Walk out for sunset.
         map: Portara Temple of Apollo Naxos

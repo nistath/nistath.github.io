@@ -5,7 +5,7 @@ nav:
   label: Santorini
   icon: 🌅
 title: Santorini
-tagline: Dramatic cliffs, legendary sunsets, real depth
+tagline: The caldera is the whole point
 image:
   src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900
   alt: Oia blue domes at sunset, Santorini
@@ -13,14 +13,14 @@ image:
 
 body:
   - type: prose
-    text: Built on a volcanic caldera, with cliffs into deep blue water and white buildings stacked together. Romantic, photogenic, historically rich.
+    text: White villages stacked on the edge of a volcanic caldera.
 
   - type: heading
     text: Where to Stay
 
   - type: prose
     text: >-
-      [**Fira**](map:Fira Santorini) is lively. [**Oia**](map:Oia Santorini) is fancier with the iconic sunset. Stay along the caldera coast between them for a middle ground.
+      Choose [**Fira**](map:Fira Santorini) for more restaurants and nightlife, or [**Oia**](map:Oia Santorini) for the famous sunset and higher prices. The caldera coast between them is a good middle ground.
 
   - type: heading
     text: Things to Do
@@ -51,7 +51,7 @@ body:
             url: https://hhticket.gr/
             icon: 🎟️
       - name: Ancient Thira
-        description: Hellenistic ruins on a ridge between Kamari and Perissa beaches.
+        description: Hellenistic ruins high on the ridge between Kamari and Perissa.
         actions:
           - kind: map
             label: Map
@@ -71,7 +71,7 @@ body:
           - label: Archaeological Museum of Thera
             map: Archaeological Museum of Thera Fira
       - name: Red & White Beach
-        description: Dramatic colored cliffs. Red Beach on foot, White Beach by boat.
+        description: Red Beach is reached on foot; White Beach by boat.
         links:
           - label: Red Beach
             map: Red Beach Santorini

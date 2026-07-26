@@ -5,7 +5,7 @@ nav:
   label: Crete
   icon: 🏔️
 title: Crete
-tagline: The largest island, feels like its own country
+tagline: The largest island. It feels like its own country
 image:
   src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900
   alt: Chania Venetian harbor, Crete
@@ -13,7 +13,7 @@ image:
 
 body:
   - type: prose
-    text: Gorges, beaches, Venetian harbors, ancient palaces, incredible food. Plan at least a full week.
+    text: Crete offers gorges, beaches, Venetian harbors, ancient palaces, incredible food. Don’t squeeze Crete into two or three days. Give it at least a week.
 
   - type: heading
     text: Getting There
@@ -104,7 +104,7 @@ aside:
     title: 🏔 Essentials
     items:
       - Plan at least a full week
-      - Base in [Chania](map:Chania Crete), try [Riviera Suites](map:Riviera Suites Chania)
+      - Base in [Chania](map:Chania Crete). Try [Riviera Suites](map:Riviera Suites Chania)
       - Book [Samariá Gorge](map:Samaria Gorge Crete) tour the day before
       - "Best bar in [Chania](map:Chania Crete): [Sinagogi](map:Sinagogi bar Chania)"
 
@@ -112,7 +112,7 @@ aside:
     title: 🚢 Getting There
     items:
       - Fly to [Chania](map:Chania Crete) (CHQ) or [Heraklion](map:Heraklion Crete) (HER)
-      - Overnight ferry from Piraeus, get a cabin
+      - Overnight ferry from Piraeus. Get a cabin
 
   - variant: logistics
     title: 🗺 Logistics
