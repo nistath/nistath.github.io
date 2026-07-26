@@ -7,7 +7,7 @@ nav:
 title: Crete
 tagline: The largest island. It feels like its own country
 image:
-  src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900
+  src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg
   alt: Chania Venetian harbor, Crete
   aspect: 16/9
 
@@ -37,7 +37,7 @@ body:
     text: Things to Do
 
   - type: image
-    src: https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg?width=900
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/Samaria_Gorge_05.jpg
     alt: Samaria Gorge
     aspect: 16/7
     variant: inset

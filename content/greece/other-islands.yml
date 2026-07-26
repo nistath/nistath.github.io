@@ -13,28 +13,28 @@ body:
         description: >-
           Volcanic coastline, sea caves, colorful beaches. [Sarakiniko](map:Sarakiniko Beach Milos)’s white lunar landscape is iconic. Quieter and rugged, great for couples.
         image:
-          src: https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/Milos_Sarakiniko.JPG
           alt: Sarakiniko Beach, Milos
           aspect: 16/7
       - name: Rhodes
         description: >-
           Rhodes has the [Medieval Old Town](map:Rhodes Old Town), a walled UNESCO city you can lose hours in, plus beaches, [ancient Lindos](map:Lindos Acropolis Rhodes), and a different vibe from the Cyclades.
         image:
-          src: https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/Rhodes_old_town_Greece_6.jpg
           alt: Rhodes Old Town
           aspect: 16/7
       - name: Corfu
         description: >-
           Northwest and closer to Italy, with Venetian architecture around [Corfu Old Town](map:Corfu Old Town) and green hills everywhere. A longer trip from Athens, but a completely different island.
         image:
-          src: https://upload.wikimedia.org/wikipedia/commons/4/4e/The_Old_Town_of_Corfu.jpg
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Old_Town_of_Corfu.jpg
           alt: Corfu Old Town
           aspect: 16/7
       - name: Zakynthos
         description: >-
           Also off the west coast. Famous for [Navagio Beach](map:Navagio Beach Zakynthos) with the shipwreck, reachable only by boat, plus sea caves, loud nightlife in Laganas, and loggerhead turtles nesting in the bay.
         image:
-          src: https://upload.wikimedia.org/wikipedia/commons/5/5d/Navagio_beach_Zakynthos_3.jpg
+          src: https://commons.wikimedia.org/wiki/Special:FilePath/Navagio_beach_Zakynthos_3.jpg
           alt: Navagio Beach, Zakynthos
           aspect: 16/7
 

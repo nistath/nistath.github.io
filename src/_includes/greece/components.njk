@@ -1,7 +1,15 @@
 {% macro image(block) %}
-  <div class="gr-img{% if block.variant == 'island' %} gr-island-img-wrap{% endif %}"
+  {% set imageSrcset = block.src | responsiveImageSrcset %}
+  <div class="gr-img{% if block.variant == 'island' %} gr-island-img-wrap{% elif block.variant == 'city' %} gr-city-image{% endif %}"
        style="aspect-ratio:{{ block.aspect or '16/9' }}{% if block.variant == 'inset' %};margin-bottom:12px{% endif %}">
-    <img src="{{ block.src }}" alt="{{ block.alt }}" loading="lazy">
+    <img
+      src="{{ block.src | responsiveImageUrl }}"
+      {% if imageSrcset %}srcset="{{ imageSrcset }}"
+      sizes="{% if block.variant == 'island' %}(min-width: 1200px) 1028px, (min-width: 900px) calc(100vw - 112px), calc(100vw - 32px){% else %}(min-width: 1200px) 740px, (min-width: 900px) calc(100vw - 454px), calc(100vw - 32px){% endif %}"{% endif %}
+      alt="{{ block.alt }}"
+      loading="lazy"
+      decoding="async"
+    >
   </div>
 {% endmacro %}
 
@@ -58,8 +66,12 @@
 {% macro block(item) %}
   {% if item.type == 'city_image' %}
     <div class="gr-city-feature">
-      <div class="gr-img gr-city-image" role="img" aria-label="{{ item.alt }}"
-           style="--gr-city-image:url('{{ item.src }}')"></div>
+      {{ image({
+        src: item.src,
+        alt: item.alt,
+        aspect: '16/8',
+        variant: 'city'
+      }) }}
     </div>
   {% elif item.type == 'image' %}
     {{ image(item) }}

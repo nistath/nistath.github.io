@@ -7,7 +7,7 @@ nav:
 title: Santorini
 tagline: The caldera is the whole point
 image:
-  src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg?width=900
+  src: https://commons.wikimedia.org/wiki/Special:FilePath/07-17-2012_-_Oia_-_Santorini_-_Greece_-_19.jpg
   alt: Oia blue domes at sunset, Santorini
   aspect: 16/9
 
@@ -26,7 +26,7 @@ body:
     text: Things to Do
 
   - type: image
-    src: https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg?width=900
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/Hiking_Santorini_(7449565644).jpg
     alt: Fira to Oia caldera hike
     aspect: 16/7
     variant: inset

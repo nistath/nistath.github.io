@@ -369,19 +369,19 @@ a:hover { text-decoration: underline; }
   background: var(--clr-bg);
 }
 
-/* Each section is stacked in the same space; only .active is visible */
+/* Only the active section participates in layout. This prevents browsers from
+   fetching images, fonts, and embedded documents for off-screen routes. */
 .section {
+  display: none;
   position: absolute;
   inset: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
 }
 
 .section.active {
-  opacity: 1;
+  display: block;
   pointer-events: auto;
 }
 

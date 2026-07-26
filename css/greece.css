@@ -27,7 +27,7 @@
 .gr-hero {
   background:
     linear-gradient(150deg, rgba(0,60,150,0.96) 0%, rgba(0,105,195,0.91) 45%, rgba(0,168,232,0.84) 100%),
-    url('https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg') center 60% / cover no-repeat;
+    url('/img/cache/athens-skyline.jpg') center 60% / cover no-repeat;
   padding: clamp(28px, 4.4vw, 56px) var(--gr-page-x) clamp(42px, 7vw, 82px);
   position: relative;
   overflow: hidden;
@@ -214,10 +214,16 @@
 }
 
 .gr-city-image {
+  position: relative;
   aspect-ratio: 16 / 8;
-  background:
-    linear-gradient(180deg, rgba(18,45,64,0.08) 0%, rgba(18,45,64,0.18) 100%),
-    var(--gr-city-image) center 54% / cover no-repeat;
+}
+
+.gr-city-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18,45,64,0.08) 0%, rgba(18,45,64,0.18) 100%);
+  pointer-events: none;
 }
 
 .gr-card--city-intro {

@@ -59,6 +59,7 @@ if (emailTopbarCompact) {
 
 /* ── Navigation state ── */
 var githubLoaded = false;
+var resumeLoaded = false;
 var DEFAULT_SECTION = 'about';
 var SECTION_PATHS = {
   'about':     '/about',
@@ -165,6 +166,17 @@ function getRouteForSection(section) {
   return SECTION_PATHS[section] || SECTION_PATHS[DEFAULT_SECTION];
 }
 
+function loadResume() {
+  if (resumeLoaded) return;
+
+  var frame = document.querySelector('#section-resume iframe[data-src]');
+  if (!frame) return;
+
+  frame.setAttribute('src', frame.dataset.src);
+  frame.removeAttribute('data-src');
+  resumeLoaded = true;
+}
+
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
   var requestedRoute = params.get('route');
@@ -243,6 +255,11 @@ function navigate(section, options) {
   if (section === 'github' && !githubLoaded) {
     githubLoaded = true;
     loadGitHubRepos();
+  }
+
+  /* Defer the remote PDF and browser PDF viewer until Resume is opened. */
+  if (section === 'resume') {
+    loadResume();
   }
 
   /* Lazy-render portfolio cards */

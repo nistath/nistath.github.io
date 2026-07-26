@@ -227,6 +227,12 @@ of the same type when adding content.
 | `card` | A nested group of other body `blocks` |
 | `other_cards` | Compact cards for additional islands |
 
+For Wikimedia Commons images, use a canonical
+`https://commons.wikimedia.org/wiki/Special:FilePath/Filename.jpg` URL without
+a `width` query parameter. The Greece template automatically requests
+responsive 640, 960, and 1280-pixel thumbnails, so authored content should not
+link directly to full-resolution `upload.wikimedia.org` originals.
+
 Presentation variants are a closed set defined by the templates and schemas.
 Reuse one visible in a neighboring file; inventing a new variant requires a
 coding change.

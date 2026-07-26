@@ -1,4 +1,8 @@
 const MarkdownIt = require('markdown-it');
+const {
+  responsiveImageSrcset,
+  responsiveImageUrl,
+} = require('./scripts/content/images.cjs');
 const { loadContent } = require('./scripts/content/load-content.cjs');
 const { contentHref, expandMapLinks } = require('./scripts/content/links.cjs');
 
@@ -31,6 +35,8 @@ module.exports = function configureEleventy(eleventyConfig) {
     markdown.renderInline(expandMapLinks(value), { linkClass: linkClass || '' })
   ));
   eleventyConfig.addFilter('contentHref', contentHref);
+  eleventyConfig.addFilter('responsiveImageSrcset', responsiveImageSrcset);
+  eleventyConfig.addFilter('responsiveImageUrl', responsiveImageUrl);
   eleventyConfig.addFilter('json', (value) => JSON.stringify(value).replace(/</g, '\\u003c'));
 
   eleventyConfig.addGlobalData('siteContent', () => loadContent());
