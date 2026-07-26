@@ -68,6 +68,18 @@ function main() {
   if (countMatches(html, /class="gr-nav-btn(?: active)?"/g) !== content.greece.sections.length) {
     fail('Generated Greece nav count does not match content');
   }
+  if (html.includes('https://upload.wikimedia.org/wikipedia/commons/')) {
+    fail('Generated HTML links to a full-resolution Wikimedia Commons original');
+  }
+  if (!html.includes('width=640 640w') || !html.includes('width=1280 1280w')) {
+    fail('Generated Greece images are missing responsive Wikimedia thumbnails');
+  }
+  if (!html.includes('loading="lazy"') || !html.includes('decoding="async"')) {
+    fail('Generated Greece images must be lazy-loaded and asynchronously decoded');
+  }
+  if (!html.includes('<iframe\n            data-src=') || html.includes('<iframe\n            src=')) {
+    fail('The resume iframe must defer its remote source until the route is opened');
+  }
 
   for (const required of [
     '404.html',
@@ -79,6 +91,13 @@ function main() {
     'portfolio/index.html',
   ]) {
     if (!fs.existsSync(path.join(SITE, required))) fail(`Build output is missing ${required}`);
+  }
+
+  for (const route of ['about', 'github', 'resume', 'portfolio', 'greece']) {
+    const routeHtml = fs.readFileSync(path.join(SITE, route, 'index.html'), 'utf8');
+    if (routeHtml.includes('rel="preload" as="image"')) {
+      fail(`${route}/index.html eagerly preloads a social preview image before redirecting`);
+    }
   }
 
   execFileSync(process.execPath, ['--check', path.join(ROOT, 'js', 'main.js')], { stdio: 'inherit' });

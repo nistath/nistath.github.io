@@ -15,10 +15,8 @@
  *     of the Athens skyline gradient.
  *
  * No CSS overrides for layout — both images use the exact code path the live
- * site uses. The only intervention: routing the upstream Athens skyline URL
- * to a local cache (img/cache/athens-skyline.jpg) when present, so the
- * screenshot is deterministic and works offline. With no cache, the request
- * goes through to Wikimedia normally.
+ * site uses. The Greece hero uses the checked-in Athens skyline cache, so the
+ * screenshot is deterministic and works offline.
  */
 const http = require('http');
 const fs = require('fs');
@@ -28,9 +26,6 @@ const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 const SITE_ROOT = path.join(ROOT, '_site');
 const OUT_DIR = path.join(ROOT, 'img', 'og');
-const CACHE_DIR = path.join(ROOT, 'img', 'cache');
-const ATHENS_UPSTREAM = 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Athens_Skyline.jpg';
-const ATHENS_CACHE = path.join(CACHE_DIR, 'athens-skyline.jpg');
 
 const SPA_ROUTES = new Set(['/about', '/github', '/resume', '/portfolio', '/greece']);
 const MIME = {
@@ -119,35 +114,16 @@ async function main() {
 
   /* ─── Greece OG: gr-hero at desktop viewport ───
      The Greece guide is content-width-bound; at 1200px the gr-hero renders
-     with the same proportions visitors see. We route-intercept the upstream
-     Athens skyline so the screenshot is deterministic. */
+     with the same proportions visitors see. */
   {
     const ctx = await browser.newContext({
       viewport: { width: 1200, height: 900 },
       deviceScaleFactor: 2,
       ignoreHTTPSErrors: true,
     });
-    /* Try upstream first; fall back to local cache only if Wikimedia is
-       unreachable. That way users on a normal network get the real photo,
-       but renders still work offline (or in sandboxed CI). */
-    await ctx.route(ATHENS_UPSTREAM, async route => {
-      try {
-        const response = await route.fetch();
-        if (response.ok()) { await route.fulfill({ response }); return; }
-        console.log('Wikimedia returned', response.status(), '— falling back to cache');
-      } catch (err) {
-        console.log('Wikimedia fetch failed — falling back to cache');
-      }
-      if (fs.existsSync(ATHENS_CACHE)) {
-        const body = await fs.promises.readFile(ATHENS_CACHE);
-        await route.fulfill({ status: 200, contentType: 'image/jpeg', body });
-      } else {
-        await route.abort();
-      }
-    });
     const page = await ctx.newPage();
     await page.goto(origin + '/greece', { waitUntil: 'networkidle' });
-    // Force the section active so opacity is 1 (the SPA toggles this on nav).
+    // Force the Greece section active (the SPA also toggles this on navigation).
     await page.evaluate(() => {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       const g = document.getElementById('section-greece');

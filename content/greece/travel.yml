@@ -8,7 +8,7 @@ title: Getting There & Around
 
 body:
   - type: city_image
-    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg?width=900
+    src: https://commons.wikimedia.org/wiki/Special:FilePath/The_Acropolis_at_sunset_from_Mount_Lycabettus_on_December_21,_2019.jpg
     alt: Athens city view at sunset
 
   - type: card
