@@ -11,14 +11,14 @@ body:
     items:
       - name: Milos
         description: >-
-          Volcanic coastline, sea caves, colorful beaches. [Sarakiniko](map:Sarakiniko Beach Milos)’s white lunar landscape is iconic. Quieter, rugged — great for couples.
+          Volcanic coastline, sea caves, colorful beaches. [Sarakiniko](map:Sarakiniko Beach Milos)’s white lunar landscape is iconic. Quieter and rugged, great for couples.
         image:
           src: https://upload.wikimedia.org/wikipedia/commons/2/24/Milos_Sarakiniko.JPG
           alt: Sarakiniko Beach, Milos
           aspect: 16/7
       - name: Rhodes
         description: >-
-          Rhodes offers the [Medieval Old Town](map:Rhodes Old Town)–a walled-city UNESCO site, Beaches, [ancient Lindos](map:Lindos Acropolis Rhodes), and a different vibe from the Cyclades.
+          Rhodes has the [Medieval Old Town](map:Rhodes Old Town), a walled UNESCO city you can lose hours in, plus beaches, [ancient Lindos](map:Lindos Acropolis Rhodes), and a different vibe from the Cyclades.
         image:
           src: https://upload.wikimedia.org/wikipedia/commons/6/6e/Rhodes_old_town_Greece_6.jpg
           alt: Rhodes Old Town
@@ -32,7 +32,7 @@ body:
           aspect: 16/7
       - name: Zakynthos
         description: >-
-          Also off the West coast. Famous for its [Navagio Beach](map:Navagio Beach Zakynthos) with the shipwreck, dramatic cliffs, and vibrant nightlife. Ideal for both relaxation and adventure.
+          Also off the west coast. Famous for [Navagio Beach](map:Navagio Beach Zakynthos) with the shipwreck, reachable only by boat, plus sea caves, loud nightlife in Laganas, and loggerhead turtles nesting in the bay.
         image:
           src: https://upload.wikimedia.org/wikipedia/commons/5/5d/Navagio_beach_Zakynthos_3.jpg
           alt: Navagio Beach, Zakynthos

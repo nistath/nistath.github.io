@@ -18,7 +18,7 @@ body:
   - type: sights
     items:
       - name: Acropolis
-        description: The must-see. Go early to beat crowds and heat. Parthenon, Erechtheion, and Temple of Athena Nike.
+        description: Parthenon, Erechtheion, and the Temple of Athena Nike. Go at opening or late afternoon. Midday is all crowds and heat, and there is no shade up there.
         actions:
           - kind: map
             label: Map
@@ -29,19 +29,19 @@ body:
             url: https://hhticket.gr/
             icon: 🎟️
       - name: Acropolis Museum
-        description: World-class collection at the base of the hill. Top-floor gallery with Parthenon views is unforgettable.
+        description: At the base of the hill. The top-floor gallery offers an unforgettable view, laying out the Parthenon frieze with the actual Parthenon in the background.
         map: Acropolis Museum Athens
       - name: National Garden
-        description: Leafy escape next to the Parliament building. Great for a break from the sun.
+        description: Dense shade next to Parliament, and the fastest way to cool off in August. Cuts through to Zappeion and Plaka.
         map: National Garden Athens
       - name: Vrachakia
-        description: Lesser-known rocky area with a local feel. Worth exploring off the beaten path.
+        description: The rocks just below the Acropolis entrance, where Athenians sit out with a beer (pick one up from a kiosk on your way up). Free, no ticket. The marble is polished slippery; take care.
         url: https://www.google.com/maps/place/Areopagus+Hill/@37.9722409,23.7231843,95m/data=!3m1!1e3!4m6!3m5!1s0x14a1bd1972fd320f:0x673dac60a01f1e34!8m2!3d37.9723655!4d23.7232322!16s%2Fg%2F11b66gtt3z!5m1!1e1?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D
       - name: Philopappos Monument
-        description: Best panoramic views of the Acropolis and city. Especially beautiful at sunset.
+        description: The view of the Acropolis from across the way, with the whole city and the sea behind it. Pine shade on the climb up.
         map: Philopappos Monument Athens
       - name: Odeon of Herodes Atticus
-        description: Ancient Roman theatre built into the Acropolis slope, still used for summer performances. Catch a concert or show if the season lines up — it's unforgettable.
+        description: Roman theatre built into the Acropolis slope, still hosting the Athens Festival every summer. You can only go inside with a ticket to a performance, so plan accordingly.
         map: Odeon of Herodes Atticus Athens
 
 aside:
@@ -50,7 +50,7 @@ aside:
     days:
       - label: Day 1
         items:
-          - "[Acropolis](map:Acropolis of Athens) — early morning"
+          - "[Acropolis](map:Acropolis of Athens), early morning"
           - "[Acropolis Museum](map:Acropolis Museum Athens)"
           - "[Plaka](map:Plaka Athens) stroll & dinner with a view"
       - label: Day 2
@@ -65,4 +65,4 @@ aside:
       - Book Acropolis tickets in advance at [hhticket.gr](https://hhticket.gr/) (official)
       - Go before 9 AM or after 5 PM to beat the heat
       - Arrive 30 min before sunset for [Philopappos](map:Philopappos Hill Athens)
-      - "[Acropolis Museum](map:Acropolis Museum Athens) closed Tuesdays — check ahead"
+      - Museum and site hours shift between summer and winter, so check the day before

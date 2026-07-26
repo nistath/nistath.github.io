@@ -5,7 +5,7 @@ nav:
   label: Crete
   icon: 🏔️
 title: Crete
-tagline: The largest island — feels like its own country
+tagline: The largest island, feels like its own country
 image:
   src: https://commons.wikimedia.org/wiki/Special:FilePath/Chania_-_Venetian_harbor_1.jpg?width=900
   alt: Chania Venetian harbor, Crete
@@ -31,7 +31,7 @@ body:
 
   - type: prose
     text: >-
-      [**Chania**](map:Chania Crete) (west) — Lively Venetian harbor town, best base for the gorge and beaches. Try [**Riviera Suites**](map:Riviera Suites Chania). [**Elounda**](map:Elounda Crete) (northeast) — Quieter, upscale, closer to Knossos and Spinalonga. These are opposite ends of the island — pick one based on your itinerary.
+      [**Chania**](map:Chania Crete) (west) is a lively Venetian harbor town, the best base for the gorge and beaches. Try [**Riviera Suites**](map:Riviera Suites Chania). [**Elounda**](map:Elounda Crete) (northeast) is quieter and upscale, closer to Knossos and Spinalonga. These are opposite ends of the island, so pick one based on your itinerary.
 
   - type: heading
     text: Things to Do
@@ -45,10 +45,10 @@ body:
   - type: sights
     items:
       - name: Samariá Gorge
-        description: ~16 km, one of Europe’s longest. Full day. Book a tour bus from Chania.
+        description: ~16 km downhill, ending at the sea in Agia Roumeli where you can splash in the sea before taking a ferry out. Full day. Book a tour bus from Chania.
         map: Samaria Gorge Crete
       - name: Elafonisi Beach
-        description: Pink-sand lagoon. Almost tropical. Dedicate a full day.
+        description: Pink-sand lagoon with water shallow enough to wade across. Far southwest corner, so dedicate a full day.
         map: Elafonisi Beach Crete
       - name: Palace of Knossos
         description: Center of Minoan civilization, home of the labyrinth. Get a guide.
@@ -79,7 +79,7 @@ body:
         description: At Chania’s old harbor entrance. Great views.
         map: Firka Fortress Chania
       - name: Spinalonga
-        description: Fortified island near Elounda. Short boat trip to explore.
+        description: Venetian fortress island off Elounda, a leper colony until 1957. Boats run from Elounda and Plaka.
         map: Spinalonga Crete
 
   - type: heading
@@ -97,14 +97,14 @@ body:
         map: Sinagogi bar Chania
 
   - type: note
-    text: We’ve barely scratched the surface. Do your own research — or better yet, ask a local.
+    text: We’ve barely scratched the surface. Do your own research, or better yet, ask a local.
 
 aside:
   - variant: essentials
     title: 🏔 Essentials
     items:
       - Plan at least a full week
-      - Base in [Chania](map:Chania Crete) — try [Riviera Suites](map:Riviera Suites Chania)
+      - Base in [Chania](map:Chania Crete), try [Riviera Suites](map:Riviera Suites Chania)
       - Book [Samariá Gorge](map:Samaria Gorge Crete) tour the day before
       - "Best bar in [Chania](map:Chania Crete): [Sinagogi](map:Sinagogi bar Chania)"
 
@@ -112,7 +112,7 @@ aside:
     title: 🚢 Getting There
     items:
       - Fly to [Chania](map:Chania Crete) (CHQ) or [Heraklion](map:Heraklion Crete) (HER)
-      - Overnight ferry from Piraeus — get a cabin
+      - Overnight ferry from Piraeus, get a cabin
 
   - variant: logistics
     title: 🗺 Logistics

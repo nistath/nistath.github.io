@@ -40,7 +40,7 @@ body:
             url: https://hhticket.gr/
             icon: 🎟️
       - name: The Windmills
-        description: Iconic row overlooking the harbor. Classic photo spot, beautiful at sunset.
+        description: Iconic row on the hill above Chora. Best light at sunset.
         map: Mykonos Windmills
 
   - type: heading
@@ -50,7 +50,7 @@ body:
     items:
       - icon: 🐦
         name: Pelican
-        description: The restaurant that cooked Nick's second "best meal ever".
+        description: The restaurant that cooked Nick’s second “best meal ever”.
         map: Pelican Restaurant Mykonos
       - icon: 🥂
         name: Cerise
@@ -58,7 +58,7 @@ body:
         map: Cerise Bar Mykonos
       - icon: 🎉
         name: Skandinavian
-        description: Raucous bi-level nightclub featuring 3 bars, a courtyard an a dance floor.
+        description: Raucous bi-level nightclub with three bars, a courtyard, and a dance floor.
         map: Skandinavian Bar Mykonos
 
 aside:
@@ -66,8 +66,8 @@ aside:
     title: 🌊 Essentials
     items:
       - Stay in old town [Chora](map:Mykonos Chora), not beach hotels
-      - Visit [Delos](map:Delos Archaeological Site) — don’t skip it
-      - "Sunset drinks: [Caprice](map:Caprice Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
+      - "[Delos](map:Delos Archaeological Site) boat trip, with a guide"
+      - "Sunset drinks: [Cerise](map:Cerise Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
       - "Big night out: [Skandinavian](map:Skandinavian Bar Mykonos)"
       - "Best meal: [Pelican](map:Pelican Restaurant Mykonos)"
 

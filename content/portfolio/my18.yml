@@ -18,7 +18,7 @@ highlights:
     The car finished the 22 km Formula SAE Electric 2018 endurance race **113
     seconds ahead** of the next fastest competitor.
   - >-
-    Built *CANlib* — a code-generated CAN bus serialization library — alongside
+    Built *CANlib*, a code-generated CAN bus serialization library, alongside
     Makefile improvements, automated toolchain installation, and Git-versioned
     binary flashing.
   - >-

@@ -19,16 +19,16 @@ body:
     text: Naxos
 
   - type: prose
-    text: The most well-rounded island — beaches, history, mountain villages, great food, youthful energy.
+    text: The most well-rounded island, with beaches, history, mountain villages, great food, and youthful energy. Also the greenest of the Cyclades, so the produce and cheese are a step up.
 
   - type: sights
     items:
       - name: Guided bus tour
-        description: Hit the island’s major sights with a local guide.
+        description: The easy way to see the mountain villages and the marble quarries inland without renting a car.
       - name: Catamaran cruise
         description: Swimming in secluded coves with lunch on board.
       - name: Portara (Temple of Apollo)
-        description: Iconic marble gateway. Beautiful at sunset.
+        description: Marble doorway of a temple that was never finished, on the islet by the port. Walk out for sunset.
         map: Portara Temple of Apollo Naxos
 
   - type: heading
@@ -45,7 +45,7 @@ aside:
       - Best all-around Cycladic island
       - Book a guided bus tour
       - "Catamaran cruise: coves & lunch on board"
-      - "[Portara](map:Portara Temple of Apollo Naxos) at sunset — unmissable"
+      - "[Portara](map:Portara Temple of Apollo Naxos) at sunset"
       - "Paros: [Parikia](map:Parikia Paros) & [Naoussa](map:Naoussa Paros) village"
 
   - variant: ferry

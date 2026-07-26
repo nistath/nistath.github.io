@@ -13,7 +13,7 @@ image:
 
 body:
   - type: prose
-    text: Built on a volcanic caldera — cliffs into deep blue water, white buildings stacked together. Romantic, photogenic, historically rich.
+    text: Built on a volcanic caldera, with cliffs into deep blue water and white buildings stacked together. Romantic, photogenic, historically rich.
 
   - type: heading
     text: Where to Stay
@@ -34,13 +34,13 @@ body:
   - type: sights
     items:
       - name: Oia Castle (Agios Nikolaos)
-        description: 15th-century Venetian fortress ruins. The sunset spot — arrive early.
+        description: Venetian fortress ruins at the tip of Oia. The sunset spot, so it packs out an hour ahead.
         map: Castle of Oia Agios Nikolaos Santorini
       - name: Fira to Oia Hike
         description: ~10 km caldera rim trail. Very little shade. Start early, bring water.
         map: Fira to Oia Hike Santorini
       - name: Akrotiri
-        description: Bronze Age settlement — the “Pompeii of the Aegean.” Over 3,500 years old.
+        description: Bronze Age settlement, the “Pompeii of the Aegean.” Over 3,500 years old.
         actions:
           - kind: map
             label: Map
@@ -92,14 +92,14 @@ body:
         map: Yogi Gyro Santorini
       - icon: 🌅
         name: PK Cocktail Bar
-        description: The spot for sunset drinks.
+        description: Caldera-edge cocktails in Fira. Come well before sunset if you want a seat at the rail.
         map: PK Cocktail Bar Santorini
 
 aside:
   - variant: essentials
     title: 🌅 Essentials
     items:
-      - Stay in [Oia](map:Oia Santorini) for iconic sunset views
+      - "[Fira](map:Fira Santorini) for nightlife, [Oia](map:Oia Santorini) for the sunset, between them for both"
       - Book caldera-view hotels early
       - Hike [Fira → Oia](map:Fira to Oia Hike Santorini) (10 km, go early)
       - Visit [Akrotiri](map:Akrotiri Archaeological Site Santorini) archaeological site

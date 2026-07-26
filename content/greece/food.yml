@@ -34,7 +34,7 @@ body:
         url: https://maps.app.goo.gl/wpPoY4SJ9zuhZ4bm6
       - icon: 🥙
         name: Street Souvlaki
-        description: Go-to for fast, excellent souvlaki.
+        description: Go-to for fast, excellent souvlaki between Monastiraki and Syntagma.
         url: https://maps.app.goo.gl/dsEzw2CS7NDqNAva8
       - icon: 🍦
         name: Lartecono Davinci Gelato
@@ -79,7 +79,7 @@ aside:
       - Souvlaki – meat on a stick
       - Gyros – classic Greek wrap with shaved meat
       - Loukoumades – honey-drizzled donuts
-      - Spanakopita — spinach & feta pastry
+      - Spanakopita – spinach & feta pastry
       - Greek yogurt with thyme honey
       - Fresh seafood near Piraeus
 
@@ -87,9 +87,9 @@ aside:
     title: 🍷 Drink Like a Local
     items:
       - Freddo espresso = iced espresso
-      - Tsipouro — the Greek grappa
+      - Tsipouro – the Greek grappa
       - Ouzo with seafood meze
-      - In Greece, rounding up or leaving a couple of euros is normal; 5–10% is more for especially good service
+      - Rounding up or leaving a couple euros is normal; 5–10% for especially good service
 
   - variant: facts
     title: 📍 Neighbourhoods

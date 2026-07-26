@@ -31,8 +31,8 @@ details:
         bus data wirelessly from the car to a pit-side laptop throughout dynamic
         events.
       - >-
-        Visualised vehicle state — motor temperatures, battery cell voltages,
-        current draw, and fault codes — using Kx Dashboards, enabling engineers
+        Visualised vehicle state (motor temperatures, battery cell voltages,
+        current draw, and fault codes) using Kx Dashboards, enabling engineers
         to monitor and diagnose the car live from the pits.
   - id: driver-display
     title: Driver Dashboard Display
