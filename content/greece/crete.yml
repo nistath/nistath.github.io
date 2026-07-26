@@ -89,7 +89,7 @@ body:
     items:
       - icon: 🥐
         name: Red Jane Bakery
-        description: In Chania — don’t skip it.
+        description: Best bakery in Chania.
         map: Red Jane Bakery Chania
       - icon: 🍸
         name: Sinagogi
@@ -106,7 +106,6 @@ aside:
       - Plan at least a full week
       - Base in [Chania](map:Chania Crete) — try [Riviera Suites](map:Riviera Suites Chania)
       - Book [Samariá Gorge](map:Samaria Gorge Crete) tour the day before
-      - Red Jane Bakery — don’t skip it
       - "Best bar in [Chania](map:Chania Crete): [Sinagogi](map:Sinagogi bar Chania)"
 
   - variant: ferry

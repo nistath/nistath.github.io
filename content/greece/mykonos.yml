@@ -21,7 +21,7 @@ body:
 
   - type: prose
     text: >-
-      Good but below average by Greek island standards. You’re here for the scene. [Paradise](map:Paradise Beach Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are more party than swim.
+      Good but below average by Greek island standards. You’re here to party. [Paradise](map:Paradise Beach Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are fun beaches.
 
   - type: heading
     text: Don’t Miss
@@ -29,7 +29,7 @@ body:
   - type: sights
     items:
       - name: Delos
-        description: Short boat ride — one of Greece’s most important archaeological sites. Birthplace of Apollo and Artemis. Visit with a guide.
+        description: One of Greece’s most important archaeological sites only a short boat ride away. Birthplace of Apollo and Artemis. Visit with a guide.
         actions:
           - kind: map
             label: Map
@@ -50,15 +50,15 @@ body:
     items:
       - icon: 🐦
         name: Pelican
-        description: Nick’s top pick for a meal on the island.
+        description: The restaurant that cooked Nick's second "best meal ever".
         map: Pelican Restaurant Mykonos
       - icon: 🥂
-        name: Caprice
+        name: Cerise
         description: Sunset drinks on the water in Little Venice. Stunning views.
-        map: Caprice Bar Mykonos
+        map: Cerise Bar Mykonos
       - icon: 🎉
         name: Skandinavian
-        description: The go-to club for a big night out.
+        description: Raucous bi-level nightclub featuring 3 bars, a courtyard an a dance floor.
         map: Skandinavian Bar Mykonos
 
 aside:

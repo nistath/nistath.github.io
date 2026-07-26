@@ -37,7 +37,7 @@ body:
         description: 15th-century Venetian fortress ruins. The sunset spot — arrive early.
         map: Castle of Oia Agios Nikolaos Santorini
       - name: Fira to Oia Hike
-        description: ~10 km caldera rim trail. Very little shade — go early, bring water.
+        description: ~10 km caldera rim trail. Very little shade. Start early, bring water.
         map: Fira to Oia Hike Santorini
       - name: Akrotiri
         description: Bronze Age settlement — the “Pompeii of the Aegean.” Over 3,500 years old.
@@ -62,7 +62,7 @@ body:
             url: https://hhticket.gr/
             icon: 🎟️
       - name: Museums in Fira
-        description: Good indoor stop before or after Akrotiri.
+        description: Small museums in Fira covering prehistoric and archaeological finds from Santorini.
         links:
           - label: Fira
             map: Fira Santorini
@@ -78,7 +78,7 @@ body:
           - label: White Beach
             map: White Beach Santorini
       - name: Ammoudi Bay
-        description: Hidden harbor below Oia. Hike or donkey down for swimming and seafood.
+        description: Hidden harbor below Oia. Hike or donkey down for swimming and seafood. Ironically not a sand (άμμος) beach.
         map: Ammoudi Bay Santorini
 
   - type: heading
@@ -88,7 +88,7 @@ body:
     items:
       - icon: 🥙
         name: Yogi Gyro
-        description: In Fira — best gyros on the island.
+        description: Best gyros on the island. Located in Fira.
         map: Yogi Gyro Santorini
       - icon: 🌅
         name: PK Cocktail Bar
