@@ -61,6 +61,11 @@ build-time tools only.
   must stay here rather than in templates or runtime JavaScript.
 - `src/index.njk` is the application shell that replaces the old authored root
   `index.html`.
+- `src/routes.njk` and `src/404.njk` generate the clean-path redirect stubs and
+  the direct-load fallback. They are output, not authoring surfaces.
+- `scripts/content/routes.cjs` is the single route registry. Shell navigation,
+  redirect stubs, the 404 fallback list, the route table injected into
+  `js/main.js`, and the generated checks all read it.
 - `src/_includes/portfolio/` and `src/_includes/greece/` own generated markup,
   CSS classes, SVGs, and accessibility attributes.
 - `src/_data/portfolioThemes.json` maps stable portfolio theme keys to visual
@@ -72,7 +77,8 @@ build-time tools only.
 - `scripts/content/links.cjs` owns the `map:` shorthand and conversion to
   canonical Google Maps search URLs.
 - `scripts/check-generated.cjs` checks the built artifact for expected content,
-  unique IDs, valid anchor nesting, copied route files, and JavaScript syntax.
+  unique IDs, valid anchor nesting, generated route files, and JavaScript
+  syntax. It also asserts that a disabled route emits no stub or 404 entry.
 - `.eleventy.js` wires content into templates and copies runtime assets to
   `_site/`.
 
@@ -99,30 +105,34 @@ The app uses a CSS grid layout with two modes controlled by the
 3. Shows and hides generated `<section>` elements via the `.active` class.
 4. Lazy-loads GitHub repos and initializes portfolio and Greece interactions
    once.
-5. Syncs browser history and clean paths such as `/portfolio` and `/greece`.
+5. Syncs browser history and clean paths such as `/resume` and `/greece`.
 
-Production direct-route support is handled by the copied route stubs and
-`404.html`, not server rewrites. The fallback only captures the known
-personal-site routes:
+Every path, title, social card, and mobile surface color comes from the route
+registry the build injects as `window.SITE_CONTENT.routes`. `js/main.js` holds
+no route list of its own, so a route the build does not generate cannot be
+navigated to.
 
-- `/about`
-- `/github`
-- `/resume`
-- `/portfolio`
-- `/greece`
-
-Unknown paths are intentionally left alone so other Pages content under this
-domain, such as project repositories on their own path prefixes, can continue
-to resolve normally.
+Production direct-route support is handled by the generated route stubs and
+`404.html`, not server rewrites. The fallback only captures the routes in the
+registry; unknown paths are intentionally left alone so other Pages content
+under this domain, such as project repositories on their own path prefixes,
+can continue to resolve normally.
 
 Keep local asset references in `src/index.njk` root-relative, not
-route-relative. Direct loads on nested paths depend on that. When adding a new
-top-level site route, update every route registry and artifact involved: the
-shell navigation and section, `js/main.js`, its redirect stub, `404.html`,
-Eleventy passthrough configuration, generated checks, and social metadata as
-applicable.
+route-relative. Direct loads on nested paths depend on that. Adding a top-level
+route means adding an entry to `scripts/content/routes.cjs`, a nav icon under
+`src/_includes/nav/`, and its `<section>` in the shell. The stub, the 404
+fallback, navigation, titles, and social metadata all follow from the registry.
 
 ### Portfolio cards
+
+The portfolio route is optional and currently disabled: `content/portfolio/`
+is empty, so `loadPortfolio` returns `null`, the registry drops `/portfolio`,
+and no section, nav entry, stub, or 404 entry is generated. The schema,
+renderer, theme map, icons, card styles, and expand/collapse code all remain,
+so restoring the page is a content change. To revive it, add
+`content/portfolio/index.yml` listing project slugs plus one YAML file per
+project; `docs/content-authoring.md` has the shapes.
 
 `content/portfolio/index.yml` defines the portfolio heading and project order.
 Each referenced sibling YAML file defines one project. Projects render at build

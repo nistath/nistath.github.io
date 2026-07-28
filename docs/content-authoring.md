@@ -6,7 +6,7 @@ remain practical to edit in the GitHub mobile app.
 
 - About, GitHub, and Resume content live in `content/about.yml`,
   `content/github.yml`, and `content/resume.yml`.
-- Portfolio projects live in `content/portfolio/`.
+- Portfolio projects live in `content/portfolio/`, which is currently empty.
 - Greece guide sections live in `content/greece/`.
 - Templates own HTML, CSS classes, icons, and ARIA behavior.
 - The generated site is build output. Do not edit `_site/` or generated HTML.
@@ -99,9 +99,29 @@ these files. The template and JavaScript consume them automatically.
 
 ## Portfolio
 
+**The portfolio is switched off.** `content/portfolio/` has no files in it, so
+the site builds without a portfolio section, without its navigation entries,
+and without a `/portfolio` address — that URL returns the not-found page. The
+templates and styles are untouched and waiting.
+
+To bring the page back, add `content/portfolio/index.yml` and one file per
+project using the shapes below. Nothing else needs changing; the section, both
+navigation menus, and the `/portfolio` address reappear on the next build.
+
 `content/portfolio/index.yml` contains the section heading and the ordered list
 of project slugs. Each slug names a sibling file; for example, `salient` loads
 `content/portfolio/salient.yml`.
+
+```yaml
+title: Portfolio
+subtitle: Selected projects.
+projects:
+  - salient
+```
+
+Removing every file from `content/portfolio/` again switches the route back
+off. A leftover project file with no `index.yml` is an error rather than a
+silent half-state.
 
 Each project contains:
 

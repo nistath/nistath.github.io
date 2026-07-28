@@ -5,8 +5,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "npm run validate:content && eleventy",
+    "build": "npm run clean && npm run validate:content && eleventy",
     "check": "npm run build && node scripts/check-generated.cjs",
+    "clean": "node -e \"require('node:fs').rmSync('_site', { force: true, recursive: true })\"",
     "dev": "eleventy --serve --port=8080",
     "og": "npm run build && node scripts/render-og.js",
     "validate:content": "node scripts/validate-content.cjs"

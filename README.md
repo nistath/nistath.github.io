@@ -10,8 +10,9 @@ The main hand-authored content is split into small files:
 
 - `content/about.yml`, `content/github.yml`, and `content/resume.yml` contain
   the other page prose, the pinned-repository order, and the resume source.
-- `content/portfolio/` contains the portfolio index and one YAML file per
-  project.
+- `content/portfolio/` holds the portfolio index and one YAML file per project.
+  It is empty, which switches the whole `/portfolio` route off; adding the
+  files back brings the page back.
 - `content/greece/` contains the Greece guide metadata and one YAML file per
   guide section or island.
 
@@ -70,15 +71,17 @@ deployment**, set **Source** to **GitHub Actions**. This is a one-time setup;
 without it, the workflow cannot publish the generated site.
 
 The workflow deploys a build artifact rather than committing generated files.
-The `CNAME`, clean-route stubs, `404.html`, and static assets are copied into
-that artifact by Eleventy.
+Eleventy generates the clean-route stubs and `404.html` from the route registry
+and copies `CNAME` and the static assets into that artifact.
 
 ## Project layout
 
 - `content/` — human-authored YAML and Markdown strings
 - `src/index.njk` — application shell
-- `src/_includes/` — portfolio and Greece rendering components
+- `src/routes.njk`, `src/404.njk` — generated clean-path stubs and fallback
+- `src/_includes/` — navigation, portfolio, and Greece rendering components
 - `schemas/` — schemas for every content file shape
-- `scripts/content/` — validated content loader used by Eleventy and checks
+- `scripts/content/` — validated content loader and route registry used by
+  Eleventy and the checks
 - `css/`, `js/`, `img/`, `fonts/`, `files/` — static runtime assets
 - `_site/` — ignored generated output

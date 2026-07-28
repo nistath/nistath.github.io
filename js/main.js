@@ -57,37 +57,29 @@ if (emailTopbarCompact) {
   emailTopbarCompact.setAttribute('href', 'mailto:' + email);
 }
 
-/* ── Navigation state ── */
+/* ── Navigation state ──
+   The build injects the route registry (scripts/content/routes.cjs), so a
+   route the site does not generate — an empty content/portfolio/, say — is
+   simply absent here, and every path, title, social card, and surface color
+   comes from the same record the redirect stubs were built from. */
 var githubLoaded = false;
 var resumeLoaded = false;
-var DEFAULT_SECTION = 'about';
-var SECTION_PATHS = {
-  'about':     '/about',
-  'github':    '/github',
-  'resume':    '/resume',
-  'portfolio': '/portfolio',
-  'greece':    '/greece'
-};
+var ROUTES = (window.SITE_CONTENT && window.SITE_CONTENT.routes) || [];
+var DEFAULT_SECTION = ROUTES.length ? ROUTES[0].id : null;
 
-var PAGE_TITLES = {
-  'about':     'Nick Stathas',
-  'github':    'GitHub — Nick Stathas',
-  'resume':    'Resume — Nick Stathas',
-  'portfolio': 'Portfolio — Nick Stathas',
-  'greece':    'Guide to Greece — Nick Stathas'
-};
+function routeById(section) {
+  for (var i = 0; i < ROUTES.length; i++) {
+    if (ROUTES[i].id === section) return ROUTES[i];
+  }
+  return null;
+}
 
-/* Per-section social preview metadata. Mirrors the per-route stub HTML files
-   so that in-app navigation also keeps OG/Twitter tags accurate (useful when
-   users copy the URL after navigating). The Greece guide gets its own card;
-   every other section reuses the default profile card. */
-var PAGE_META = {
-  'about':     { title: 'Nick Stathas',                    image: '/img/og/og-default.png' },
-  'github':    { title: 'Nick Stathas — GitHub',           image: '/img/og/og-default.png' },
-  'resume':    { title: 'Nick Stathas — Resume',           image: '/img/og/og-default.png' },
-  'portfolio': { title: 'Nick Stathas — Portfolio',        image: '/img/og/og-default.png' },
-  'greece':    { title: "Nick's Guide to Athens & Beyond", image: '/img/og/og-greece.png' }
-};
+function routeByPath(pathname) {
+  for (var i = 0; i < ROUTES.length; i++) {
+    if (ROUTES[i].path === pathname) return ROUTES[i];
+  }
+  return null;
+}
 
 var SITE_ORIGIN = 'https://nistath.com';
 
@@ -96,31 +88,21 @@ function setMetaContent(selector, value) {
   if (el) el.setAttribute('content', value);
 }
 
-function updateSocialMeta(section) {
-  var meta = PAGE_META[section] || PAGE_META[DEFAULT_SECTION];
-  var route = SECTION_PATHS[section] || '/';
-  var absUrl = SITE_ORIGIN + route;
-  var absImg = SITE_ORIGIN + meta.image;
+function updateSocialMeta(route) {
+  var absUrl = SITE_ORIGIN + route.path;
+  var absImg = SITE_ORIGIN + route.social.image;
 
-  setMetaContent('meta[property="og:title"]', meta.title);
+  setMetaContent('meta[property="og:title"]', route.social.title);
   setMetaContent('meta[property="og:url"]', absUrl);
   setMetaContent('meta[property="og:image"]', absImg);
-  setMetaContent('meta[property="og:image:alt"]', meta.title);
-  setMetaContent('meta[name="twitter:title"]', meta.title);
+  setMetaContent('meta[property="og:image:alt"]', route.social.title);
+  setMetaContent('meta[name="twitter:title"]', route.social.title);
   setMetaContent('meta[name="twitter:image"]', absImg);
-  setMetaContent('meta[name="twitter:image:alt"]', meta.title);
+  setMetaContent('meta[name="twitter:image:alt"]', route.social.title);
 
   var canonical = document.querySelector('link[rel="canonical"]');
   if (canonical) canonical.setAttribute('href', absUrl);
 }
-
-var MOBILE_PAGE_BACKGROUNDS = {
-  'about': '#0d1117',
-  'github': '#0d1117',
-  'resume': '#0d1117',
-  'portfolio': '#0d1117',
-  'greece': '#f5f0e8'
-};
 
 /* ── Viewport meta: keep one consistent viewport across sections.
    Mobile PDF viewers behave better when we do not override scaling on the
@@ -133,9 +115,8 @@ function setViewportForSection(section) {
   viewportMeta.setAttribute('content', viewportDefault);
 }
 
-function setMobilePageSurface(section) {
-  var surface = MOBILE_PAGE_BACKGROUNDS[section] || MOBILE_PAGE_BACKGROUNDS[DEFAULT_SECTION];
-  document.documentElement.style.setProperty('--mobile-page-bg', surface);
+function setMobilePageSurface(route) {
+  document.documentElement.style.setProperty('--mobile-page-bg', route.surface);
 }
 
 /* ── Sync <meta name="theme-color"> from the CSS variable so
@@ -155,15 +136,8 @@ function normalizeRoutePath(pathname) {
 }
 
 function getSectionFromPath(pathname) {
-  var normalized = normalizeRoutePath(pathname);
-  if (normalized === '/') return DEFAULT_SECTION;
-
-  var section = normalized.slice(1);
-  return PAGE_TITLES[section] ? section : DEFAULT_SECTION;
-}
-
-function getRouteForSection(section) {
-  return SECTION_PATHS[section] || SECTION_PATHS[DEFAULT_SECTION];
+  var route = routeByPath(normalizeRoutePath(pathname));
+  return route ? route.id : DEFAULT_SECTION;
 }
 
 function loadResume() {
@@ -202,10 +176,12 @@ function restoreSectionRoute() {
 
 function navigate(section, options) {
   options = options || {};
-  section = PAGE_TITLES[section] ? section : DEFAULT_SECTION;
+  var route = routeById(section) || routeById(DEFAULT_SECTION);
+  if (!route) return;
+  section = route.id;
 
   if (options.updateHistory !== false) {
-    var nextRoute = getRouteForSection(section);
+    var nextRoute = route.path;
     var currentRoute = normalizeRoutePath(window.location.pathname);
 
     if (currentRoute !== nextRoute || window.location.search || window.location.hash) {
@@ -225,7 +201,7 @@ function navigate(section, options) {
   var shouldCollapseMobileHero = section !== 'about';
 
   setViewportForSection(section);
-  setMobilePageSurface(section);
+  setMobilePageSurface(route);
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
   if (section === 'about') {
@@ -248,8 +224,8 @@ function navigate(section, options) {
   });
 
   /* Update page title and social preview metadata */
-  document.title = PAGE_TITLES[section] || 'Nick Stathas';
-  updateSocialMeta(section);
+  document.title = route.title;
+  updateSocialMeta(route);
 
   /* Lazy-load GitHub repos */
   if (section === 'github' && !githubLoaded) {
@@ -470,6 +446,11 @@ function loadGitHubRepos() {
 
 /* =====================================================
    PORTFOLIO — pre-rendered card interactions
+
+   Dormant while content/portfolio/ is empty: without projects the build
+   emits no portfolio route or section, so navigate() never reaches
+   renderPortfolio(). Kept, with the schema, renderer, and card styles, so
+   restoring the content restores the page.
    ===================================================== */
 function setExpandedState(container, header, body, isOpen) {
   container.classList.toggle('is-open', isOpen);

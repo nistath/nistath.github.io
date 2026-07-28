@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { loadContent } = require('./content/load-content.cjs');
+const { siteRoutes } = require('./content/routes.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = path.join(ROOT, '_site');
@@ -54,11 +55,17 @@ function main() {
     if (!html.includes(repository)) fail(`Missing injected pinned repository: ${repository}`);
   }
 
-  for (const project of content.portfolio.projects) {
-    if (!html.includes(`id="pcard-${project.id}"`)) fail(`Missing portfolio card: ${project.id}`);
-  }
-  if (countMatches(html, /class="pcard"/g) !== content.portfolio.projects.length) {
-    fail('Generated portfolio card count does not match content');
+  /* The portfolio is optional. With content it renders one card per project;
+     without it the route must be gone from the shell, not merely empty. */
+  if (content.portfolio) {
+    for (const project of content.portfolio.projects) {
+      if (!html.includes(`id="pcard-${project.id}"`)) fail(`Missing portfolio card: ${project.id}`);
+    }
+    if (countMatches(html, /class="pcard"/g) !== content.portfolio.projects.length) {
+      fail('Generated portfolio card count does not match content');
+    }
+  } else if (html.includes('data-section="portfolio"') || html.includes('id="section-portfolio"')) {
+    fail('Portfolio content is absent but the shell still renders its navigation or section');
   }
 
   for (const section of content.greece.sections) {
@@ -81,23 +88,34 @@ function main() {
     fail('The resume iframe must defer its remote source until the route is opened');
   }
 
-  for (const required of [
-    '404.html',
-    'CNAME',
-    'about/index.html',
-    'css/main.css',
-    'greece/index.html',
-    'js/main.js',
-    'portfolio/index.html',
-  ]) {
+  for (const required of ['404.html', 'CNAME', 'css/main.css', 'js/main.js']) {
     if (!fs.existsSync(path.join(SITE, required))) fail(`Build output is missing ${required}`);
   }
 
-  for (const route of ['about', 'github', 'resume', 'portfolio', 'greece']) {
-    const routeHtml = fs.readFileSync(path.join(SITE, route, 'index.html'), 'utf8');
+  /* Every registered route needs its redirect stub and its entry in the 404
+     fallback, and every unregistered one must have neither. */
+  const routes = siteRoutes(content);
+  const notFound = fs.readFileSync(path.join(SITE, '404.html'), 'utf8');
+
+  for (const route of routes) {
+    const stub = path.join(SITE, route.path.slice(1), 'index.html');
+    if (!fs.existsSync(stub)) fail(`Build output is missing ${route.path}/index.html`);
+
+    const routeHtml = fs.readFileSync(stub, 'utf8');
     if (routeHtml.includes('rel="preload" as="image"')) {
-      fail(`${route}/index.html eagerly preloads a social preview image before redirecting`);
+      fail(`${route.path}/index.html eagerly preloads a social preview image before redirecting`);
     }
+    if (!routeHtml.includes(`encodeURIComponent('${route.path}')`)) {
+      fail(`${route.path}/index.html does not hand its route back to the shell`);
+    }
+    if (!notFound.includes(`"${route.path}":true`)) fail(`404.html does not recover ${route.path}`);
+    if (!html.includes(`data-section="${route.id}"`)) fail(`Missing shell navigation for ${route.path}`);
+  }
+
+  for (const disabled of ['portfolio']) {
+    if (routes.some((route) => route.id === disabled)) continue;
+    if (fs.existsSync(path.join(SITE, disabled))) fail(`Disabled route ${disabled} still emits a stub`);
+    if (notFound.includes(`"/${disabled}"`)) fail(`404.html still recovers the disabled /${disabled} route`);
   }
 
   execFileSync(process.execPath, ['--check', path.join(ROOT, 'js', 'main.js')], { stdio: 'inherit' });
