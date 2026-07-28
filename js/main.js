@@ -200,7 +200,6 @@ function navigate(section, options) {
 
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
-  var heroEl = document.getElementById('topbar');
   /* Collapse the hero on mobile for all non-about sections.  This covers
      explicit nav clicks (collapseMobileHero: true), popstate (back/forward),
      and direct-route entry. */
@@ -253,20 +252,19 @@ function navigate(section, options) {
   }
 
   /* On mobile: navigation clicks should always land in the compact state.
-     Re-apply after layout so the sticky header cannot get stuck mid-reveal. */
+     Re-apply after layout so the sticky header cannot get stuck mid-reveal.
+     The header is updated directly rather than through a synthetic scroll
+     event, which used to wake every other scroll listener on the page too. */
   if (window.innerWidth <= MOBILE_BREAKPOINT && contentScrollEl) {
-    var targetScrollTop = 0;
-
-    if (shouldCollapseMobileHero && heroEl) {
-      targetScrollTop = heroEl.offsetHeight;
-    }
+    measureHero();
+    var targetScrollTop = shouldCollapseMobileHero ? heroMetrics.height : 0;
 
     window.scrollTo(0, targetScrollTop);
-    window.dispatchEvent(new Event('scroll'));
+    updateHeroVisibility();
 
     requestAnimationFrame(function() {
       window.scrollTo(0, targetScrollTop);
-      window.dispatchEvent(new Event('scroll'));
+      updateHeroVisibility();
     });
   }
 }
@@ -312,37 +310,75 @@ function clamp01(num) {
   return Math.min(1, Math.max(0, num));
 }
 
+/* Hero geometry only changes with the viewport, so it is measured on resize
+   rather than on every scroll event.  Reading offsetHeight mid-scroll forces
+   a synchronous layout, and doing that between writes to --compact-progress
+   is what makes a scroll-linked header stutter. */
+var heroMetrics = { height: 0, revealStart: 0, revealSpan: 1 };
+
+function measureHero() {
+  if (!topbarEl) return;
+
+  var height = topbarEl.offsetHeight;
+  var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, height * COMPACT_REVEAL_SPAN_RATIO);
+  var revealStart = Math.max(0, height - revealSpan);
+
+  heroMetrics = {
+    height: height,
+    revealStart: revealStart,
+    revealSpan: Math.max(1, height - revealStart)
+  };
+}
+
+var heroUpdateScheduled = false;
+
+function setMobileHeaderFixed(isFixed) {
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  appEl.classList.toggle('app--mobile-header-fixed', !!isFixed);
+}
+
+function updateHeroVisibility() {
+  if (!stickyHeaderEl || !topbarEl) return;
+
+  if (window.innerWidth > MOBILE_BREAKPOINT) {
+    stickyHeaderEl.style.setProperty('--compact-progress', '0');
+    stickyHeaderEl.classList.remove('hero-hidden');
+    setMobileHeaderFixed(false);
+    return;
+  }
+
+  if (!heroMetrics.height) measureHero();
+  if (!heroMetrics.height) return;
+
+  var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+  var progress = clamp01((scrollTop - heroMetrics.revealStart) / heroMetrics.revealSpan);
+  var heroHidden = progress >= HERO_HIDDEN_PROGRESS;
+
+  stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
+  stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
+  setMobileHeaderFixed(heroHidden);
+}
+
+/* Coalesce to one update per frame. Scroll events can outpace frames, and
+   without this the header is restyled several times per painted frame. */
+function scheduleHeroUpdate() {
+  if (heroUpdateScheduled) return;
+  heroUpdateScheduled = true;
+  requestAnimationFrame(function() {
+    heroUpdateScheduled = false;
+    updateHeroVisibility();
+  });
+}
+
 if (stickyHeaderEl && topbarEl && contentEl) {
-  function setMobileHeaderFixed(isFixed) {
-    var appEl = document.getElementById('app');
-    if (!appEl) return;
-    appEl.classList.toggle('app--mobile-header-fixed', !!isFixed);
-  }
+  window.addEventListener('scroll', scheduleHeroUpdate, { passive: true });
+  window.addEventListener('resize', function() {
+    measureHero();
+    scheduleHeroUpdate();
+  }, { passive: true });
 
-  function updateHeroVisibility() {
-    if (window.innerWidth > MOBILE_BREAKPOINT) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '0');
-      stickyHeaderEl.classList.remove('hero-hidden');
-      setMobileHeaderFixed(false);
-      return;
-    }
-
-    var heroHeight = topbarEl.offsetHeight;
-    if (!heroHeight) return;
-
-    var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, heroHeight * COMPACT_REVEAL_SPAN_RATIO);
-    var revealStart = Math.max(0, heroHeight - revealSpan);
-    var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-    var progress = clamp01((scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
-    var heroHidden = progress >= HERO_HIDDEN_PROGRESS;
-
-    stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
-    stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
-    setMobileHeaderFixed(heroHidden);
-  }
-
-  window.addEventListener('scroll', updateHeroVisibility, { passive: true });
-  window.addEventListener('resize', updateHeroVisibility, { passive: true });
+  measureHero();
   updateHeroVisibility();
 }
 
