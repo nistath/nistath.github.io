@@ -547,7 +547,11 @@ a.repo-card:hover {
   color: var(--clr-link);
 }
 
-/* ── Resume iframe ── */
+/* ── Resume ──
+   The embedded viewer is the desktop presentation.  .resume-handoff is the
+   phone presentation and swaps in at the mobile breakpoint; only one of the
+   two is ever displayed, and js/main.js only fetches the PDF when the embed
+   is the visible one. */
 .resume-wrap {
   width: 100%;
   height: 100%;
@@ -563,6 +567,55 @@ a.repo-card:hover {
   min-height: 0;
   border: none;
   display: block;
+}
+
+.resume-handoff { display: none; }
+
+.resume-handoff-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  padding: 1.6rem 1.5rem 1.5rem;
+}
+
+.resume-handoff-icon {
+  color: var(--clr-accent2);
+  margin-bottom: 0.1rem;
+}
+
+.resume-handoff-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.resume-handoff-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--clr-muted);
+}
+
+.resume-handoff-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--clr-accent);
+  border: 1px solid var(--clr-accent2);
+  transition: background var(--t);
+}
+
+.resume-handoff-action:hover {
+  background: var(--clr-accent2);
+  text-decoration: none;
 }
 
 /* =====================================================
@@ -1185,34 +1238,6 @@ a.repo-card:hover {
     pointer-events: auto;
   }
 
-  .app.app--resume-compact .topbar {
-    display: none !important;
-  }
-
-  .app.app--resume-compact .sticky-header {
-    padding-top: var(--safe-top);
-    background-color: var(--shell-hero-dark);
-    background-image:
-      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
-      var(--shell-bg-image);
-    background-repeat: no-repeat, var(--shell-bg-repeat);
-    background-size: auto, var(--shell-bg-size);
-    background-position: 0 0, var(--shell-bg-position);
-    animation: bgscroll-overlay 12s linear infinite;
-  }
-
-  .app.app--resume-compact .topbar-compact-wrap {
-    height: var(--bar-h);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-  }
-
-  .app.app--resume-compact .topbar-left,
-  .app.app--resume-compact .topbar-compact-social {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-  }
-
   .topbar-social { display: none; }
 
   .topbar-nav {
@@ -1262,22 +1287,16 @@ a.repo-card:hover {
     background: #f5f0e8;
   }
 
-  /* Resume: explicit height so the iframe fills the viewport below the nav ── */
-  #section-resume {
-    min-height: 0;
-    height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom));
-    padding-bottom: 0;
+  /* Resume: hand the PDF to the browser's own viewer instead of embedding it.
+     Mobile browsers render an embedded PDF as a single page that neither
+     scrolls nor zooms and overflows the viewport horizontally. */
+  #section-resume .resume-wrap {
+    display: none;
   }
 
-  .app.app--mobile-header-fixed #section-resume {
-    padding-top: 0;
-    min-height: calc(100dvh - var(--safe-bottom));
-    height: auto;
-  }
-
-  .app.app--mobile-header-fixed #section-resume .resume-wrap {
-    margin-top: var(--mobile-fixed-header-h);
-    height: calc(100dvh - var(--mobile-fixed-header-h) - var(--safe-bottom));
+  .resume-handoff {
+    display: block;
+    padding: 2rem 1.25rem 3rem;
   }
 
   /* ── Content padding ── */

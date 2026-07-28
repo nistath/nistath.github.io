@@ -92,7 +92,10 @@ authoritative validation command.
 - `content/about.yml` contains the About heading, paragraphs, and farewell.
 - `content/github.yml` contains the GitHub heading, subtitle, loading text,
   and ordered pinned-repository list.
-- `content/resume.yml` contains the resume PDF URL and iframe title.
+- `content/resume.yml` contains the resume PDF URL, the embedded viewer's
+  title, and — under `mobile` — the heading, description, and button text of
+  the card phones get in place of that viewer, since mobile browsers cannot
+  scroll or zoom an embedded PDF.
 
 Routine wording, link, repository-order, and resume-source changes belong in
 these files. The template and JavaScript consume them automatically.

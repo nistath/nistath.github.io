@@ -72,15 +72,14 @@ These constraints drive the multi-layer approach below.
   stack. `padding-top: var(--safe-top)` extends the background into the safe
   area while content sits below it.
 - **Compact header:** `.sticky-header` uses the same stacked-background
-  approach as `.topbar`. Its `::before` overlay is likewise disabled. The
-  `.app.app--resume-compact .sticky-header` variant receives the same
-  treatment.
+  approach as `.topbar`. Its `::before` overlay is likewise disabled.
 
 ## Bottom Spill
 
 - The bottom of the page must not bleed the moving shell texture.
 - The bottom browser-chrome spill should continue the active page surface:
-  dark on `about`, `github`, `resume`, and `portfolio`; light on `greece`.
+  dark on `about`, `github`, and `resume`; light on `greece`. Each route's
+  surface color comes from `scripts/content/routes.cjs`.
 
 ### Implementation
 
@@ -130,36 +129,45 @@ These constraints drive the multi-layer approach below.
 
 ## Resume Route
 
-- The resume route should always use the compact header state on mobile.
-- The native PDF viewer should start below the compact header rather than
-  underneath it.
-- Mobile users must be able to zoom normally in the PDF viewer.
-- The initial PDF view should default to a fit mode.
+- Mobile visitors must be able to read the resume: scroll it, zoom it, and
+  see the full page width.
+- The route must not overflow the viewport horizontally.
+- The route should behave like every other section on mobile.
 
 ### Implementation
 
-- **Forced compact state:** `navigate()` adds `app--resume-compact` to `#app`
-  on the resume route, which hides `.topbar` entirely
-  (`display: none !important`) and forces the sticky header into its compact
-  state with full opacity and `padding-top: var(--safe-top)`.
-- **PDF offset:** `.app.app--mobile-header-fixed #section-resume .resume-wrap`
-  gets `margin-top: var(--mobile-fixed-header-h)` so the iframe starts below
-  the fixed header.
-- **PDF sizing:** `#section-resume` uses
-  `height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom))` (or the
-  fixed-header variant) to fill the remaining viewport below the header.
-- **Fit mode:** The iframe `src` includes `#page=1&view=FitH` for the
-  browser's built-in PDF viewer. However, Dropbox's `raw=1` redirect returns
-  a `Location` header ending in `#` (empty fragment), which clears the hint
-  before the PDF viewer sees it. This cannot be fixed client-side: the
-  redirect URL has no CORS headers, so JavaScript cannot resolve it and
-  re-append the fragment. Switching away from Dropbox hosting would resolve
-  this.
-- **iOS pinch-to-zoom:** On iOS Safari, PDF content in an iframe does not
-  receive its own zoom context. Pinch-to-zoom affects the entire page
-  viewport rather than just the PDF. This is a Safari platform limitation
-  (Chrome desktop uses PDFium which handles zoom independently). No reliable
-  client-side workaround exists.
+Mobile browsers do not give an embedded PDF its own scroll or zoom context.
+iOS Safari renders it as a single fixed page — pinch-to-zoom acts on the page
+viewport instead of the document, and anything wider than the frame is simply
+cut off. Android Chrome generally refuses to render one at all. Sizing the
+iframe more carefully cannot fix this, and earlier attempts to do so are why
+the resume route used to need a forced-compact header and its own viewport
+math.
+
+So mobile does not embed the PDF:
+
+- **Two presentations, one section:** `#section-resume` contains both
+  `.resume-wrap` (the iframe) and `.resume-handoff` (a card with the resume
+  title, a line of explanation, and a link to the PDF). The mobile media
+  query hides the first and shows the second. Its wording lives in
+  `content/resume.yml` under `mobile`.
+- **Handing off:** The card's link is an ordinary `target="_blank"` anchor to
+  `pdf_url`, so the file opens as a top-level document in the browser's own
+  PDF viewer, which scrolls and zooms normally and fits to width by default.
+- **Deferred fetch:** `loadResume()` returns early when
+  `matchMedia('(max-width: 767px)')` matches, so phones never download the
+  PDF at all. A `change` listener on that query loads the iframe if a window
+  is resized past the breakpoint while the resume route is open.
+- **No special casing:** Because the route is now ordinary content on mobile,
+  `app--resume-compact` and the fixed heights, offsets, and viewport-meta
+  handling that supported it are gone. The hero collapses on the resume route
+  the same way it does everywhere else.
+
+The `#page=1&view=FitH` fragment on `pdf_url` remains a hint for desktop
+browsers. Dropbox's `raw=1` redirect returns a `Location` ending in `#`,
+which clears it before the viewer sees it; that is unchanged and cannot be
+fixed client-side, since the redirect has no CORS headers. It no longer
+affects mobile, where the browser's own viewer picks the fit mode.
 
 ## Testing Notes
 

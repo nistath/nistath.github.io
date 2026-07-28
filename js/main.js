@@ -62,8 +62,10 @@ if (emailTopbarCompact) {
    route the site does not generate — an empty content/portfolio/, say — is
    simply absent here, and every path, title, social card, and surface color
    comes from the same record the redirect stubs were built from. */
+var MOBILE_BREAKPOINT = 767;
 var githubLoaded = false;
 var resumeLoaded = false;
+var activeSection = null;
 var ROUTES = (window.SITE_CONTENT && window.SITE_CONTENT.routes) || [];
 var DEFAULT_SECTION = ROUTES.length ? ROUTES[0].id : null;
 
@@ -104,17 +106,6 @@ function updateSocialMeta(route) {
   if (canonical) canonical.setAttribute('href', absUrl);
 }
 
-/* ── Viewport meta: keep one consistent viewport across sections.
-   Mobile PDF viewers behave better when we do not override scaling on the
-   resume route, especially on iOS where users may need to zoom back out. ── */
-var viewportMeta = document.querySelector('meta[name="viewport"]');
-var viewportDefault = viewportMeta ? viewportMeta.getAttribute('content') : null;
-
-function setViewportForSection(section) {
-  if (!viewportMeta || !viewportDefault) return;
-  viewportMeta.setAttribute('content', viewportDefault);
-}
-
 function setMobilePageSurface(route) {
   document.documentElement.style.setProperty('--mobile-page-bg', route.surface);
 }
@@ -140,8 +131,17 @@ function getSectionFromPath(pathname) {
   return route ? route.id : DEFAULT_SECTION;
 }
 
+/* ── Resume ──
+   Only the desktop layout embeds the PDF.  Mobile browsers render an
+   embedded PDF as a single fixed page that neither scrolls nor zooms, so the
+   mobile layout shows a card that opens the file in the browser's own
+   viewer instead.  Fetching the PDF is tied to the embed actually being
+   visible, so phones never download it, and a window resized across the
+   breakpoint still ends up with a loaded viewer. */
+var mobileLayout = window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)');
+
 function loadResume() {
-  if (resumeLoaded) return;
+  if (resumeLoaded || mobileLayout.matches) return;
 
   var frame = document.querySelector('#section-resume iframe[data-src]');
   if (!frame) return;
@@ -150,6 +150,10 @@ function loadResume() {
   frame.removeAttribute('data-src');
   resumeLoaded = true;
 }
+
+mobileLayout.addEventListener('change', function() {
+  if (activeSection === 'resume') loadResume();
+});
 
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
@@ -192,15 +196,16 @@ function navigate(section, options) {
       );
     }
   }
+  activeSection = section;
+
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
   var heroEl = document.getElementById('topbar');
   /* Collapse the hero on mobile for all non-about sections.  This covers
      explicit nav clicks (collapseMobileHero: true), popstate (back/forward),
-     direct-route entry, and the resume route. */
+     and direct-route entry. */
   var shouldCollapseMobileHero = section !== 'about';
 
-  setViewportForSection(section);
   setMobilePageSurface(route);
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
@@ -209,7 +214,6 @@ function navigate(section, options) {
   } else {
     app.classList.add('app--browsing');
   }
-  app.classList.toggle('app--resume-compact', section === 'resume');
 
   /* Update all nav button active states */
   document.querySelectorAll('.nav-btn, .tab').forEach(function(btn) {
@@ -250,10 +254,10 @@ function navigate(section, options) {
 
   /* On mobile: navigation clicks should always land in the compact state.
      Re-apply after layout so the sticky header cannot get stuck mid-reveal. */
-  if (window.innerWidth <= 767 && contentScrollEl) {
+  if (window.innerWidth <= MOBILE_BREAKPOINT && contentScrollEl) {
     var targetScrollTop = 0;
 
-    if (section !== 'resume' && shouldCollapseMobileHero && heroEl) {
+    if (shouldCollapseMobileHero && heroEl) {
       targetScrollTop = heroEl.offsetHeight;
     }
 
@@ -300,7 +304,6 @@ window.addEventListener('popstate', function() {
 var stickyHeaderEl = document.querySelector('.sticky-header');
 var topbarEl = document.getElementById('topbar');
 var contentEl = document.getElementById('content');
-var MOBILE_BREAKPOINT = 767;
 var COMPACT_REVEAL_SPAN_RATIO = 0.55;
 var COMPACT_REVEAL_MIN_SPAN_PX = 88;
 var HERO_HIDDEN_PROGRESS = 0.995;
@@ -321,13 +324,6 @@ if (stickyHeaderEl && topbarEl && contentEl) {
       stickyHeaderEl.style.setProperty('--compact-progress', '0');
       stickyHeaderEl.classList.remove('hero-hidden');
       setMobileHeaderFixed(false);
-      return;
-    }
-
-    if (document.getElementById('app').classList.contains('app--resume-compact')) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '1');
-      stickyHeaderEl.classList.add('hero-hidden');
-      setMobileHeaderFixed(true);
       return;
     }
 

@@ -176,6 +176,8 @@
         </div>
       </section>
 
+      {# Desktop embeds the PDF; phones get the card below, because mobile
+         browsers render an embedded PDF as one fixed, unzoomable page. #}
       <section id="section-resume" class="section">
         <div class="resume-wrap">
           <iframe
@@ -184,6 +186,27 @@
             frameborder="0"
             title="{{ siteContent.resume.title }}"
           ></iframe>
+        </div>
+        <div class="resume-handoff">
+          <div class="resume-handoff-card">
+            <svg class="resume-handoff-icon" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="butt" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+            <h2>{{ siteContent.resume.mobile.heading }}</h2>
+            <p>{{ siteContent.resume.mobile.description }}</p>
+            <a class="resume-handoff-action" href="{{ siteContent.resume.pdf_url }}" target="_blank" rel="noopener noreferrer">
+              {{ siteContent.resume.mobile.action }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </section>
 

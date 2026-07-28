@@ -85,8 +85,15 @@ function main() {
   if (!html.includes('loading="lazy"') || !html.includes('decoding="async"')) {
     fail('Generated Greece images must be lazy-loaded and asynchronously decoded');
   }
-  if (!html.includes('<iframe\n            data-src=') || html.includes('<iframe\n            src=')) {
+  const resumeFrame = (html.match(/<iframe\b[\s\S]*?>/) || [''])[0];
+  if (!/\sdata-src=/.test(resumeFrame) || /\ssrc=/.test(resumeFrame)) {
     fail('The resume iframe must defer its remote source until the route is opened');
+  }
+  /* Mobile browsers cannot scroll or zoom an embedded PDF, so the route also
+     has to offer the file as a plain link out to the browser's own viewer. */
+  const handoff = html.match(/class="resume-handoff-action" href="([^"]+)"/);
+  if (!handoff || handoff[1].replace(/&amp;/g, '&') !== content.resume.pdf_url) {
+    fail('The resume route is missing its link to the PDF for mobile visitors');
   }
 
   for (const required of ['404.html', 'CNAME', 'css/main.css', 'js/main.js']) {
