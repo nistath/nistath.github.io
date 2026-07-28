@@ -4,6 +4,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { loadContent } = require('./content/load-content.cjs');
 const { siteRoutes } = require('./content/routes.cjs');
+const { buildShellTexture, OUTPUT: SHELL_TEXTURE } = require('./render-shell-texture.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = path.join(ROOT, '_site');
@@ -116,6 +117,12 @@ function main() {
     if (routes.some((route) => route.id === disabled)) continue;
     if (fs.existsSync(path.join(SITE, disabled))) fail(`Disabled route ${disabled} still emits a stub`);
     if (notFound.includes(`"/${disabled}"`)) fail(`404.html still recovers the disabled /${disabled} route`);
+  }
+
+  /* The shell texture is a checked-in build product balanced against
+     --sidebar-overlay. Catch it drifting from its generator. */
+  if (!fs.readFileSync(SHELL_TEXTURE).equals(buildShellTexture().texture)) {
+    fail('img/shell-texture.png is stale; run npm run texture');
   }
 
   execFileSync(process.execPath, ['--check', path.join(ROOT, 'js', 'main.js')], { stdio: 'inherit' });

@@ -35,12 +35,13 @@ iOS Safari dynamically samples `background-color` from the topmost visible
 These constraints drive the multi-layer approach below.
 
 - **`--shell-hero-dark` variable:** Defined in `:root` (`css/main.css`).
-  Approximation of the visual average of the shell texture composited through
-  `--sidebar-overlay`. The texture (`img/background-blue.png`) averages
-  significantly lighter than `--shell-hero-base`, so the blended result is
-  approximately #2b4557, not the darker #142d43 that a base-only calculation
-  would suggest. Adjust on-device if the flat color doesn't match the
-  textured hero.
+  The visual average of the shell texture composited through
+  `--sidebar-overlay`, and exact rather than approximate:
+  `scripts/render-shell-texture.cjs` generates `img/shell-texture.png` so that
+  it averages this value under the overlay, and `--shell-hero-base` is the
+  texture's own average so the pre-load flat color matches too. Changing
+  `--shell-hero-dark` or the overlay alpha means re-running `npm run texture`;
+  `npm run check` fails if the committed texture drifts from its generator.
 - **`#mobile-spill` element:** A real `<div>` in `index.html` (before `#app`),
   styled on mobile as `position: fixed; z-index: 9999` covering only
   `height: env(safe-area-inset-top)` — the area behind the status bar. Because
@@ -179,10 +180,9 @@ These constraints drive the multi-layer approach below.
   not revert it on scroll-back. On a fresh load the hero texture may briefly
   show through the rounded chrome edges before the flat color takes over.
   This is expected Safari behavior and cannot be overridden from CSS.
-- The `#2b4557` value (`--shell-hero-dark`) is an approximation of the visual
-  average of the texture composited through the overlay. The texture
-  (`img/background-blue.png`) is significantly lighter than
-  `--shell-hero-base`, so the blended result is lighter than a base-only
-  calculation. Tweak on-device by adjusting the single `--shell-hero-dark`
-  variable in `:root`; `js/main.js` syncs `<meta name="theme-color">` from
-  the computed CSS variable at startup so there is only one value to change.
+- The `#2b4557` value (`--shell-hero-dark`) is the visual average of
+  `img/shell-texture.png` composited through the overlay. To tweak it
+  on-device, change that single `:root` variable and re-run
+  `npm run texture`, which rebalances the texture against it;
+  `js/main.js` syncs `<meta name="theme-color">` from the computed CSS
+  variable at startup so there is only one value to change.

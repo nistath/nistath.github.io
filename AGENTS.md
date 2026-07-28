@@ -26,6 +26,7 @@ npm run build              # validate content and generate _site/
 npm run validate:content   # validate authored YAML only
 npm run check              # build plus generated-site safety checks
 npm run og                 # build and regenerate Open Graph images
+npm run texture            # regenerate img/shell-texture.png
 ```
 
 `_site/` is generated, ignored, and never an authoring source. Do not edit or
@@ -197,9 +198,17 @@ The shell and hero treatment are controlled by the shell theme variables:
 - `--shell-bg-image`
 - `--shell-bg-size`
 
-The sidebar, topbar, and sticky header use the moving
-`img/background-blue.png` texture directly. Do not rely on CSS blend-mode
-tinting for shell color, since Safari renders it inconsistently.
+The sidebar, topbar, and sticky header use the moving `img/shell-texture.png`
+directly. Do not rely on CSS blend-mode tinting for shell color, since Safari
+renders it inconsistently.
+
+That texture is a checked-in build product: `scripts/render-shell-texture.cjs`
+(`npm run texture`) derives it from the original `img/background.png` tile,
+darkening it and expanding its contrast so the pattern survives
+`--sidebar-overlay` while the composited average stays `--shell-hero-dark`.
+Overlay alpha and texture contrast are two halves of one setting — change
+either and re-run the script. `npm run check` fails if the committed texture
+no longer matches its generator.
 
 ## Extension checklist
 

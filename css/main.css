@@ -17,18 +17,22 @@
   --clr-accent:  #2980b9;
   --clr-accent2: #3498db;
 
-  /* Shell theme */
-  --shell-hero-base:       #2c678c;
+  /* Shell theme.
+     --shell-hero-base is the tile's own average, so the flat color shown
+     before the texture loads matches the texture itself. */
+  --shell-hero-base:       #3d5f73;
   --shell-hero-accent:     #68a7cb;
   --shell-divider:         rgba(151, 191, 215, 0.34);
-  --shell-bg-image:        url('/img/background-blue.png');
+  --shell-bg-image:        url('/img/shell-texture.png');
   --shell-bg-repeat:       repeat;
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
   --mobile-page-bg:        #0d1117;
-  /* --shell-hero-base composited through --sidebar-overlay.
-     Used as background-color on mobile shell elements so iOS Safari's
-     dynamic chrome-color sampling picks up the darkened value. */
+  /* The shell texture composited through --sidebar-overlay. Used as
+     background-color on mobile shell elements so iOS Safari's dynamic
+     chrome-color sampling picks up the darkened value.  Exact: the texture is
+     generated to average this value under the overlay, so changing either
+     means re-running `npm run texture`. */
   --shell-hero-dark:       #2b4557;
 
   /* Surface */
@@ -42,8 +46,11 @@
   --clr-muted:   #8b949e;
   --clr-link:    #58a6ff;
 
-  /* Sidebar overlay */
-  --sidebar-overlay: rgba(8, 18, 32, 0.68);
+  /* Flat layer the shell paints over the texture.  Compositing scales the
+     texture's contrast by 1 - alpha, so this value is what decides how much
+     of the tessellation survives; scripts/render-shell-texture.cjs balances
+     the tile against it. */
+  --sidebar-overlay: rgba(8, 18, 32, 0.34);
 
   /* Motion */
   --t: 0.25s ease;
@@ -109,6 +116,18 @@ a:hover { text-decoration: underline; }
 @keyframes bgscroll-overlay {
   from { background-position: 0 0, 0 var(--bg-y, 0px); }
   to   { background-position: 0 0, 500px var(--bg-y, 0px); }
+}
+
+/* The texture drifts sideways behind the whole shell. Now that it is legible
+   the motion is legible too, so honor a reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  html, body,
+  .sidebar,
+  .topbar,
+  .sticky-header,
+  #mobile-spill {
+    animation: none;
+  }
 }
 
 .sidebar-inner {
