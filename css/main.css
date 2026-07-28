@@ -404,6 +404,20 @@ a:hover { text-decoration: underline; }
   pointer-events: auto;
 }
 
+/* Short sections sit centered in the content area rather than hugging the
+   top edge.  `margin: auto` on the child does the centering instead of
+   `align-items`, so content taller than the viewport still scrolls from its
+   own start instead of being clipped at the top. */
+.section--centered.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.section--centered .section-inner {
+  margin: auto;
+  width: 100%;
+}
+
 /* ── About / text sections ── */
 .section-inner {
   max-width: 680px;
@@ -1229,8 +1243,15 @@ a.repo-card:hover {
     background: var(--clr-bg);
   }
 
-  .section.active {
+  .section.active,
+  .section--centered.active {
     display: block;
+  }
+
+  /* Mobile sections start under the header and flow downward; vertical
+     centering would only push the text away from it. */
+  .section--centered .section-inner {
+    margin: 0 auto;
   }
 
   .app.app--mobile-header-fixed .section.active {
