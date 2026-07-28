@@ -1,47 +1,149 @@
 /* =====================================================
    GUIDE TO GREECE
+
+   Visual language: whitewashed limestone paper, Aegean blues,
+   sun-warmed gold. The shell texture from the rest of the site is
+   reused in the hero so the guide reads as part of the same place.
    ===================================================== */
 .greece-wrap {
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  background: #f5f0e8;
+  background-color: #f5f0e8;
+  background-image:
+    radial-gradient(150% 560px at 50% 0, rgba(120, 186, 208, 0.22) 0%, rgba(120, 186, 208, 0) 100%);
+  background-repeat: no-repeat;
   min-height: 100%;
-  color: #1a3a4a;
-  --gr-page-x: clamp(16px, 4vw, 24px);
-  --gr-main-max: 620px;
-  --gr-section-gap: clamp(44px, 7vw, 64px);
-  --gr-card-py: clamp(16px, 2.2vw, 22px);
-  --gr-card-px: clamp(16px, 2.4vw, 20px);
-  --gr-tight-gap: clamp(10px, 1.4vw, 13px);
-  --gr-stack-gap: clamp(14px, 2.2vw, 20px);
-  --gr-stack-gap-lg: clamp(20px, 3vw, 28px);
-  --gr-text-body: clamp(16px, 0.35vw + 15px, 18px);
-  --gr-text-small: clamp(14px, 0.18vw + 13.4px, 15px);
-  --gr-text-h3: clamp(20px, 0.7vw + 17px, 24px);
-  --gr-text-h2: clamp(33px, 1.2vw + 28px, 45px);
-  --gr-text-display: clamp(48px, 3.8vw + 32px, 74px);
-  --gr-text-tagline: clamp(19px, 0.45vw + 17px, 22px);
-  --gr-text-kicker: clamp(12px, 0.2vw + 11.3px, 14px);
+  color: var(--gr-ink);
+
+  /* ── Palette ── */
+  --gr-ink:         #12303f;
+  --gr-body:        #47646f;
+  --gr-muted:       #64818e;
+  --gr-sea:         #1f6a8c;
+  --gr-sea-deep:    #0c3a56;
+  --gr-sea-light:   #3fa3c2;
+  --gr-foam:        rgba(31, 106, 140, 0.07);
+  --gr-foam-strong: rgba(31, 106, 140, 0.13);
+  --gr-sand:        #8a7454;
+  --gr-gold:        #b07d2e;
+  --gr-gold-ink:    #6a4416;
+  --gr-paper:       #fff;
+  --gr-line:        rgba(18, 48, 63, 0.09);
+  --gr-line-strong: rgba(18, 48, 63, 0.15);
+  --gr-shadow:      0 1px 2px rgba(18, 48, 63, 0.04), 0 8px 18px -14px rgba(18, 48, 63, 0.34);
+  --gr-shadow-lift: 0 2px 4px rgba(18, 48, 63, 0.05), 0 14px 26px -16px rgba(18, 48, 63, 0.36);
+  --gr-shadow-lg:   0 2px 5px rgba(18, 48, 63, 0.05), 0 20px 38px -26px rgba(18, 48, 63, 0.45);
+
+  /* ── Geometry ── */
+  --gr-radius:       12px;
+  --gr-radius-sm:    9px;
+  --gr-radius-lg:    14px;
+  --gr-sheet-radius: 16px;
+  --gr-sheet-lip:    16px;
+  --gr-nav-bg:       #f8f4ec;
+  --gr-nav-h:        42px; /* kept in sync at runtime by greeceNavInit() */
+
+  --gr-page-x:       clamp(14px, 3.6vw, 22px);
+  --gr-main-max:     620px;
+  --gr-section-gap:  clamp(40px, 6.2vw, 58px);
+  --gr-card-py:      clamp(14px, 1.9vw, 19px);
+  --gr-card-px:      clamp(14px, 2vw, 18px);
+  --gr-tight-gap:    clamp(8px, 1.2vw, 11px);
+  --gr-stack-gap:    clamp(12px, 1.9vw, 16px);
+  --gr-stack-gap-lg: clamp(18px, 2.6vw, 24px);
+
+  /* ── Type scale ── */
+  --gr-text-body:    clamp(16px, 0.28vw + 14.9px, 17.4px);
+  --gr-text-small:   clamp(13.8px, 0.14vw + 13.3px, 14.6px);
+  --gr-text-h3:      clamp(18.5px, 0.6vw + 16.2px, 22px);
+  --gr-text-h2:      clamp(27px, 3.2vw + 16.5px, 36px);
+  --gr-text-display: clamp(41px, 8.2vw + 8px, 60px);
+  --gr-text-tagline: clamp(17px, 0.9vw + 14.5px, 20px);
+  --gr-text-kicker:  clamp(11px, 0.2vw + 10.4px, 12.5px);
 }
 
 /* ── Hero ── */
 .gr-hero {
-  background:
-    linear-gradient(150deg, rgba(0,60,150,0.96) 0%, rgba(0,105,195,0.91) 45%, rgba(0,168,232,0.84) 100%),
-    url('/img/cache/athens-skyline.jpg') center 60% / cover no-repeat;
-  padding: clamp(28px, 4.4vw, 56px) var(--gr-page-x) clamp(42px, 7vw, 82px);
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+  padding:
+    clamp(26px, 4vw, 46px)
+    var(--gr-page-x)
+    calc(clamp(34px, 5.5vw, 58px) + var(--gr-sheet-lip));
+  background-color: var(--gr-sea-deep);
+  background-image:
+    linear-gradient(180deg, rgba(245, 240, 232, 0) 56%, rgba(245, 240, 232, 0.26) 100%),
+    linear-gradient(163deg, rgba(9, 48, 74, 0.94) 0%, rgba(20, 96, 138, 0.86) 46%, rgba(60, 160, 188, 0.70) 100%),
+    url('/img/cache/athens-skyline.jpg');
+  background-size: auto, auto, cover;
+  background-position: center, center, center 62%;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+}
+
+/* Same moving facet texture as the sidebar and topbar, dialled right down. */
+.gr-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--shell-bg-image);
+  background-repeat: repeat;
+  background-size: 500px 500px;
+  opacity: 0.15;
+  animation: bgscroll 12s linear infinite;
+  pointer-events: none;
+}
+
+/* Leading edge of the content sheet, rising over the sea.  Keeping the
+   rounded corners here rather than on the nav means the nav is a plain
+   square bar the moment it pins to the top of the viewport. */
+.gr-hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--gr-sheet-lip);
+  background: var(--gr-nav-bg);
+  border-radius: var(--gr-sheet-radius) var(--gr-sheet-radius) 0 0;
+  pointer-events: none;
+}
+
+/* Low summer sun, upper right. */
+.gr-hero-curve {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: clamp(-46px, -4vw, -16px);
+  right: clamp(-58px, -5vw, -20px);
+  width: clamp(176px, 34vw, 320px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(255, 233, 189, 0.52) 0%,
+    rgba(255, 214, 152, 0.24) 44%,
+    rgba(255, 202, 132, 0.05) 70%,
+    rgba(255, 202, 132, 0) 80%);
+  pointer-events: none;
 }
 
 .gr-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-kicker);
-  letter-spacing: clamp(3px, 0.35vw + 2px, 5px);
+  letter-spacing: clamp(2.5px, 0.3vw + 1.8px, 4px);
   text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 10px;
   font-weight: 600;
-  position: relative;
+}
+
+.gr-hero-eyebrow::before {
+  content: '';
+  width: clamp(18px, 4vw, 30px);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
 }
 
 .gr-hero h1 {
@@ -52,71 +154,103 @@
   margin: 0;
   line-height: 1.02;
   letter-spacing: -0.01em;
-  position: relative;
+  text-wrap: balance;
 }
 
 .gr-hero h1 em {
   font-style: italic;
   font-weight: 400;
-  font-size: 0.78em;
-  opacity: 0.88;
+  font-size: 0.76em;
+  opacity: 0.9;
 }
 
-.gr-hero-curve { display: none; }
-
-/* ── Internal sticky nav ── */
+/* ── Internal sticky nav ──
+   Sits flush under the hero's sheet lip, then pins to the top of the
+   viewport.  Opaque rather than frosted: a translucent bar over a guide
+   this dense reads as bleed-through, and backdrop blur is expensive to
+   composite on every scroll frame on a phone. */
 .gr-nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(245,240,232,0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(44,95,122,0.10);
-  border-radius: 16px 16px 0 0;
-  padding: 6px 8px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+  padding: 5px 0 6px;
+  background: var(--gr-nav-bg);
+  border-bottom: 1px solid var(--gr-line);
+  box-shadow: 0 8px 16px -14px rgba(18, 48, 63, 0.6);
+  overflow: hidden;
 }
 
+/* Horizontal rail on narrow screens.  The edges of the strip fade out
+   wherever there is more of it to scroll to, so the cut-off chip reads as
+   an invitation rather than a clipping bug. */
+.gr-nav-rail {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gr-page-x);
+  padding: 0 var(--gr-page-x);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  --gr-rail-fade-start: 26px;
+  --gr-rail-fade-end: 30px;
+  -webkit-mask-image: linear-gradient(90deg,
+    transparent 0, #000 var(--gr-rail-fade-start),
+    #000 calc(100% - var(--gr-rail-fade-end)), transparent 100%);
+  mask-image: linear-gradient(90deg,
+    transparent 0, #000 var(--gr-rail-fade-start),
+    #000 calc(100% - var(--gr-rail-fade-end)), transparent 100%);
+}
+
+.gr-nav--rail-start .gr-nav-rail { --gr-rail-fade-start: 0px; }
+.gr-nav--rail-end .gr-nav-rail { --gr-rail-fade-end: 0px; }
+
+.gr-nav-rail::-webkit-scrollbar { display: none; }
+
 .gr-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
   border: none;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: 999px;
   background: transparent;
-  color: #5a7a8a;
-  transition: all 0.22s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 7px 5px;
+  color: var(--gr-muted);
+  padding: 7px 11px;
+  transition: background 0.2s ease, color 0.2s ease;
   touch-action: manipulation;
 }
 
+.gr-nav-btn:hover {
+  background: var(--gr-foam);
+  color: var(--gr-sea);
+}
+
 .gr-nav-btn.active {
-  background: rgba(44,95,122,0.12);
-  color: #2c5f7a;
+  background: var(--gr-sea);
+  color: #fff;
 }
 
 .gr-nav-icon {
-  font-size: clamp(18px, 1vw + 14px, 20px);
+  font-size: 14px;
   line-height: 1;
 }
 
 .gr-nav-label {
-  font-size: clamp(11.5px, 0.16vw + 11px, 13px);
-  line-height: 1.18;
-  text-align: center;
-  letter-spacing: 0.01em;
+  font-size: 13px;
+  line-height: 1.15;
+  white-space: nowrap;
+  letter-spacing: 0.005em;
 }
 
 /* ── Main content ── */
 .gr-main {
-  padding: clamp(24px, 4.5vw, 44px) var(--gr-page-x) clamp(68px, 9vw, 100px);
+  padding: clamp(20px, 3.4vw, 34px) var(--gr-page-x) clamp(54px, 7vw, 84px);
   max-width: var(--gr-main-max);
   margin: 0 auto;
 }
@@ -130,12 +264,12 @@
 
 .gr-aside {
   /* visible on mobile — flows below body content as collapsible cards */
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 /* ── Section scroll targets ── */
 .gr-section {
-  scroll-margin-top: 64px;
+  scroll-margin-top: calc(var(--gr-nav-h) + 14px);
   margin-bottom: var(--gr-section-gap);
 }
 
@@ -144,57 +278,71 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-h2);
   font-weight: 700;
-  color: #1a3a4a;
-  margin: 0 0 clamp(18px, 2.4vw, 28px);
+  color: var(--gr-ink);
+  margin: 0 0 clamp(15px, 2vw, 22px);
   letter-spacing: normal;
-  line-height: 1.08;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.gr-h2::after {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 3px;
+  margin-top: 9px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gr-sea), var(--gr-sea-light));
 }
 
 .gr-h3 {
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-h3);
   font-weight: 700;
-  color: #2c5f7a;
+  color: var(--gr-sea);
   margin: var(--gr-stack-gap-lg) 0 var(--gr-tight-gap);
-  letter-spacing: 0.3px;
-  line-height: 1.12;
+  letter-spacing: 0.2px;
+  line-height: 1.15;
 }
 
 .gr-p {
   font-size: var(--gr-text-body);
-  color: #4a6a7a;
-  line-height: 1.72;
+  color: var(--gr-body);
+  line-height: 1.62;
   margin: 0 0 var(--gr-stack-gap);
 }
+
+.gr-p:last-child { margin-bottom: 0; }
 
 .gr-tagline {
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-tagline);
   font-style: italic;
-  color: #7a6a5a;
-  margin: 16px 0 18px;
-  line-height: 1.4;
+  color: var(--gr-sand);
+  margin: 12px 0 14px;
+  line-height: 1.36;
 }
 
 /* ── White card containers ── */
 .gr-card {
-  background: #fff;
-  border-radius: 16px;
+  background: var(--gr-paper);
+  border: 1px solid var(--gr-line);
+  border-radius: var(--gr-radius);
   padding: var(--gr-card-py) var(--gr-card-px);
-  margin-top: 16px;
-  box-shadow: 0 1px 4px rgba(44,95,122,0.07);
+  margin-top: 12px;
+  box-shadow: var(--gr-shadow);
 }
 
 .gr-card--flush {
-  padding: 8px var(--gr-card-px);
+  padding: 2px var(--gr-card-px);
 }
 
 /* ── Images ── */
 .gr-img {
   width: 100%;
-  border-radius: 14px;
+  border-radius: var(--gr-radius);
   overflow: hidden;
-  background: #e0ddd6;
+  background: #e2ded6;
 }
 
 .gr-img img {
@@ -222,15 +370,15 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(18,45,64,0.08) 0%, rgba(18,45,64,0.18) 100%);
+  background: linear-gradient(180deg, rgba(12, 58, 86, 0.06) 0%, rgba(12, 58, 86, 0.20) 100%);
   pointer-events: none;
 }
 
 .gr-card--city-intro {
-  margin-top: -28px;
+  margin-top: -22px;
   position: relative;
   z-index: 2;
-  padding-top: clamp(12px, 1.8vw, 18px);
+  padding-top: clamp(12px, 1.7vw, 17px);
 }
 
 .gr-card--city-intro .gr-h3:first-child {
@@ -241,31 +389,33 @@
 .gr-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 13px;
 }
 
 .gr-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(61,106,130,0.08);
-  color: #2c5f7a;
-  padding: 6px 12px;
-  border-radius: 20px;
+  gap: 5px;
+  background: var(--gr-foam);
+  color: var(--gr-sea);
+  padding: 5px 11px;
+  border-radius: 999px;
   font-size: var(--gr-text-small);
   font-weight: 600;
+  line-height: 1.35;
   white-space: nowrap;
 }
 
 a.gr-chip {
-  color: #2c5f7a;
+  color: var(--gr-sea);
   text-decoration: none;
+  transition: background 0.18s ease;
 }
 
 a.gr-chip:hover,
 a.gr-chip:focus-visible {
-  background: rgba(61,106,130,0.14);
+  background: var(--gr-foam-strong);
   text-decoration: none;
 }
 
@@ -274,54 +424,55 @@ a.gr-chip:focus-visible {
 }
 
 .gr-intro-copy {
-  margin-top: 4px;
-  margin-bottom: 16px;
+  margin-top: 2px;
+  margin-bottom: 13px;
 }
 
 /* ── Venue cards ── */
 .gr-venue-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .gr-venue {
   display: block;
   text-decoration: none;
   color: inherit;
-  background: #fff;
-  border-radius: 14px;
-  padding: clamp(15px, 1.8vw, 19px) clamp(15px, 2vw, 18px);
-  box-shadow: 0 1px 4px rgba(44,95,122,0.08);
-  border: 1px solid rgba(44,95,122,0.06);
-  transition: transform 0.18s, box-shadow 0.18s;
+  background: var(--gr-paper);
+  border-radius: var(--gr-radius);
+  padding: clamp(12px, 1.6vw, 16px) clamp(13px, 1.8vw, 16px);
+  box-shadow: var(--gr-shadow);
+  border: 1px solid var(--gr-line);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .gr-venue:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(44,95,122,0.12);
+  border-color: rgba(31, 106, 140, 0.22);
+  box-shadow: var(--gr-shadow-lift);
   text-decoration: none;
 }
 
 .gr-venue-inner {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .gr-venue-icon {
-  font-size: 21px;
+  font-size: 19px;
   line-height: 1;
-  margin-top: 2px;
+  margin-top: 1px;
   flex-shrink: 0;
 }
 
 .gr-venue-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(18px, 0.55vw + 16.5px, 20px);
+  font-size: clamp(17.5px, 0.5vw + 16px, 19.5px);
   font-weight: 700;
-  color: #1a3a4a;
-  line-height: 1.3;
+  color: var(--gr-ink);
+  line-height: 1.25;
 }
 
 .gr-venue-name:lang(el) {
@@ -330,22 +481,22 @@ a.gr-chip:focus-visible {
 
 .gr-venue-ext {
   font-size: 11px;
-  margin-left: 5px;
-  opacity: 0.38;
+  margin-left: 4px;
+  opacity: 0.4;
 }
 
 .gr-venue-desc {
   font-size: var(--gr-text-small);
-  color: #5a7a8a;
-  line-height: 1.62;
-  margin-top: 4px;
+  color: var(--gr-muted);
+  line-height: 1.55;
+  margin-top: 3px;
 }
 
 /* ── Sight items ── */
 .gr-sight {
   display: block;
-  padding: clamp(13px, 1.5vw, 17px) 0;
-  border-bottom: 1px solid rgba(44,95,122,0.08);
+  padding: clamp(11px, 1.4vw, 14px) 0;
+  border-bottom: 1px solid var(--gr-line);
 }
 
 .gr-sight:last-child { border-bottom: none; }
@@ -361,43 +512,44 @@ a.gr-sight:hover {
 
 a.gr-sight:hover .gr-sight-name,
 a.gr-sight:focus-visible .gr-sight-name {
-  color: #2c5f7a;
+  color: var(--gr-sea);
 }
 
 .gr-sight-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(18px, 0.55vw + 16.5px, 20px);
+  font-size: clamp(17.5px, 0.5vw + 16px, 19.5px);
   font-weight: 700;
-  color: #1a3a4a;
-  line-height: 1.3;
+  color: var(--gr-ink);
+  line-height: 1.25;
+  transition: color 0.18s ease;
 }
 
 .gr-sight-desc {
   font-size: var(--gr-text-small);
-  color: #5a7a8a;
-  line-height: 1.64;
-  margin-top: 4px;
+  color: var(--gr-muted);
+  line-height: 1.56;
+  margin-top: 3px;
 }
 
 .gr-sight--grouped .gr-sight-desc {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .gr-sight-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .gr-sight-link {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 11px;
+  gap: 4px;
+  padding: 5px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(44,95,122,0.12);
-  background: rgba(61,106,130,0.06);
-  color: #2c5f7a;
+  border: 1px solid var(--gr-line-strong);
+  background: var(--gr-foam);
+  color: var(--gr-sea);
   text-decoration: none;
   font-size: var(--gr-text-small);
   font-weight: 600;
@@ -407,8 +559,8 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 .gr-sight-link:hover,
 .gr-sight-link:focus-visible {
-  background: rgba(61,106,130,0.12);
-  border-color: rgba(44,95,122,0.2);
+  background: var(--gr-foam-strong);
+  border-color: rgba(31, 106, 140, 0.26);
   text-decoration: none;
   transform: translateY(-1px);
 }
@@ -423,15 +575,15 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-sight-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 9px;
 }
 
 .gr-sight-action {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
+  gap: 5px;
+  padding: 6px 11px;
   border-radius: 999px;
   text-decoration: none;
   font-size: var(--gr-text-small);
@@ -442,20 +594,20 @@ a.gr-sight:focus-visible .gr-sight-name {
 }
 
 .gr-sight-action-icon {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1;
 }
 
 .gr-sight-action--map {
-  background: rgba(61,106,130,0.06);
-  border-color: rgba(44,95,122,0.16);
-  color: #2c5f7a;
+  background: var(--gr-foam);
+  border-color: var(--gr-line-strong);
+  color: var(--gr-sea);
 }
 
 .gr-sight-action--map:hover,
 .gr-sight-action--map:focus-visible {
-  background: rgba(61,106,130,0.14);
-  border-color: rgba(44,95,122,0.28);
+  background: var(--gr-foam-strong);
+  border-color: rgba(31, 106, 140, 0.3);
   text-decoration: none;
   transform: translateY(-1px);
 }
@@ -464,7 +616,7 @@ a.gr-sight:focus-visible .gr-sight-name {
   background: linear-gradient(135deg, #c98a32 0%, #a87026 100%);
   border-color: #8a5a1a;
   color: #fff;
-  box-shadow: 0 1px 2px rgba(138,90,26,0.22);
+  box-shadow: 0 1px 2px rgba(138, 90, 26, 0.22);
 }
 
 .gr-sight-action--ticket:hover,
@@ -472,39 +624,38 @@ a.gr-sight:focus-visible .gr-sight-name {
   background: linear-gradient(135deg, #b07d2e 0%, #8a5a1a 100%);
   text-decoration: none;
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(138,90,26,0.32);
+  box-shadow: 0 3px 8px rgba(138, 90, 26, 0.3);
 }
 
 /* ── Top-of-guide official tickets banner ── */
 .gr-tickets-banner {
-  margin: 0 auto clamp(22px, 3vw, 32px);
+  margin: 0 auto clamp(20px, 2.6vw, 28px);
   max-width: var(--gr-main-max);
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: clamp(13px, 1.6vw, 16px) clamp(14px, 2vw, 18px);
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(255,243,221,0.95), rgba(252,229,193,0.92));
-  border: 1px solid rgba(176,125,46,0.24);
-  border-left: 4px solid #b07d2e;
-  box-shadow: 0 1px 4px rgba(176,125,46,0.10);
+  gap: 10px;
+  padding: clamp(11px, 1.4vw, 14px) clamp(12px, 1.8vw, 16px);
+  border-radius: var(--gr-radius);
+  background: linear-gradient(135deg, rgba(255, 244, 224, 0.96), rgba(251, 231, 199, 0.92));
+  border: 1px solid rgba(176, 125, 46, 0.24);
+  border-left: 3px solid var(--gr-gold);
+  box-shadow: 0 1px 2px rgba(176, 125, 46, 0.09);
 }
 
 .gr-tickets-banner-icon {
-  font-size: 22px;
-  line-height: 1;
+  font-size: 19px;
+  line-height: 1.2;
   flex-shrink: 0;
-  margin-top: 1px;
 }
 
 .gr-tickets-banner-body {
   font-size: var(--gr-text-small);
   color: #5a4a2a;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .gr-tickets-banner-body strong {
-  color: #6a4416;
+  color: var(--gr-gold-ink);
 }
 
 .gr-tickets-banner-body a {
@@ -520,9 +671,9 @@ a.gr-sight:focus-visible .gr-sight-name {
 }
 
 .gr-inline-link {
-  color: #2c5f7a;
+  color: var(--gr-sea);
   text-decoration: underline;
-  text-decoration-color: rgba(44,95,122,0.28);
+  text-decoration-color: rgba(31, 106, 140, 0.3);
   text-underline-offset: 2px;
 }
 
@@ -533,173 +684,194 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 /* ── Island sections ── */
 .gr-island {
-  scroll-margin-top: 64px;
+  scroll-margin-top: calc(var(--gr-nav-h) + 14px);
   margin-bottom: var(--gr-section-gap);
 }
 
 .gr-island-img-wrap { position: relative; }
 
 .gr-island-card {
-  margin-top: -32px;
+  margin-top: -26px;
   position: relative;
   z-index: 2;
   padding: 0 4px;
 }
 
 .gr-island-card-inner {
-  background: #fff;
-  border-radius: 18px;
-  padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2vw, 30px);
-  box-shadow: 0 4px 24px rgba(44,95,122,0.10);
+  background: var(--gr-paper);
+  border: 1px solid var(--gr-line);
+  border-radius: var(--gr-radius-lg);
+  padding: clamp(18px, 2.2vw, 28px) clamp(15px, 1.9vw, 26px);
+  box-shadow: var(--gr-shadow-lg);
 }
 
 .gr-island-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(32px, 2vw + 24px, 40px);
+  font-size: clamp(29px, 1.8vw + 22px, 37px);
   font-weight: 700;
-  color: #1a3a4a;
+  color: var(--gr-ink);
   margin: 0;
-  line-height: 1.12;
+  line-height: 1.1;
   letter-spacing: normal;
 }
 
 .gr-island-tagline {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(18px, 0.5vw + 16px, 20px);
+  font-size: clamp(17px, 0.5vw + 15px, 19.5px);
   font-style: italic;
-  color: #7a6a5a;
-  margin: 6px 0 0;
-  line-height: 1.4;
+  color: var(--gr-sand);
+  margin: 4px 0 0;
+  line-height: 1.36;
 }
 
 .gr-island-body {
-  margin-top: clamp(20px, 2.6vw, 28px);
+  margin-top: clamp(16px, 2.2vw, 24px);
 }
 
 /* ── Islands divider ── */
 .gr-islands-intro {
   text-align: center;
-  margin: clamp(54px, 7vw, 96px) 0 clamp(30px, 4vw, 56px);
+  margin: clamp(46px, 6vw, 82px) 0 clamp(26px, 3.4vw, 46px);
   padding: 0 8px;
 }
 
 .gr-islands-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-kicker);
-  letter-spacing: clamp(3px, 0.35vw + 2px, 4.5px);
+  letter-spacing: clamp(2.5px, 0.3vw + 1.8px, 4px);
   text-transform: uppercase;
-  color: #a09080;
+  color: var(--gr-sand);
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
+}
+
+.gr-islands-eyebrow::before,
+.gr-islands-eyebrow::after {
+  content: '';
+  width: clamp(22px, 6vw, 46px);
+  height: 1px;
+  background: var(--gr-line-strong);
 }
 
 .gr-islands-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(38px, 2.8vw + 24px, 50px);
+  font-size: clamp(33px, 2.4vw + 22px, 46px);
   font-weight: 700;
-  color: #1a3a4a;
+  color: var(--gr-ink);
   margin: 0;
-  line-height: 1.1;
+  line-height: 1.08;
 }
 
 .gr-islands-sub {
   font-size: var(--gr-text-body);
-  color: #7a6a5a;
-  margin-top: 8px;
+  color: var(--gr-sand);
+  margin-top: 6px;
   line-height: 1.45;
   margin-bottom: 0;
 }
 
 /* ── Note box ── */
 .gr-note {
-  margin-top: 18px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: rgba(61,106,130,0.06);
-  border-left: 3px solid #4a9ab5;
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: var(--gr-radius-sm);
+  background: var(--gr-foam);
+  border-left: 3px solid var(--gr-sea-light);
 }
 
 .gr-note p {
   font-size: var(--gr-text-small);
-  color: #5a7a8a;
+  color: var(--gr-body);
   margin: 0;
-  line-height: 1.64;
+  line-height: 1.56;
 }
 
 /* ── Other islands ── */
 .gr-other-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .gr-other-card {
-  background: #fff;
-  border-radius: 14px;
+  background: var(--gr-paper);
+  border: 1px solid var(--gr-line);
+  border-radius: var(--gr-radius);
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(44,95,122,0.06);
+  box-shadow: var(--gr-shadow);
 }
 
-.gr-other-card-body { padding: clamp(16px, 1.8vw, 24px) clamp(16px, 1.8vw, 22px); }
+.gr-other-card .gr-img {
+  border-radius: 0;
+}
+
+.gr-other-card-body { padding: clamp(13px, 1.6vw, 20px) clamp(13px, 1.6vw, 18px); }
 
 .gr-other-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(21px, 0.7vw + 18px, 26px);
+  font-size: clamp(20px, 0.6vw + 17.5px, 24px);
   font-weight: 700;
-  color: #1a3a4a;
-  margin: 0 0 6px;
+  color: var(--gr-ink);
+  margin: 0 0 4px;
   letter-spacing: normal;
+  line-height: 1.2;
 }
 
 .gr-other-desc {
   font-size: var(--gr-text-small);
-  color: #5a7a8a;
-  line-height: 1.64;
+  color: var(--gr-muted);
+  line-height: 1.56;
   margin: 0;
 }
 
-/* ── Tip cards (desktop aside) ── */
+/* ── Tip cards (desktop aside / mobile accordions) ── */
 .gr-tip {
-  background: #fff;
-  border-radius: 14px;
-  padding: clamp(16px, 2vw, 22px) clamp(16px, 2vw, 22px);
-  margin-bottom: 14px;
-  box-shadow: 0 1px 4px rgba(44,95,122,0.07);
-  border-top: 3px solid #2c5f7a;
+  background: var(--gr-paper);
+  border: 1px solid var(--gr-line);
+  border-top: 3px solid var(--gr-sea);
+  border-radius: var(--gr-radius);
+  padding: 11px 14px 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--gr-shadow);
   cursor: pointer;
   touch-action: manipulation; /* eliminates 300ms tap delay */
 }
 
 .gr-tip:last-child { margin-bottom: 0; }
 
-.gr-tip--facts     { border-color: #2c5f7a; }
-.gr-tip--tips      { border-color: #b07d2e; }
-.gr-tip--itinerary { border-color: #6a3a8a; }
-.gr-tip--eats      { border-color: #7a2c3a; }
-.gr-tip--essentials{ border-color: #2a6e5a; }
-.gr-tip--ferry     { border-color: #1a3a6a; }
-.gr-tip--logistics { border-color: #5a6a3a; }
+.gr-tip--facts     { border-top-color: var(--gr-sea); }
+.gr-tip--tips      { border-top-color: var(--gr-gold); }
+.gr-tip--itinerary { border-top-color: #6d3f7a; }
+.gr-tip--eats      { border-top-color: #b0512f; }
+.gr-tip--essentials{ border-top-color: #2a7a63; }
+.gr-tip--ferry     { border-top-color: #17497e; }
+.gr-tip--logistics { border-top-color: #6b7a3a; }
 
 .gr-tip-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(17px, 0.45vw + 15.5px, 19px);
+  font-size: clamp(16.5px, 0.4vw + 15.2px, 18.5px);
   font-weight: 700;
-  color: #1a3a4a;
+  color: var(--gr-ink);
   margin-bottom: 0;
-  line-height: 1.3;
+  line-height: 1.25;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   user-select: none;
 }
 
 .gr-tip-chevron {
-  font-size: 16px;
-  color: #2c5f7a;
+  font-size: 15px;
+  color: var(--gr-sea);
   font-weight: 700;
   transition: transform 0.22s;
   flex-shrink: 0;
-  margin-left: 8px;
+  line-height: 1;
 }
 
 .gr-tip--open .gr-tip-chevron {
@@ -720,7 +892,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-tip--open .gr-tip-body {
   grid-template-rows: 1fr;
   opacity: 1;
-  padding-top: 10px;
+  padding-top: 9px;
 }
 
 .gr-tip-body-inner {
@@ -736,10 +908,11 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-fact-list > div {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   font-size: var(--gr-text-small);
-  padding: 7px 0;
-  border-bottom: 1px solid rgba(44,95,122,0.07);
+  line-height: 1.45;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gr-line);
 }
 
 .gr-fact-list > div:last-child {
@@ -750,12 +923,13 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-fact-list > div:first-child { padding-top: 0; }
 
 .gr-fact-list dt {
-  color: #6a8a9a;
+  color: var(--gr-muted);
   flex-shrink: 0;
+  max-width: 46%;
 }
 
 .gr-fact-list dd {
-  color: #1a3a4a;
+  color: var(--gr-ink);
   font-weight: 600;
   text-align: right;
   margin: 0;
@@ -765,16 +939,16 @@ a.gr-sight:focus-visible .gr-sight-name {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
   margin: 0;
   padding: 0;
 }
 
 .gr-tip-list li {
   font-size: var(--gr-text-small);
-  color: #4a6a7a;
-  line-height: 1.55;
-  padding-left: 15px;
+  color: var(--gr-body);
+  line-height: 1.5;
+  padding-left: 14px;
   position: relative;
 }
 
@@ -782,14 +956,14 @@ a.gr-sight:focus-visible .gr-sight-name {
   content: '›';
   position: absolute;
   left: 0;
-  color: #2c5f7a;
+  color: var(--gr-sea);
   font-weight: 700;
   font-size: 14px;
   line-height: 1.3;
 }
 
 .gr-tip-list a {
-  color: #2c5f7a;
+  color: var(--gr-sea);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -797,38 +971,49 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-day-plan {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 13px;
 }
 
 .gr-day-label {
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-kicker);
   font-weight: 700;
-  color: #6a3a8a;
+  color: #6d3f7a;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.4px;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 /* ── Footer ── */
 .gr-footer {
   text-align: center;
-  padding: clamp(34px, 5vw, 56px) 16px clamp(18px, 3vw, 28px);
-  border-top: 1px solid rgba(44,95,122,0.1);
+  padding: clamp(30px, 4.4vw, 48px) 16px clamp(16px, 2.6vw, 24px);
+  border-top: 1px solid var(--gr-line);
+}
+
+.gr-footer::before {
+  content: '❋';
+  display: block;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--gr-sand);
+  opacity: 0.5;
+  margin-bottom: 12px;
 }
 
 .gr-footer-greek {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(26px, 0.8vw + 22px, 30px);
+  font-size: clamp(24px, 0.8vw + 21px, 28px);
   font-weight: 700;
-  color: #2c5f7a;
+  color: var(--gr-sea);
+  line-height: 1.2;
 }
 
 .gr-footer-sub {
   font-size: var(--gr-text-small);
-  color: #a09080;
-  margin-top: 6px;
+  color: var(--gr-sand);
+  margin-top: 5px;
   margin-bottom: 0;
 }
 
@@ -838,56 +1023,53 @@ a.gr-sight:focus-visible .gr-sight-name {
 @media (min-width: 900px) {
 
   .greece-wrap {
-    --gr-page-x: clamp(40px, 4vw, 56px);
-    --gr-main-max: 1140px;
-    --gr-section-gap: clamp(72px, 7vw, 96px);
-    --gr-card-py: clamp(22px, 2vw, 28px);
-    --gr-card-px: clamp(22px, 2.2vw, 30px);
-    --gr-text-body: clamp(16.5px, 0.28vw + 15.5px, 18.5px);
-    --gr-text-small: clamp(14.25px, 0.12vw + 13.8px, 15.25px);
-    --gr-text-h2: clamp(36px, 1vw + 30px, 46px);
-    --gr-text-h3: clamp(21px, 0.45vw + 18px, 25px);
+    --gr-page-x: clamp(32px, 3.4vw, 52px);
+    --gr-main-max: 1120px;
+    --gr-section-gap: clamp(58px, 5.6vw, 82px);
+    --gr-card-py: clamp(18px, 1.7vw, 24px);
+    --gr-card-px: clamp(18px, 1.9vw, 26px);
+    --gr-sheet-radius: 24px;
+    --gr-sheet-lip: 22px;
+    --gr-nav-h: 52px;
+    --gr-text-body: clamp(16px, 0.24vw + 15.1px, 17.6px);
+    --gr-text-small: clamp(14px, 0.1vw + 13.6px, 14.9px);
+    --gr-text-h2: clamp(31px, 0.9vw + 25px, 39px);
+    --gr-text-h3: clamp(19.5px, 0.4vw + 17px, 23px);
+    --gr-text-display: clamp(50px, 3.2vw + 24px, 68px);
   }
 
   /* Wider main container */
   .gr-main {
-    padding: 44px var(--gr-page-x) 96px;
+    padding: clamp(28px, 2.6vw, 40px) var(--gr-page-x) 88px;
   }
 
-  /* Internal nav: switch to single flex row with inline icon+label */
+  /* Internal nav: roomier chips */
   .gr-nav {
-    display: flex;
-    grid-template-columns: none;
-    gap: 6px;
-    padding: 12px var(--gr-page-x);
-    border-radius: 32px 32px 0 0;
+    padding: 9px 0 10px;
+  }
+
+  /* The rail keeps scrolling here too: eight chips do not fit a narrow
+     desktop content column, and clipping them would strand the last
+     sections.  Both edge fades resolve to 0 once everything fits. */
+  .gr-nav-rail {
+    gap: 5px;
   }
 
   .gr-nav-btn {
-    flex-direction: row;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 22px;
-    flex-shrink: 0;
+    padding: 8px 14px;
   }
 
-  .gr-nav-btn.active {
-    background: #2c5f7a;
-    color: #fff;
-  }
-
-  .gr-nav-icon { font-size: 15px; }
+  .gr-nav-icon { font-size: 14px; }
 
   .gr-nav-label {
     font-size: 13px;
-    text-align: left;
   }
 
   /* 2-column grid */
   .gr-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 286px;
-    gap: clamp(40px, 4vw, 56px);
+    grid-template-columns: minmax(0, 1fr) 288px;
+    gap: clamp(32px, 3.4vw, 48px);
     align-items: start;
   }
 
@@ -895,7 +1077,7 @@ a.gr-sight:focus-visible .gr-sight-name {
   .gr-aside {
     display: block;
     position: sticky;
-    top: 84px;
+    top: calc(var(--gr-nav-h) + 22px);
     margin-top: 0;
   }
 
@@ -903,11 +1085,13 @@ a.gr-sight:focus-visible .gr-sight-name {
   .gr-tip {
     cursor: default;
     touch-action: auto;
+    padding: 14px 17px 16px;
+    margin-bottom: 12px;
   }
 
   .gr-tip-title {
     user-select: auto;
-    margin-bottom: 12px;
+    margin-bottom: 11px;
   }
 
   .gr-tip-chevron { display: none; }
@@ -924,63 +1108,64 @@ a.gr-sight:focus-visible .gr-sight-name {
     overflow: visible;
   }
 
-  /* Section headings — add decorative rule */
+  /* Section headings — decorative rule runs to the column edge */
   .gr-h2 {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     white-space: nowrap;
   }
 
   .gr-h2::after {
-    content: '';
-    display: block;
+    width: auto;
     height: 1px;
-    background: rgba(44,95,122,0.15);
+    margin-top: 0;
     flex: 1;
     min-width: 40px;
+    border-radius: 0;
+    background: linear-gradient(90deg, rgba(31, 106, 140, 0.32), rgba(31, 106, 140, 0.06));
   }
 
   /* Bigger sub-headings */
-  .gr-h3 { margin-top: 30px; }
+  .gr-h3 { margin-top: 26px; }
 
   /* Island card gets more breathing room */
   .gr-island-card {
-    margin-top: -44px;
+    margin-top: -38px;
     padding: 0 10px;
   }
 
   .gr-card--city-intro {
-    margin-top: -34px;
+    margin-top: -30px;
   }
 
   /* Island body is now the grid */
   .gr-island-body {
-    margin-top: 28px;
+    margin-top: 24px;
   }
 
   /* Other islands: 3-column on desktop */
   .gr-other-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
   }
 
   /* Islands intro */
   .gr-islands-intro {
-    margin: 96px 0 56px;
+    margin: 82px 0 48px;
   }
 
   /* Venue list: 2-col grid on desktop inside main body */
   .gr-body .gr-venue-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px 14px;
+    gap: 10px 12px;
   }
 
   /* Footer */
   .gr-footer {
-    padding-top: 56px;
+    padding-top: 52px;
   }
 }
 
@@ -988,12 +1173,41 @@ a.gr-sight:focus-visible .gr-sight-name {
    MOBILE ADJUSTMENTS
    ===================================================== */
 @media (max-width: 767px) {
+  /* The site hero and tab bar scroll away on this route (see
+     .app--greece in main.css), so the guide nav owns the top edge. */
   .gr-nav {
-    top: var(--bar-h);
+    top: var(--safe-top, 0px);
   }
 
   .gr-section,
   .gr-island {
-    scroll-margin-top: calc(var(--bar-h) + 54px);
+    scroll-margin-top: calc(var(--safe-top, 0px) + var(--gr-nav-h) + 10px);
+  }
+
+  /* Collapsed accordions stay compact so they never crowd the content
+     they sit under. */
+  .gr-tip {
+    padding: 10px 13px 11px;
+  }
+
+  .gr-tip--open {
+    padding-bottom: 13px;
+  }
+
+  .gr-island-card {
+    padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gr-hero::before { animation: none; }
+
+  .gr-img img,
+  .gr-venue,
+  .gr-sight-link,
+  .gr-sight-action,
+  .gr-tip-chevron,
+  .gr-tip-body {
+    transition: none;
   }
 }
