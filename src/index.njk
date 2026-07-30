@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Nick Stathas</title>
+  {#- The shell boots on the first route; js/main.js retitles and rewrites the
+      social tags below as the visitor navigates. -#}
+  {% set home = siteContent.routes[0] %}
+  <title>{{ home.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#2b4557">
+  <meta name="theme-color" content="{{ home.theme }}">
   <meta name="author" content="Nick Stathas">
-  <link rel="canonical" href="https://nistath.com/">
+  <link rel="canonical" href="{{ siteOrigin }}/">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -17,19 +20,19 @@
   <!-- Open Graph / Facebook / Messenger / iMessage -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Nick Stathas">
-  <meta property="og:title" content="Nick Stathas">
-  <meta property="og:url" content="https://nistath.com/">
-  <meta property="og:image" content="https://nistath.com/img/og/og-default.png">
+  <meta property="og:title" content="{{ home.social.title }}">
+  <meta property="og:url" content="{{ siteOrigin }}/">
+  <meta property="og:image" content="{{ siteOrigin }}{{ home.social.image }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Nick Stathas">
+  <meta property="og:image:alt" content="{{ home.social.title }}">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Nick Stathas">
-  <meta name="twitter:image" content="https://nistath.com/img/og/og-default.png">
-  <meta name="twitter:image:alt" content="Nick Stathas">
+  <meta name="twitter:title" content="{{ home.social.title }}">
+  <meta name="twitter:image" content="{{ siteOrigin }}{{ home.social.image }}">
+  <meta name="twitter:image:alt" content="{{ home.social.title }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=EB+Garamond:wght@700&display=swap" rel="stylesheet">
@@ -63,52 +66,12 @@
         </div>
 
         <nav class="sidebar-nav" aria-label="Sections">
-          <a class="nav-btn active" href="/about" data-section="about" aria-current="page">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <rect x="8" y="2" width="8" height="9"/>
-            </svg>
-            About
+          {% for route in siteContent.routes %}
+          <a class="nav-btn{% if loop.first %} active{% endif %}" href="{{ route.path }}" data-section="{{ route.id }}"{% if loop.first %} aria-current="page"{% endif %}>
+            {% include "nav/" + route.id + ".svg" %}
+            {{ route.label }}
           </a>
-          <a class="nav-btn" href="/github" data-section="github">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-            GitHub
-          </a>
-          <a class="nav-btn" href="/resume" data-section="resume">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <line x1="10" y1="9" x2="8" y2="9"/>
-            </svg>
-            Resume
-          </a>
-          <a class="nav-btn" href="/portfolio" data-section="portfolio">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-            </svg>
-            Portfolio
-          </a>
-          <a class="nav-btn" href="/greece" data-section="greece">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
-              <circle cx="12" cy="12" r="4"/>
-              <line x1="12" y1="2" x2="12" y2="5"/>
-              <line x1="12" y1="19" x2="12" y2="22"/>
-              <line x1="2" y1="12" x2="5" y2="12"/>
-              <line x1="19" y1="12" x2="22" y2="12"/>
-              <line x1="4.9" y1="4.9" x2="7" y2="7"/>
-              <line x1="17" y1="17" x2="19.1" y2="19.1"/>
-              <line x1="4.9" y1="19.1" x2="7" y2="17"/>
-              <line x1="17" y1="7" x2="19.1" y2="4.9"/>
-            </svg>
-            Greece
-          </a>
+          {% endfor %}
         </nav>
 
         <div class="social-links">
@@ -187,15 +150,13 @@
           </div>
         </div>
         <nav class="topbar-nav" aria-label="Sections">
-          <a class="tab active" href="/about" data-section="about">About</a>
-          <a class="tab" href="/github" data-section="github">GitHub</a>
-          <a class="tab" href="/resume" data-section="resume">Resume</a>
-          <a class="tab" href="/portfolio" data-section="portfolio">Portfolio</a>
-          <a class="tab" href="/greece" data-section="greece">Greece</a>
+          {% for route in siteContent.routes %}
+          <a class="tab{% if loop.first %} active{% endif %}" href="{{ route.path }}" data-section="{{ route.id }}">{{ route.label }}</a>
+          {% endfor %}
         </nav>
       </div>
 
-      <section id="section-about" class="section active">
+      <section id="section-about" class="section section--centered active">
         <div class="section-inner">
           <h1>{{ siteContent.about.heading }}</h1>
           {% for paragraph in siteContent.about.paragraphs %}
@@ -215,6 +176,8 @@
         </div>
       </section>
 
+      {# Desktop embeds the PDF; phones get the card below, because mobile
+         browsers render an embedded PDF as one fixed, unzoomable page. #}
       <section id="section-resume" class="section">
         <div class="resume-wrap">
           <iframe
@@ -224,11 +187,34 @@
             title="{{ siteContent.resume.title }}"
           ></iframe>
         </div>
+        <div class="resume-handoff">
+          <div class="resume-handoff-card">
+            <svg class="resume-handoff-icon" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="butt" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+            <h2>{{ siteContent.resume.mobile.heading }}</h2>
+            <p>{{ siteContent.resume.mobile.description }}</p>
+            <a class="resume-handoff-action" href="{{ siteContent.resume.pdf_url }}" target="_blank" rel="noopener noreferrer">
+              {{ siteContent.resume.mobile.action }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
+        </div>
       </section>
 
+      {% if siteContent.portfolio %}
       <section id="section-portfolio" class="section">
         {% include "portfolio/section.njk" %}
       </section>
+      {% endif %}
 
       <section id="section-greece" class="section">
         {% include "greece/guide.njk" %}
@@ -237,7 +223,7 @@
     </main>
   </div>
 
-  <script>window.SITE_CONTENT = { pinnedRepos: {{ siteContent.github.pinned_repositories | json | safe }} };</script>
+  <script>window.SITE_CONTENT = {{ { pinnedRepos: siteContent.github.pinned_repositories, routes: siteContent.routes } | json | safe }};</script>
   <script src="/js/main.js"></script>
 </body>
 </html>

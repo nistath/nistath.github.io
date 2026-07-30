@@ -22,12 +22,16 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
+const { loadContent } = require('./content/load-content.cjs');
+const { siteRoutes } = require('./content/routes.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE_ROOT = path.join(ROOT, '_site');
 const OUT_DIR = path.join(ROOT, 'img', 'og');
 
-const SPA_ROUTES = new Set(['/about', '/github', '/resume', '/portfolio', '/greece']);
+/* Serve clean paths the way GitHub Pages plus the shell do, for the routes
+   this build actually generated. */
+const SPA_ROUTES = new Set(siteRoutes(loadContent()).map((route) => route.path));
 const MIME = {
   '.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8',
   '.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8',

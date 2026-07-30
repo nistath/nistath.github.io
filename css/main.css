@@ -17,18 +17,22 @@
   --clr-accent:  #2980b9;
   --clr-accent2: #3498db;
 
-  /* Shell theme */
-  --shell-hero-base:       #2c678c;
+  /* Shell theme.
+     --shell-hero-base is the tile's own average, so the flat color shown
+     before the texture loads matches the texture itself. */
+  --shell-hero-base:       #3d5f73;
   --shell-hero-accent:     #68a7cb;
   --shell-divider:         rgba(151, 191, 215, 0.34);
-  --shell-bg-image:        url('/img/background-blue.png');
+  --shell-bg-image:        url('/img/shell-texture.png');
   --shell-bg-repeat:       repeat;
   --shell-bg-size:         500px 500px;
   --shell-bg-position:     0 var(--bg-y, 0px);
   --mobile-page-bg:        #0d1117;
-  /* --shell-hero-base composited through --sidebar-overlay.
-     Used as background-color on mobile shell elements so iOS Safari's
-     dynamic chrome-color sampling picks up the darkened value. */
+  /* The shell texture composited through --sidebar-overlay. Used as
+     background-color on mobile shell elements so iOS Safari's dynamic
+     chrome-color sampling picks up the darkened value.  Exact: the texture is
+     generated to average this value under the overlay, so changing either
+     means re-running `npm run texture`. */
   --shell-hero-dark:       #2b4557;
 
   /* Surface */
@@ -42,8 +46,11 @@
   --clr-muted:   #8b949e;
   --clr-link:    #58a6ff;
 
-  /* Sidebar overlay */
-  --sidebar-overlay: rgba(8, 18, 32, 0.68);
+  /* Flat layer the shell paints over the texture.  Compositing scales the
+     texture's contrast by 1 - alpha, so this value is what decides how much
+     of the tessellation survives; scripts/render-shell-texture.cjs balances
+     the tile against it. */
+  --sidebar-overlay: rgba(8, 18, 32, 0.34);
 
   /* Motion */
   --t: 0.25s ease;
@@ -109,6 +116,18 @@ a:hover { text-decoration: underline; }
 @keyframes bgscroll-overlay {
   from { background-position: 0 0, 0 var(--bg-y, 0px); }
   to   { background-position: 0 0, 500px var(--bg-y, 0px); }
+}
+
+/* The texture drifts sideways behind the whole shell. Now that it is legible
+   the motion is legible too, so honor a reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  html, body,
+  .sidebar,
+  .topbar,
+  .sticky-header,
+  #mobile-spill {
+    animation: none;
+  }
 }
 
 .sidebar-inner {
@@ -385,6 +404,20 @@ a:hover { text-decoration: underline; }
   pointer-events: auto;
 }
 
+/* Short sections sit centered in the content area rather than hugging the
+   top edge.  `margin: auto` on the child does the centering instead of
+   `align-items`, so content taller than the viewport still scrolls from its
+   own start instead of being clipped at the top. */
+.section--centered.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.section--centered .section-inner {
+  margin: auto;
+  width: 100%;
+}
+
 /* ── About / text sections ── */
 .section-inner {
   max-width: 680px;
@@ -514,7 +547,11 @@ a.repo-card:hover {
   color: var(--clr-link);
 }
 
-/* ── Resume iframe ── */
+/* ── Resume ──
+   The embedded viewer is the desktop presentation.  .resume-handoff is the
+   phone presentation and swaps in at the mobile breakpoint; only one of the
+   two is ever displayed, and js/main.js only fetches the PDF when the embed
+   is the visible one. */
 .resume-wrap {
   width: 100%;
   height: 100%;
@@ -530,6 +567,55 @@ a.repo-card:hover {
   min-height: 0;
   border: none;
   display: block;
+}
+
+.resume-handoff { display: none; }
+
+.resume-handoff-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  padding: 1.6rem 1.5rem 1.5rem;
+}
+
+.resume-handoff-icon {
+  color: var(--clr-accent2);
+  margin-bottom: 0.1rem;
+}
+
+.resume-handoff-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #fff;
+}
+
+.resume-handoff-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--clr-muted);
+}
+
+.resume-handoff-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--clr-accent);
+  border: 1px solid var(--clr-accent2);
+  transition: background var(--t);
+}
+
+.resume-handoff-action:hover {
+  background: var(--clr-accent2);
+  text-decoration: none;
 }
 
 /* =====================================================
@@ -1110,7 +1196,7 @@ a.repo-card:hover {
     border-bottom: none;
     opacity: var(--compact-progress, 0);
     transform: translateY(calc((1 - var(--compact-progress, 0)) * -6px));
-    transition: opacity 0.16s linear, transform 0.16s ease-out;
+    will-change: opacity, transform;
     pointer-events: none;
   }
 
@@ -1132,6 +1218,10 @@ a.repo-card:hover {
     text-overflow: ellipsis;
   }
 
+  /* Opacity and offset are driven straight from --compact-progress, which
+     js/main.js rewrites once per frame while the hero scrolls. A transition
+     on top of that would animate toward a target that has already moved,
+     leaving the compact row trailing the hero by its own duration. */
   .topbar-compact-social {
     display: flex;
     align-items: center;
@@ -1139,7 +1229,7 @@ a.repo-card:hover {
     margin-left: auto;
     opacity: var(--compact-progress, 0);
     transform: translateY(calc((1 - var(--compact-progress, 0)) * -6px));
-    transition: opacity 0.16s linear, transform 0.16s ease-out;
+    will-change: opacity, transform;
     pointer-events: none;
   }
 
@@ -1158,34 +1248,6 @@ a.repo-card:hover {
   }
 
   .sticky-header.hero-hidden .topbar-compact-social {
-    pointer-events: auto;
-  }
-
-  .app.app--resume-compact .topbar {
-    display: none !important;
-  }
-
-  .app.app--resume-compact .sticky-header {
-    padding-top: var(--safe-top);
-    background-color: var(--shell-hero-dark);
-    background-image:
-      linear-gradient(var(--sidebar-overlay), var(--sidebar-overlay)),
-      var(--shell-bg-image);
-    background-repeat: no-repeat, var(--shell-bg-repeat);
-    background-size: auto, var(--shell-bg-size);
-    background-position: 0 0, var(--shell-bg-position);
-    animation: bgscroll-overlay 12s linear infinite;
-  }
-
-  .app.app--resume-compact .topbar-compact-wrap {
-    height: var(--bar-h);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-  }
-
-  .app.app--resume-compact .topbar-left,
-  .app.app--resume-compact .topbar-compact-social {
-    opacity: 1;
-    transform: none;
     pointer-events: auto;
   }
 
@@ -1223,12 +1285,32 @@ a.repo-card:hover {
     background: var(--clr-bg);
   }
 
-  .section.active {
+  .section.active,
+  .section--centered.active {
     display: block;
   }
 
+  /* Mobile sections start under the header and flow downward; vertical
+     centering would only push the text away from it. */
+  .section--centered .section-inner {
+    margin: 0 auto;
+  }
+
+  /* Pinning takes the header out of flow, so the section has to give back
+     the height it occupied — otherwise the document shrinks by exactly the
+     header's height, the browser clamps the scroll position to the new
+     maximum, the reduced position reads as a lower collapse progress, and
+     the header unpins again. That feedback loop is what left the hero
+     hanging half-collapsed after a nav tap.
+
+     The min-height has to grow along with the padding: every box here is
+     border-box, so padding inside a min-height box insets the content
+     without making the box any taller. */
   .app.app--mobile-header-fixed .section.active {
     padding-top: var(--mobile-fixed-header-h);
+    min-height: calc(
+      100dvh - var(--bar-h) - var(--safe-bottom) + var(--mobile-fixed-header-h)
+    );
   }
 
   /* ── Greece exception: the guide carries its own sticky section nav, so
@@ -1242,30 +1324,27 @@ a.repo-card:hover {
     z-index: 20;
   }
 
+  /* Undoes both halves of the reservation above: with the header still in
+     flow there is no gap to pad out and no height to give back. */
   .app.app--greece.app--mobile-header-fixed .section.active {
     padding-top: 0;
+    min-height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
   }
 
   #section-greece {
     background: #f5f0e8;
   }
 
-  /* Resume: explicit height so the iframe fills the viewport below the nav ── */
-  #section-resume {
-    min-height: 0;
-    height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom));
-    padding-bottom: 0;
+  /* Resume: hand the PDF to the browser's own viewer instead of embedding it.
+     Mobile browsers render an embedded PDF as a single page that neither
+     scrolls nor zooms and overflows the viewport horizontally. */
+  #section-resume .resume-wrap {
+    display: none;
   }
 
-  .app.app--mobile-header-fixed #section-resume {
-    padding-top: 0;
-    min-height: calc(100dvh - var(--safe-bottom));
-    height: auto;
-  }
-
-  .app.app--mobile-header-fixed #section-resume .resume-wrap {
-    margin-top: var(--mobile-fixed-header-h);
-    height: calc(100dvh - var(--mobile-fixed-header-h) - var(--safe-bottom));
+  .resume-handoff {
+    display: block;
+    padding: 2rem 1.25rem 3rem;
   }
 
   /* ── Content padding ── */

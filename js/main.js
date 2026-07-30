@@ -57,37 +57,31 @@ if (emailTopbarCompact) {
   emailTopbarCompact.setAttribute('href', 'mailto:' + email);
 }
 
-/* ── Navigation state ── */
+/* ── Navigation state ──
+   The build injects the route registry (scripts/content/routes.cjs), so a
+   route the site does not generate — an empty content/portfolio/, say — is
+   simply absent here, and every path, title, social card, and surface color
+   comes from the same record the redirect stubs were built from. */
+var MOBILE_BREAKPOINT = 767;
 var githubLoaded = false;
 var resumeLoaded = false;
-var DEFAULT_SECTION = 'about';
-var SECTION_PATHS = {
-  'about':     '/about',
-  'github':    '/github',
-  'resume':    '/resume',
-  'portfolio': '/portfolio',
-  'greece':    '/greece'
-};
+var activeSection = null;
+var ROUTES = (window.SITE_CONTENT && window.SITE_CONTENT.routes) || [];
+var DEFAULT_SECTION = ROUTES.length ? ROUTES[0].id : null;
 
-var PAGE_TITLES = {
-  'about':     'Nick Stathas',
-  'github':    'GitHub — Nick Stathas',
-  'resume':    'Resume — Nick Stathas',
-  'portfolio': 'Portfolio — Nick Stathas',
-  'greece':    'Guide to Greece — Nick Stathas'
-};
+function routeById(section) {
+  for (var i = 0; i < ROUTES.length; i++) {
+    if (ROUTES[i].id === section) return ROUTES[i];
+  }
+  return null;
+}
 
-/* Per-section social preview metadata. Mirrors the per-route stub HTML files
-   so that in-app navigation also keeps OG/Twitter tags accurate (useful when
-   users copy the URL after navigating). The Greece guide gets its own card;
-   every other section reuses the default profile card. */
-var PAGE_META = {
-  'about':     { title: 'Nick Stathas',                    image: '/img/og/og-default.png' },
-  'github':    { title: 'Nick Stathas — GitHub',           image: '/img/og/og-default.png' },
-  'resume':    { title: 'Nick Stathas — Resume',           image: '/img/og/og-default.png' },
-  'portfolio': { title: 'Nick Stathas — Portfolio',        image: '/img/og/og-default.png' },
-  'greece':    { title: "Nick's Guide to Athens & Beyond", image: '/img/og/og-greece.png' }
-};
+function routeByPath(pathname) {
+  for (var i = 0; i < ROUTES.length; i++) {
+    if (ROUTES[i].path === pathname) return ROUTES[i];
+  }
+  return null;
+}
 
 var SITE_ORIGIN = 'https://nistath.com';
 
@@ -96,46 +90,24 @@ function setMetaContent(selector, value) {
   if (el) el.setAttribute('content', value);
 }
 
-function updateSocialMeta(section) {
-  var meta = PAGE_META[section] || PAGE_META[DEFAULT_SECTION];
-  var route = SECTION_PATHS[section] || '/';
-  var absUrl = SITE_ORIGIN + route;
-  var absImg = SITE_ORIGIN + meta.image;
+function updateSocialMeta(route) {
+  var absUrl = SITE_ORIGIN + route.path;
+  var absImg = SITE_ORIGIN + route.social.image;
 
-  setMetaContent('meta[property="og:title"]', meta.title);
+  setMetaContent('meta[property="og:title"]', route.social.title);
   setMetaContent('meta[property="og:url"]', absUrl);
   setMetaContent('meta[property="og:image"]', absImg);
-  setMetaContent('meta[property="og:image:alt"]', meta.title);
-  setMetaContent('meta[name="twitter:title"]', meta.title);
+  setMetaContent('meta[property="og:image:alt"]', route.social.title);
+  setMetaContent('meta[name="twitter:title"]', route.social.title);
   setMetaContent('meta[name="twitter:image"]', absImg);
-  setMetaContent('meta[name="twitter:image:alt"]', meta.title);
+  setMetaContent('meta[name="twitter:image:alt"]', route.social.title);
 
   var canonical = document.querySelector('link[rel="canonical"]');
   if (canonical) canonical.setAttribute('href', absUrl);
 }
 
-var MOBILE_PAGE_BACKGROUNDS = {
-  'about': '#0d1117',
-  'github': '#0d1117',
-  'resume': '#0d1117',
-  'portfolio': '#0d1117',
-  'greece': '#f5f0e8'
-};
-
-/* ── Viewport meta: keep one consistent viewport across sections.
-   Mobile PDF viewers behave better when we do not override scaling on the
-   resume route, especially on iOS where users may need to zoom back out. ── */
-var viewportMeta = document.querySelector('meta[name="viewport"]');
-var viewportDefault = viewportMeta ? viewportMeta.getAttribute('content') : null;
-
-function setViewportForSection(section) {
-  if (!viewportMeta || !viewportDefault) return;
-  viewportMeta.setAttribute('content', viewportDefault);
-}
-
-function setMobilePageSurface(section) {
-  var surface = MOBILE_PAGE_BACKGROUNDS[section] || MOBILE_PAGE_BACKGROUNDS[DEFAULT_SECTION];
-  document.documentElement.style.setProperty('--mobile-page-bg', surface);
+function setMobilePageSurface(route) {
+  document.documentElement.style.setProperty('--mobile-page-bg', route.surface);
 }
 
 /* ── Sync <meta name="theme-color"> from the CSS variable so
@@ -155,19 +127,21 @@ function normalizeRoutePath(pathname) {
 }
 
 function getSectionFromPath(pathname) {
-  var normalized = normalizeRoutePath(pathname);
-  if (normalized === '/') return DEFAULT_SECTION;
-
-  var section = normalized.slice(1);
-  return PAGE_TITLES[section] ? section : DEFAULT_SECTION;
+  var route = routeByPath(normalizeRoutePath(pathname));
+  return route ? route.id : DEFAULT_SECTION;
 }
 
-function getRouteForSection(section) {
-  return SECTION_PATHS[section] || SECTION_PATHS[DEFAULT_SECTION];
-}
+/* ── Resume ──
+   Only the desktop layout embeds the PDF.  Mobile browsers render an
+   embedded PDF as a single fixed page that neither scrolls nor zooms, so the
+   mobile layout shows a card that opens the file in the browser's own
+   viewer instead.  Fetching the PDF is tied to the embed actually being
+   visible, so phones never download it, and a window resized across the
+   breakpoint still ends up with a loaded viewer. */
+var mobileLayout = window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)');
 
 function loadResume() {
-  if (resumeLoaded) return;
+  if (resumeLoaded || mobileLayout.matches) return;
 
   var frame = document.querySelector('#section-resume iframe[data-src]');
   if (!frame) return;
@@ -176,6 +150,10 @@ function loadResume() {
   frame.removeAttribute('data-src');
   resumeLoaded = true;
 }
+
+mobileLayout.addEventListener('change', function() {
+  if (activeSection === 'resume') loadResume();
+});
 
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
@@ -202,10 +180,12 @@ function restoreSectionRoute() {
 
 function navigate(section, options) {
   options = options || {};
-  section = PAGE_TITLES[section] ? section : DEFAULT_SECTION;
+  var route = routeById(section) || routeById(DEFAULT_SECTION);
+  if (!route) return;
+  section = route.id;
 
   if (options.updateHistory !== false) {
-    var nextRoute = getRouteForSection(section);
+    var nextRoute = route.path;
     var currentRoute = normalizeRoutePath(window.location.pathname);
 
     if (currentRoute !== nextRoute || window.location.search || window.location.hash) {
@@ -216,16 +196,16 @@ function navigate(section, options) {
       );
     }
   }
+  activeSection = section;
+
   var app = document.getElementById('app');
   var contentScrollEl = document.getElementById('content');
-  var heroEl = document.getElementById('topbar');
   /* Collapse the hero on mobile for all non-about sections.  This covers
      explicit nav clicks (collapseMobileHero: true), popstate (back/forward),
-     direct-route entry, and the resume route. */
+     and direct-route entry. */
   var shouldCollapseMobileHero = section !== 'about';
 
-  setViewportForSection(section);
-  setMobilePageSurface(section);
+  setMobilePageSurface(route);
 
   /* Desktop: about = expanded sidebar, anything else = topbar */
   if (section === 'about') {
@@ -233,7 +213,6 @@ function navigate(section, options) {
   } else {
     app.classList.add('app--browsing');
   }
-  app.classList.toggle('app--resume-compact', section === 'resume');
   /* Greece brings its own sticky guide nav; the mobile site header stays in
      flow and scrolls away so the guide owns the top of the viewport. */
   app.classList.toggle('app--greece', section === 'greece');
@@ -251,8 +230,8 @@ function navigate(section, options) {
   });
 
   /* Update page title and social preview metadata */
-  document.title = PAGE_TITLES[section] || 'Nick Stathas';
-  updateSocialMeta(section);
+  document.title = route.title;
+  updateSocialMeta(route);
 
   /* Lazy-load GitHub repos */
   if (section === 'github' && !githubLoaded) {
@@ -276,20 +255,19 @@ function navigate(section, options) {
   }
 
   /* On mobile: navigation clicks should always land in the compact state.
-     Re-apply after layout so the sticky header cannot get stuck mid-reveal. */
-  if (window.innerWidth <= 767 && contentScrollEl) {
-    var targetScrollTop = 0;
-
-    if (section !== 'resume' && shouldCollapseMobileHero && heroEl) {
-      targetScrollTop = heroEl.offsetHeight;
-    }
+     Re-apply after layout so the sticky header cannot get stuck mid-reveal.
+     The header is updated directly rather than through a synthetic scroll
+     event, which used to wake every other scroll listener on the page too. */
+  if (window.innerWidth <= MOBILE_BREAKPOINT && contentScrollEl) {
+    measureHero();
+    var targetScrollTop = shouldCollapseMobileHero ? heroMetrics.height : 0;
 
     window.scrollTo(0, targetScrollTop);
-    window.dispatchEvent(new Event('scroll'));
+    updateHeroVisibility();
 
     requestAnimationFrame(function() {
       window.scrollTo(0, targetScrollTop);
-      window.dispatchEvent(new Event('scroll'));
+      updateHeroVisibility();
     });
   }
 }
@@ -327,7 +305,6 @@ window.addEventListener('popstate', function() {
 var stickyHeaderEl = document.querySelector('.sticky-header');
 var topbarEl = document.getElementById('topbar');
 var contentEl = document.getElementById('content');
-var MOBILE_BREAKPOINT = 767;
 var COMPACT_REVEAL_SPAN_RATIO = 0.55;
 var COMPACT_REVEAL_MIN_SPAN_PX = 88;
 var HERO_HIDDEN_PROGRESS = 0.995;
@@ -336,53 +313,80 @@ function clamp01(num) {
   return Math.min(1, Math.max(0, num));
 }
 
+/* Hero geometry only changes with the viewport, so it is measured on resize
+   rather than on every scroll event.  Reading offsetHeight mid-scroll forces
+   a synchronous layout, and doing that between writes to --compact-progress
+   is what makes a scroll-linked header stutter. */
+var heroMetrics = { height: 0, revealStart: 0, revealSpan: 1 };
+
+function measureHero() {
+  if (!topbarEl) return;
+
+  var height = topbarEl.offsetHeight;
+  var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, height * COMPACT_REVEAL_SPAN_RATIO);
+  var revealStart = Math.max(0, height - revealSpan);
+
+  heroMetrics = {
+    height: height,
+    revealStart: revealStart,
+    revealSpan: Math.max(1, height - revealStart)
+  };
+}
+
+var heroUpdateScheduled = false;
+
+function setMobileHeaderFixed(isFixed) {
+  var appEl = document.getElementById('app');
+  if (!appEl) return;
+  appEl.classList.toggle('app--mobile-header-fixed', !!isFixed);
+}
+
+function updateHeroVisibility() {
+  if (!stickyHeaderEl || !topbarEl) return;
+
+  var appEl = document.getElementById('app');
+
+  /* Greece: never pin the site header.  The hero and the tab row scroll
+     away together, leaving the guide's own nav sticking to the top. */
+  if (window.innerWidth > MOBILE_BREAKPOINT
+      || (appEl && appEl.classList.contains('app--greece'))) {
+    stickyHeaderEl.style.setProperty('--compact-progress', '0');
+    stickyHeaderEl.classList.remove('hero-hidden');
+    setMobileHeaderFixed(false);
+    return;
+  }
+
+  if (!heroMetrics.height) measureHero();
+  if (!heroMetrics.height) return;
+
+  var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+  var progress = clamp01((scrollTop - heroMetrics.revealStart) / heroMetrics.revealSpan);
+  var heroHidden = progress >= HERO_HIDDEN_PROGRESS;
+
+  stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
+  stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
+  setMobileHeaderFixed(heroHidden);
+}
+
+/* Coalesce to one update per frame. Scroll events can outpace frames, and
+   without this the header is restyled several times per painted frame. */
+function scheduleHeroUpdate() {
+  if (heroUpdateScheduled) return;
+  heroUpdateScheduled = true;
+  requestAnimationFrame(function() {
+    heroUpdateScheduled = false;
+    updateHeroVisibility();
+  });
+}
+
 if (stickyHeaderEl && topbarEl && contentEl) {
-  function setMobileHeaderFixed(isFixed) {
-    var appEl = document.getElementById('app');
-    if (!appEl) return;
-    appEl.classList.toggle('app--mobile-header-fixed', !!isFixed);
-  }
+  window.addEventListener('scroll', scheduleHeroUpdate, { passive: true });
+  window.addEventListener('resize', function() {
+    measureHero();
+    scheduleHeroUpdate();
+  }, { passive: true });
 
-  function updateHeroVisibility() {
-    if (window.innerWidth > MOBILE_BREAKPOINT) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '0');
-      stickyHeaderEl.classList.remove('hero-hidden');
-      setMobileHeaderFixed(false);
-      return;
-    }
-
-    if (document.getElementById('app').classList.contains('app--resume-compact')) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '1');
-      stickyHeaderEl.classList.add('hero-hidden');
-      setMobileHeaderFixed(true);
-      return;
-    }
-
-    /* Greece: never pin the site header.  The hero and the tab row scroll
-       away together, leaving the guide's own nav sticking to the top. */
-    if (document.getElementById('app').classList.contains('app--greece')) {
-      stickyHeaderEl.style.setProperty('--compact-progress', '0');
-      stickyHeaderEl.classList.remove('hero-hidden');
-      setMobileHeaderFixed(false);
-      return;
-    }
-
-    var heroHeight = topbarEl.offsetHeight;
-    if (!heroHeight) return;
-
-    var revealSpan = Math.max(COMPACT_REVEAL_MIN_SPAN_PX, heroHeight * COMPACT_REVEAL_SPAN_RATIO);
-    var revealStart = Math.max(0, heroHeight - revealSpan);
-    var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-    var progress = clamp01((scrollTop - revealStart) / Math.max(1, heroHeight - revealStart));
-    var heroHidden = progress >= HERO_HIDDEN_PROGRESS;
-
-    stickyHeaderEl.style.setProperty('--compact-progress', progress.toFixed(4));
-    stickyHeaderEl.classList.toggle('hero-hidden', heroHidden);
-    setMobileHeaderFixed(heroHidden);
-  }
-
-  window.addEventListener('scroll', updateHeroVisibility, { passive: true });
-  window.addEventListener('resize', updateHeroVisibility, { passive: true });
+  measureHero();
   updateHeroVisibility();
 }
 
@@ -482,6 +486,11 @@ function loadGitHubRepos() {
 
 /* =====================================================
    PORTFOLIO — pre-rendered card interactions
+
+   Dormant while content/portfolio/ is empty: without projects the build
+   emits no portfolio route or section, so navigate() never reaches
+   renderPortfolio(). Kept, with the schema, renderer, and card styles, so
+   restoring the content restores the page.
    ===================================================== */
 function setExpandedState(container, header, body, isOpen) {
   container.classList.toggle('is-open', isOpen);

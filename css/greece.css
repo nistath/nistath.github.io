@@ -169,11 +169,15 @@
    viewport.  Opaque rather than frosted: a translucent bar over a guide
    this dense reads as bleed-through, and backdrop blur is expensive to
    composite on every scroll frame on a phone. */
+/* Top padding is lighter than the bottom on purpose: unpinned, the sheet's
+   rounded lip sits directly above this bar in the same color and already
+   reads as space over the chips, so matching the bottom padding here left
+   the row looking pushed down. */
 .gr-nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 5px 0 6px;
+  padding: 2px 0 6px;
   background: var(--gr-nav-bg);
   border-bottom: 1px solid var(--gr-line);
   box-shadow: 0 8px 16px -14px rgba(18, 48, 63, 0.6);
@@ -1043,9 +1047,9 @@ a.gr-sight:focus-visible .gr-sight-name {
     padding: clamp(28px, 2.6vw, 40px) var(--gr-page-x) 88px;
   }
 
-  /* Internal nav: roomier chips */
+  /* Internal nav: roomier chips, same lighter top as the mobile bar */
   .gr-nav {
-    padding: 9px 0 10px;
+    padding: 4px 0 10px;
   }
 
   /* The rail keeps scrolling here too: eight chips do not fit a narrow

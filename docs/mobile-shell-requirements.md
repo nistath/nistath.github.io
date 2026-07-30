@@ -35,12 +35,13 @@ iOS Safari dynamically samples `background-color` from the topmost visible
 These constraints drive the multi-layer approach below.
 
 - **`--shell-hero-dark` variable:** Defined in `:root` (`css/main.css`).
-  Approximation of the visual average of the shell texture composited through
-  `--sidebar-overlay`. The texture (`img/background-blue.png`) averages
-  significantly lighter than `--shell-hero-base`, so the blended result is
-  approximately #2b4557, not the darker #142d43 that a base-only calculation
-  would suggest. Adjust on-device if the flat color doesn't match the
-  textured hero.
+  The visual average of the shell texture composited through
+  `--sidebar-overlay`, and exact rather than approximate:
+  `scripts/render-shell-texture.cjs` generates `img/shell-texture.png` so that
+  it averages this value under the overlay, and `--shell-hero-base` is the
+  texture's own average so the pre-load flat color matches too. Changing
+  `--shell-hero-dark` or the overlay alpha means re-running `npm run texture`;
+  `npm run check` fails if the committed texture drifts from its generator.
 - **`#mobile-spill` element:** A real `<div>` in `index.html` (before `#app`),
   styled on mobile as `position: fixed; z-index: 9999` covering only
   `height: env(safe-area-inset-top)` — the area behind the status bar. Because
@@ -71,15 +72,14 @@ These constraints drive the multi-layer approach below.
   stack. `padding-top: var(--safe-top)` extends the background into the safe
   area while content sits below it.
 - **Compact header:** `.sticky-header` uses the same stacked-background
-  approach as `.topbar`. Its `::before` overlay is likewise disabled. The
-  `.app.app--resume-compact .sticky-header` variant receives the same
-  treatment.
+  approach as `.topbar`. Its `::before` overlay is likewise disabled.
 
 ## Bottom Spill
 
 - The bottom of the page must not bleed the moving shell texture.
 - The bottom browser-chrome spill should continue the active page surface:
-  dark on `about`, `github`, `resume`, and `portfolio`; light on `greece`.
+  dark on `about`, `github`, and `resume`; light on `greece`. Each route's
+  surface color comes from `scripts/content/routes.cjs`.
 
 ### Implementation
 
@@ -105,60 +105,85 @@ These constraints drive the multi-layer approach below.
 
 ### Implementation
 
-- **Hero collapse detection:** `js/main.js` — `updateHeroVisibility()` listens
-  to the `scroll` event and computes a `--compact-progress` (0–1) based on
-  how far `#topbar` has scrolled out of view. At progress >= 0.995 the hero is
-  considered hidden.
+- **Hero collapse detection:** `js/main.js` — `updateHeroVisibility()`
+  computes a `--compact-progress` (0–1) from how far `#topbar` has scrolled
+  out of view. At progress >= 0.995 the hero is considered hidden. Scroll
+  events schedule it through `requestAnimationFrame` so it runs at most once
+  per frame, and the hero's geometry is cached by `measureHero()` on resize
+  rather than measured mid-scroll, which would force a synchronous layout
+  between writes to `--compact-progress`.
 - **Fixed header switch:** When the hero is hidden, `app--mobile-header-fixed`
   is toggled on `#app`, which makes `.sticky-header` `position: fixed` at
   `inset: 0 0 auto` with `z-index: 30`.
+- **Reserving the pinned header's space:** `.app--mobile-header-fixed
+  .section.active` adds *both* `padding-top: var(--mobile-fixed-header-h)`
+  and the same amount to its `min-height`. Both are required. Everything here
+  is `box-sizing: border-box`, so padding inside a `min-height` box insets
+  content without adding height; with the padding alone the document shrinks
+  by the header's height the moment it pins, the browser clamps the scroll
+  position to the smaller maximum, the lower position reads as a lower
+  progress, and the header unpins — leaving the hero stuck part-way.
 - **Compact row reveal:** `.topbar-compact-wrap` height animates from `0` to
   `var(--bar-h)` via `calc(var(--bar-h) * var(--compact-progress))`.
-  `.topbar-left` and `.topbar-compact-social` fade in via opacity and
-  translateY tied to the same progress variable.
+  `.topbar-left` and `.topbar-compact-social` take their opacity and
+  translateY from the same variable. They deliberately carry no CSS
+  transition: the variable is already rewritten every frame during the
+  scroll, and a transition would chase a target that has moved on, leaving
+  the compact row trailing the hero by the transition's duration.
 - **Document flow scrolling:** On mobile, `html, body` use `overflow-y: auto`
   and `.app` / `.content` use `overflow: visible` so the page participates in
   normal document-level scrolling, allowing Safari to collapse its browser
   chrome.
 - **Navigation collapse:** `navigate()` in `js/main.js` sets
   `shouldCollapseMobileHero = (section !== 'about')` and scrolls to
-  `topbarEl.offsetHeight` for those sections so the hero is already dismissed
+  `heroMetrics.height` for those sections so the hero is already dismissed
   and the compact header is visible. This applies to all navigation paths:
   explicit tab/sidebar clicks, `popstate` (browser back/forward), and
-  direct-route entry (initial bootstrap call).
+  direct-route entry (initial bootstrap call). It then calls
+  `updateHeroVisibility()` directly rather than dispatching a synthetic
+  `scroll` event, which used to wake every other scroll listener on the page.
 
 ## Resume Route
 
-- The resume route should always use the compact header state on mobile.
-- The native PDF viewer should start below the compact header rather than
-  underneath it.
-- Mobile users must be able to zoom normally in the PDF viewer.
-- The initial PDF view should default to a fit mode.
+- Mobile visitors must be able to read the resume: scroll it, zoom it, and
+  see the full page width.
+- The route must not overflow the viewport horizontally.
+- The route should behave like every other section on mobile.
 
 ### Implementation
 
-- **Forced compact state:** `navigate()` adds `app--resume-compact` to `#app`
-  on the resume route, which hides `.topbar` entirely
-  (`display: none !important`) and forces the sticky header into its compact
-  state with full opacity and `padding-top: var(--safe-top)`.
-- **PDF offset:** `.app.app--mobile-header-fixed #section-resume .resume-wrap`
-  gets `margin-top: var(--mobile-fixed-header-h)` so the iframe starts below
-  the fixed header.
-- **PDF sizing:** `#section-resume` uses
-  `height: calc(100dvh - (var(--bar-h) * 2) - var(--safe-bottom))` (or the
-  fixed-header variant) to fill the remaining viewport below the header.
-- **Fit mode:** The iframe `src` includes `#page=1&view=FitH` for the
-  browser's built-in PDF viewer. However, Dropbox's `raw=1` redirect returns
-  a `Location` header ending in `#` (empty fragment), which clears the hint
-  before the PDF viewer sees it. This cannot be fixed client-side: the
-  redirect URL has no CORS headers, so JavaScript cannot resolve it and
-  re-append the fragment. Switching away from Dropbox hosting would resolve
-  this.
-- **iOS pinch-to-zoom:** On iOS Safari, PDF content in an iframe does not
-  receive its own zoom context. Pinch-to-zoom affects the entire page
-  viewport rather than just the PDF. This is a Safari platform limitation
-  (Chrome desktop uses PDFium which handles zoom independently). No reliable
-  client-side workaround exists.
+Mobile browsers do not give an embedded PDF its own scroll or zoom context.
+iOS Safari renders it as a single fixed page — pinch-to-zoom acts on the page
+viewport instead of the document, and anything wider than the frame is simply
+cut off. Android Chrome generally refuses to render one at all. Sizing the
+iframe more carefully cannot fix this, and earlier attempts to do so are why
+the resume route used to need a forced-compact header and its own viewport
+math.
+
+So mobile does not embed the PDF:
+
+- **Two presentations, one section:** `#section-resume` contains both
+  `.resume-wrap` (the iframe) and `.resume-handoff` (a card with the resume
+  title, a line of explanation, and a link to the PDF). The mobile media
+  query hides the first and shows the second. Its wording lives in
+  `content/resume.yml` under `mobile`.
+- **Handing off:** The card's link is an ordinary `target="_blank"` anchor to
+  `pdf_url`, so the file opens as a top-level document in the browser's own
+  PDF viewer, which scrolls and zooms normally and fits to width by default.
+- **Deferred fetch:** `loadResume()` returns early when
+  `matchMedia('(max-width: 767px)')` matches, so phones never download the
+  PDF at all. A `change` listener on that query loads the iframe if a window
+  is resized past the breakpoint while the resume route is open.
+- **No special casing:** Because the route is now ordinary content on mobile,
+  `app--resume-compact` and the fixed heights, offsets, and viewport-meta
+  handling that supported it are gone. The hero collapses on the resume route
+  the same way it does everywhere else.
+
+The `#page=1&view=FitH` fragment on `pdf_url` remains a hint for desktop
+browsers. Dropbox's `raw=1` redirect returns a `Location` ending in `#`,
+which clears it before the viewer sees it; that is unchanged and cannot be
+fixed client-side, since the redirect has no CORS headers. It no longer
+affects mobile, where the browser's own viewer picks the fit mode.
 
 ## Testing Notes
 
@@ -179,10 +204,9 @@ These constraints drive the multi-layer approach below.
   not revert it on scroll-back. On a fresh load the hero texture may briefly
   show through the rounded chrome edges before the flat color takes over.
   This is expected Safari behavior and cannot be overridden from CSS.
-- The `#2b4557` value (`--shell-hero-dark`) is an approximation of the visual
-  average of the texture composited through the overlay. The texture
-  (`img/background-blue.png`) is significantly lighter than
-  `--shell-hero-base`, so the blended result is lighter than a base-only
-  calculation. Tweak on-device by adjusting the single `--shell-hero-dark`
-  variable in `:root`; `js/main.js` syncs `<meta name="theme-color">` from
-  the computed CSS variable at startup so there is only one value to change.
+- The `#2b4557` value (`--shell-hero-dark`) is the visual average of
+  `img/shell-texture.png` composited through the overlay. To tweak it
+  on-device, change that single `:root` variable and re-run
+  `npm run texture`, which rebalances the texture against it;
+  `js/main.js` syncs `<meta name="theme-color">` from the computed CSS
+  variable at startup so there is only one value to change.

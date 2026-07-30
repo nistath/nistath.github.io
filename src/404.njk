@@ -1,3 +1,9 @@
+---
+permalink: 404.html
+---
+{#- Direct-load fallback for clean paths. Only the site's own registered
+    routes are recovered; anything else keeps the plain not-found page so
+    other GitHub Pages content under this domain still resolves normally. -#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,23 +18,16 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Nick Stathas">
   <meta property="og:title" content="Nick Stathas">
-  <meta property="og:url" content="https://nistath.com/">
-  <meta property="og:image" content="https://nistath.com/img/og/og-default.png">
+  <meta property="og:url" content="{{ siteOrigin }}/">
+  <meta property="og:image" content="{{ siteOrigin }}/img/og/og-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Nick Stathas">
-  <meta name="twitter:image" content="https://nistath.com/img/og/og-default.png">
+  <meta name="twitter:image" content="{{ siteOrigin }}/img/og/og-default.png">
   <script>
     (function(location) {
-      var knownRoutes = {
-        '/': true,
-        '/about': true,
-        '/github': true,
-        '/resume': true,
-        '/portfolio': true,
-        '/greece': true
-      };
+      var knownRoutes = {{ siteContent.routes | knownRoutes | json | safe }};
 
       var normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
       if (normalizedPath === '/404.html' || !knownRoutes[normalizedPath]) return;

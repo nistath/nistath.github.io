@@ -163,20 +163,35 @@ function loadSingle(validators, name) {
   return value;
 }
 
+/* The portfolio is optional. An absent or empty content/portfolio/ directory
+   disables the route everywhere rather than rendering an empty page: this
+   returns null, scripts/content/routes.cjs drops /portfolio, and the shell
+   omits the section and its nav entries. The schema, renderer, theme map,
+   icons, and card styles all stay in place, so restoring the directory with
+   an index.yml and one project file brings the page back unchanged. */
 function loadPortfolio(validators) {
-  const indexPath = 'content/portfolio/index.yml';
+  const directory = 'content/portfolio';
+  if (!fs.existsSync(path.join(ROOT, directory))) return null;
+
+  const files = listYaml(directory);
+  if (!files.length) return null;
+  if (!files.includes('index.yml')) {
+    throw new Error(`${directory} has project files but no index.yml; add one, or empty the directory to disable the portfolio`);
+  }
+
+  const indexPath = `${directory}/index.yml`;
   const meta = readYaml(indexPath);
   validate(validators.portfolioIndex, meta, indexPath);
   rejectMarkup(meta, indexPath);
 
-  const authoredFiles = listYaml('content/portfolio').filter((name) => name !== 'index.yml');
+  const authoredFiles = files.filter((name) => name !== 'index.yml');
   const expectedFiles = meta.projects.map((slug) => `${slug}.yml`).sort();
   if (authoredFiles.join('\n') !== expectedFiles.join('\n')) {
-    throw new Error('content/portfolio/index.yml must reference every project file exactly once');
+    throw new Error(`${indexPath} must reference every project file exactly once`);
   }
 
   const projects = meta.projects.map((slug) => {
-    const relativePath = `content/portfolio/${slug}.yml`;
+    const relativePath = `${directory}/${slug}.yml`;
     const project = readYaml(relativePath);
     validate(validators.portfolioProject, project, relativePath);
     rejectMarkup(project, relativePath);

@@ -1,2 +1,10 @@
 pdf_url: https://www.dropbox.com/scl/fi/d1e7agwsxeq2i67ctfni0/Nick_Stathas_Resume.pdf?rlkey=62hsxcdpka3mh9gakokisj11a&st=s0g5y8mn&raw=1#page=1&view=FitH
 title: Nick Stathas Resume
+# Phones get this card instead of the embedded viewer, which mobile browsers
+# render as a fixed, unzoomable page. The link hands the PDF to the phone's
+# own viewer, where it scrolls and zooms properly.
+mobile:
+  heading: Resume
+  description: >-
+    Opens in your phone's PDF viewer, where you can zoom and scroll properly.
+  action: Open the PDF
