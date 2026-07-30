@@ -6,13 +6,15 @@
     <div class="gr-hero-curve"></div>
   </header>
 
-  <nav class="gr-nav" id="gr-nav" aria-label="Guide sections">
-    {% for section in siteContent.greece.sections %}
-      <button class="gr-nav-btn{% if loop.first %} active{% endif %}" data-gr="{{ section.id }}"{% if loop.first %} aria-current="true"{% endif %}>
-        <span class="gr-nav-icon">{{ section.nav.icon }}</span>
-        <span class="gr-nav-label">{{ section.nav.label }}</span>
-      </button>
-    {% endfor %}
+  <nav class="gr-nav gr-nav--rail-start" id="gr-nav" aria-label="Guide sections">
+    <div class="gr-nav-rail">
+      {% for section in siteContent.greece.sections %}
+        <button class="gr-nav-btn{% if loop.first %} active{% endif %}" data-gr="{{ section.id }}"{% if loop.first %} aria-current="true"{% endif %}>
+          <span class="gr-nav-icon" aria-hidden="true">{{ section.nav.icon }}</span>
+          <span class="gr-nav-label">{{ section.nav.label }}</span>
+        </button>
+      {% endfor %}
+    </div>
   </nav>
 
   <div class="gr-main">

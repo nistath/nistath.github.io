@@ -90,6 +90,17 @@ The app uses a CSS grid layout with two modes controlled by the
 - Browsing mode (other sections): topbar replaces the desktop sidebar
 - Mobile layout is handled through `@media (max-width: 767px)` overrides
 
+On mobile the page itself is the only scroll container. Overflow is set on
+`html` (it propagates to the viewport) and must stay `visible` on `body` and
+`.section`; giving either one its own overflow turns it into a scrollport that
+never scrolls, which silently breaks every `position: sticky` descendant.
+
+Greece is the one route that does not pin the site header on mobile. `navigate`
+puts `app--greece` on `#app`, which keeps `app--mobile-header-fixed` off, so the
+hero and the tab row scroll away as one unit and the guide's own nav takes the
+top of the viewport. `css/main.css` repeats the exception defensively so a
+scroll event arriving before the class update cannot mis-lay the page.
+
 ### Navigation and routing
 
 `js/main.js` drives section changes through `navigate(section)`, which:
@@ -147,7 +158,15 @@ rendering and generated Greece navigation; there is no separate nav registry.
 
 `src/_includes/greece/guide.njk` owns the guide-level layout and
 `src/_includes/greece/components.njk` renders the schema's typed body and aside
-blocks. To add prose or an entry using an existing visual type, edit YAML only.
+blocks.
+
+The guide nav is a horizontal rail (`.gr-nav-rail`) at every width, because
+eight chips do not fit a narrow desktop content column. `greeceNavInit`
+publishes the measured nav height as `--gr-nav-h` on `.greece-wrap`, and
+`scroll-margin-top` plus the sticky aside offset are derived from it, so a
+label wrap or a new section cannot leave headings under the bar. The rounded
+top corners of the content sheet belong to `.gr-hero::after`, not the nav, so
+the nav is a plain square bar once it pins. To add prose or an entry using an existing visual type, edit YAML only.
 To add a new visual type or variant, update the schema, renderer, validation,
 example content, tests, and authoring documentation together.
 
