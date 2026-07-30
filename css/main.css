@@ -925,8 +925,6 @@ a.repo-card:hover {
   html, body {
     height: auto;
     min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
     background-color: var(--mobile-page-bg);
     background-image: none;
     animation: none;
@@ -934,9 +932,20 @@ a.repo-card:hover {
 
   /* Canvas background (html) must match the darkened hero so the iOS
      top-spill / overscroll area shows the right color.  body stays dark
-     to cover section content. */
+     to cover section content.
+
+     Overflow lives on the root element only: it propagates to the viewport,
+     so the page still cannot scroll sideways.  Repeating it on body would
+     turn body into its own scroll container, and every position: sticky
+     descendant would then stick to a box that never scrolls. */
   html {
     background-color: var(--shell-hero-dark);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body {
+    overflow: visible;
   }
 
   :root {
@@ -1267,6 +1276,10 @@ a.repo-card:hover {
     display: none;
     opacity: 1;
     pointer-events: auto;
+    /* Sections scroll with the page here, not on their own axis.  Leaving
+       the desktop overflow in place would make each section a scrollport
+       and stop sticky children (the Greece guide nav) from ever pinning. */
+    overflow: visible;
     min-height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
     padding-bottom: var(--safe-bottom);
     background: var(--clr-bg);
@@ -1298,6 +1311,24 @@ a.repo-card:hover {
     min-height: calc(
       100dvh - var(--bar-h) - var(--safe-bottom) + var(--mobile-fixed-header-h)
     );
+  }
+
+  /* ── Greece exception: the guide carries its own sticky section nav, so
+     the site hero and tab bar scroll away instead of pinning.  That hands
+     the whole viewport below the guide nav back to the content.  JS keeps
+     app--mobile-header-fixed off this route; these rules make the layout
+     correct even if a scroll event lands before the class is updated. ── */
+  .app.app--greece.app--mobile-header-fixed .sticky-header {
+    position: relative;
+    inset: auto;
+    z-index: 20;
+  }
+
+  /* Undoes both halves of the reservation above: with the header still in
+     flow there is no gap to pad out and no height to give back. */
+  .app.app--greece.app--mobile-header-fixed .section.active {
+    padding-top: 0;
+    min-height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
   }
 
   #section-greece {

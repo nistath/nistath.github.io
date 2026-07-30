@@ -213,6 +213,9 @@ function navigate(section, options) {
   } else {
     app.classList.add('app--browsing');
   }
+  /* Greece brings its own sticky guide nav; the mobile site header stays in
+     flow and scrolls away so the guide owns the top of the viewport. */
+  app.classList.toggle('app--greece', section === 'greece');
 
   /* Update all nav button active states */
   document.querySelectorAll('.nav-btn, .tab').forEach(function(btn) {
@@ -341,7 +344,12 @@ function setMobileHeaderFixed(isFixed) {
 function updateHeroVisibility() {
   if (!stickyHeaderEl || !topbarEl) return;
 
-  if (window.innerWidth > MOBILE_BREAKPOINT) {
+  var appEl = document.getElementById('app');
+
+  /* Greece: never pin the site header.  The hero and the tab row scroll
+     away together, leaving the guide's own nav sticking to the top. */
+  if (window.innerWidth > MOBILE_BREAKPOINT
+      || (appEl && appEl.classList.contains('app--greece'))) {
     stickyHeaderEl.style.setProperty('--compact-progress', '0');
     stickyHeaderEl.classList.remove('hero-hidden');
     setMobileHeaderFixed(false);
@@ -566,16 +574,44 @@ function greeceNavInit() {
   greeceNavInitialized = true;
 
   var navBtns = nav.querySelectorAll('.gr-nav-btn');
+  var navRail = nav.querySelector('.gr-nav-rail') || nav;
+  var greeceWrap = document.querySelector('#section-greece .greece-wrap');
   var targets = Array.from(document.querySelectorAll(
     '#section-greece .gr-section, #section-greece .gr-island'
   ));
 
+  /* Publish the measured nav height so scroll-margin and the sticky aside
+     offset stay exact at every breakpoint and label wrap. */
+  function syncNavHeight() {
+    if (!greeceWrap) return;
+    var height = nav.offsetHeight;
+    if (height) greeceWrap.style.setProperty('--gr-nav-h', height + 'px');
+  }
+
+  /* The mobile nav is a horizontal rail; fade the trailing edge until it is
+     scrolled all the way, and keep the active chip in view. */
+  function syncRailEdge() {
+    nav.classList.toggle('gr-nav--rail-start', navRail.scrollLeft <= 1);
+    nav.classList.toggle(
+      'gr-nav--rail-end',
+      navRail.scrollLeft + navRail.clientWidth >= navRail.scrollWidth - 2
+    );
+  }
+
+  function revealNavBtn(btn) {
+    if (navRail.scrollWidth <= navRail.clientWidth) return;
+    var left = btn.offsetLeft - (navRail.clientWidth - btn.offsetWidth) / 2;
+    navRail.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+  }
+
   function setActiveSection(key) {
     navBtns.forEach(function(btn) {
       var isActive = btn.dataset.gr === key;
+      var wasActive = btn.classList.contains('active');
       btn.classList.toggle('active', isActive);
       if (isActive) {
         btn.setAttribute('aria-current', 'true');
+        if (!wasActive) revealNavBtn(btn);
       } else {
         btn.removeAttribute('aria-current');
       }
@@ -633,6 +669,20 @@ function greeceNavInit() {
     { passive: true }
   );
   scheduleActiveSectionUpdate();
+
+  navRail.addEventListener('scroll', syncRailEdge, { passive: true });
+  window.addEventListener('resize', function() {
+    syncNavHeight();
+    syncRailEdge();
+  }, { passive: true });
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(function() {
+      syncNavHeight();
+      syncRailEdge();
+    }).observe(nav);
+  }
+  syncNavHeight();
+  syncRailEdge();
 
   /* Collapsible tip cards (visible on mobile, always-open on desktop via CSS) */
   document.querySelectorAll('#section-greece .gr-aside .gr-tip').forEach(function(tip, index) {
