@@ -54,6 +54,13 @@ The production artifact is zero-framework static HTML, CSS, and JavaScript.
 Eleventy, Nunjucks, YAML parsing, Markdown rendering, and schema validation are
 build-time tools only.
 
+pdf.js is the one library that reaches the browser, vendored into
+`_site/vendor/pdfjs/` at build time and loaded only by browsers with no inline
+PDF viewer of their own, only on the resume route. See the resume section
+below. Treat it as the exception it is: a second one needs the same
+justification — a capability the platform genuinely lacks, paid for only by
+the visitors who lack it.
+
 ### Source boundaries
 
 - `content/*.yml`, `content/portfolio/`, and `content/greece/` are the
@@ -95,12 +102,45 @@ The app uses a CSS grid layout with two modes controlled by the
 
 - Default (`about`): sidebar plus content
 - Browsing mode (other sections): topbar replaces the desktop sidebar
-- Mobile layout is handled through `@media (max-width: 767px)` overrides
+- The compact shell replaces both with a scrolling page
 
-On mobile the page itself is the only scroll container. Overflow is set on
-`html` (it propagates to the viewport) and must stay `visible` on `body` and
-`.section`; giving either one its own overflow turns it into a scrollport that
-never scrolls, which silently breaks every `position: sticky` descendant.
+Which shell a visitor gets is a question of the space available, not of width
+alone. A phone held in landscape reports 874×402: wide enough to satisfy a
+width-only breakpoint, and nowhere near tall enough for a full-height sidebar.
+The condition is therefore
+
+```
+(max-width: 767px), (max-height: 600px) and (pointer: coarse)
+```
+
+written verbatim in `css/main.css`, in the Greece mobile block in
+`css/greece.css`, and as `COMPACT_SHELL_QUERY` in `js/main.js`, which matches
+it with `matchMedia` rather than measuring `window.innerWidth`. All three must
+stay in step. The compact shell scrolls the page, which is also what lets a
+phone browser get its own toolbars out of the way — the two-pane layout never
+scrolls, so it never gets that height back.
+
+A second block, `(max-height: 600px) and (pointer: coarse)`, refines the
+compact shell for a phone in landscape: the hero becomes a single identity row
+and `--bar-h` shrinks, and every other measurement follows from those.
+
+The two-pane layout is sized in `dvh` and its sidebar scrolls, so a window too
+short to hold the profile still reaches the nav. Two tiers shrink it before it
+comes to that — `(min-width: 768px) and (max-height: 720px)` trims the profile,
+and `(max-height: 500px)` collapses it to one identity row, bringing the whole
+sidebar to about 287px. After the compact shell claims every short touch
+viewport, these only reach a squashed desktop window.
+
+Landscape also puts the sensor housing beside the page rather than above it, on
+whichever side the phone was turned toward. In the compact shell's single
+centered column that is `--safe-x`, the symmetric form. The two-pane layout
+insets per pane instead — the sidebar `--safe-left`, the content
+`--safe-right` — so it is right either way round.
+
+On the compact shell the page itself is the only scroll container. Overflow is
+set on `html` (it propagates to the viewport) and must stay `visible` on `body`
+and `.section`; giving either one its own overflow turns it into a scrollport
+that never scrolls, which silently breaks every `position: sticky` descendant.
 
 Greece is the one route that does not pin the site header on mobile. `navigate`
 puts `app--greece` on `#app`, which keeps `app--mobile-header-fixed` off, so the
@@ -135,6 +175,44 @@ route-relative. Direct loads on nested paths depend on that. Adding a top-level
 route means adding an entry to `scripts/content/routes.cjs`, a nav icon under
 `src/_includes/nav/`, and its `<section>` in the shell. The stub, the 404
 fallback, navigation, titles, and social metadata all follow from the registry.
+
+### Resume
+
+The route shows the document in place. Nobody is sent off the site to read it,
+and which of three presentations they get is a capability test, not a guess
+about screen size — `navigator.pdfViewerEnabled` answers exactly the question
+that matters. `js/main.js` puts the matching state class on `#section-resume`
+and `css/main.css` shows one child of it:
+
+| state | when | presentation |
+| --- | --- | --- |
+| `resume--embed` | the browser has an inline PDF viewer | `.resume-wrap`'s iframe — real text, selection, search, print |
+| `resume--render` | it does not: every browser on iOS, and Chrome on Android | `.resume-viewer` — pdf.js paints the pages into canvases |
+| `resume--fallback` | the file could not be fetched at all | `.resume-handoff` — the card, which links out |
+
+The markup ships in `resume--fallback`, the only state needing no JavaScript.
+`check-generated.cjs` asserts that.
+
+pdf.js is vendored: `.eleventy.js` copies `pdf.min.mjs`, its worker, and the
+standard fonts out of `node_modules` into `_site/vendor/pdfjs/`, so there is no
+CDN and no third-party runtime dependency. It is a deliberate exception to the
+zero-framework rule, and a narrow one — nothing requests it until a browser
+without its own PDF viewer opens this route, so the desktop path is unchanged
+and a phone pays for it once. Pages are painted one at a time, above CSS
+resolution so a pinch-zoom stays sharp and under a pixel cap so a page cannot
+allocate tens of megabytes; a width change repaints from the document already
+in memory, which is what keeps a rotation sharp.
+
+The renderer has to fetch the bytes, so `pdf_url` in `content/resume.yml`
+matters: a root-relative path is served from this origin and always readable,
+while another host only permits the fetch if it sends CORS headers. If it does
+not, `getDocument` rejects and the route lands on `resume--fallback` — no worse
+than a plain link, but not the inline read either. The `pdf-source` format in
+`load-content.cjs` accepts both shapes.
+
+The canvases carry `role="img"` and the document title: the rendered text is
+not selectable and there is no text layer, so the viewer's own "open the
+original" link is the accessible path to the real document.
 
 ### Portfolio cards
 
@@ -245,8 +323,9 @@ For a new field, block type, presentation variant, or component:
    that JSON Schema cannot express.
 4. Add or update generated-site checks and interaction code if needed.
 5. Add representative content and update `docs/content-authoring.md`.
-6. Run `npm run check` and verify the affected routes at desktop and mobile
-   widths.
+6. Run `npm run check` and verify the affected routes at a desktop width, a
+   phone in portrait, and a phone in landscape (874×402 is the shape that
+   breaks width-only assumptions).
 
 Keep content and presentation separate throughout: a future author should be
 able to revise prose and basic nesting from a phone without touching template

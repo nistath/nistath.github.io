@@ -1175,12 +1175,20 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 /* =====================================================
    MOBILE ADJUSTMENTS
+
+   Matched against the compact shell in css/main.css, not against width
+   alone: a phone in landscape is 874px wide and still wants these.
    ===================================================== */
-@media (max-width: 767px) {
+@media (max-width: 767px), (max-height: 600px) and (pointer: coarse) {
   /* The site hero and tab bar scroll away on this route (see
      .app--greece in main.css), so the guide nav owns the top edge. */
   .gr-nav {
     top: var(--safe-top, 0px);
+  }
+
+  /* Keep the guide clear of the sensor housing when the phone is turned. */
+  .greece-wrap {
+    --gr-page-x: calc(clamp(14px, 3.6vw, 22px) + var(--safe-x, 0px));
   }
 
   .gr-section,

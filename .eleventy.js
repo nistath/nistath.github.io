@@ -76,6 +76,16 @@ module.exports = function configureEleventy(eleventyConfig) {
     'tile.png',
   ].forEach((asset) => eleventyConfig.addPassthroughCopy(asset));
 
+  /* pdf.js, vendored at build time rather than pulled from a CDN, so the
+     rendered resume viewer has no third-party runtime dependency.  Nothing
+     fetches these until a browser without its own inline PDF viewer opens
+     the resume route; see the resume section of AGENTS.md. */
+  eleventyConfig.addPassthroughCopy({
+    'node_modules/pdfjs-dist/legacy/build/pdf.min.mjs': 'vendor/pdfjs/pdf.min.mjs',
+    'node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs': 'vendor/pdfjs/pdf.worker.min.mjs',
+    'node_modules/pdfjs-dist/standard_fonts': 'vendor/pdfjs/standard_fonts',
+  });
+
   return {
     dir: {
       input: 'src',

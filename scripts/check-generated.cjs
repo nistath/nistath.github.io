@@ -89,11 +89,29 @@ function main() {
   if (!/\sdata-src=/.test(resumeFrame) || /\ssrc=/.test(resumeFrame)) {
     fail('The resume iframe must defer its remote source until the route is opened');
   }
-  /* Mobile browsers cannot scroll or zoom an embedded PDF, so the route also
-     has to offer the file as a plain link out to the browser's own viewer. */
+  /* Last resort when the file cannot be fetched: a plain link out to the
+     browser's own viewer, which needs no fetch and no renderer. */
   const handoff = html.match(/class="resume-handoff-action" href="([^"]+)"/);
   if (!handoff || handoff[1].replace(/&amp;/g, '&') !== content.resume.pdf_url) {
-    fail('The resume route is missing its link to the PDF for mobile visitors');
+    fail('The resume route is missing its link to the PDF');
+  }
+  /* Without JavaScript no state class is ever applied, so the markup has to
+     ship in the one state that needs none. */
+  if (!/id="section-resume" class="section resume--fallback"/.test(html)) {
+    fail('The resume section must ship in its no-JavaScript fallback state');
+  }
+  /* The renderer reads the URL from the injected content, not from markup. */
+  if (!html.includes(JSON.stringify(content.resume.pdf_url))) {
+    fail('The injected site content is missing the resume PDF URL');
+  }
+  /* pdf.js is vendored at build time; a missing copy would leave every
+     browser without an inline PDF viewer on the fallback card. */
+  for (const asset of [
+    'vendor/pdfjs/pdf.min.mjs',
+    'vendor/pdfjs/pdf.worker.min.mjs',
+    'vendor/pdfjs/standard_fonts/LiberationSans-Regular.ttf',
+  ]) {
+    if (!fs.existsSync(path.join(SITE, asset))) fail(`Build output is missing ${asset}`);
   }
 
   for (const required of ['404.html', 'CNAME', 'css/main.css', 'js/main.js']) {

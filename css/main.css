@@ -12,6 +12,17 @@
   --bar-h:       56px;
   --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* Landscape on a notched phone puts the sensor housing beside the page, so
+     the horizontal insets are the ones that matter there.  Which side it
+     lands on depends on which way the phone was turned, so each pane insets
+     the edge it actually owns: the sidebar the left, the content the right.
+     --safe-x is the symmetric form, for a single centered column.  The plain
+     0px below is the fallback for a browser that cannot parse the max():
+     without it every calc() built on this would be invalid. */
+  --safe-left:   env(safe-area-inset-left, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
+  --safe-x:      0px;
+  --safe-x:      max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
 
   /* Brand */
   --clr-accent:  #2980b9;
@@ -89,6 +100,10 @@ a:hover { text-decoration: underline; }
   grid-template-rows: 1fr;
   grid-template-areas: "sidebar content";
   height: 100vh;
+  /* This layout never scrolls the page, so a browser that hides its toolbars
+     on scroll never will here: 100vh would reserve height the visitor cannot
+     reach.  100dvh is the height actually on screen right now. */
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -130,12 +145,19 @@ a:hover { text-decoration: underline; }
   }
 }
 
+/* The sidebar is the only way to reach the other routes in this layout, so it
+   has to stay reachable in a viewport too short to hold it whole.  The blocks
+   below refuse to be squeezed and this box scrolls instead; the short-viewport
+   rules further down shrink the profile so it rarely comes to that. */
 .sidebar-inner {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 2rem 1.5rem 1.5rem;
+  padding: 2rem 1.5rem calc(1.5rem + var(--safe-bottom));
+  padding-left: calc(1.5rem + var(--safe-left));
   background: var(--sidebar-overlay);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* Profile block */
@@ -146,6 +168,7 @@ a:hover { text-decoration: underline; }
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--clr-border);
   margin-bottom: 1.25rem;
+  flex-shrink: 0;
 }
 
 .avatar-wrap {
@@ -194,7 +217,7 @@ a:hover { text-decoration: underline; }
   display: flex;
   flex-direction: column;
   gap: 2px;
-  flex: 1;
+  flex: 1 0 auto;
 }
 
 .nav-btn {
@@ -231,6 +254,7 @@ a:hover { text-decoration: underline; }
   padding-top: 1.25rem;
   margin-top: auto;
   border-top: 1px solid var(--clr-border);
+  flex-shrink: 0;
 }
 
 .social-link {
@@ -418,11 +442,14 @@ a:hover { text-decoration: underline; }
   width: 100%;
 }
 
-/* ── About / text sections ── */
+/* ── About / text sections ──
+   The content pane owns the right edge of the screen, so it is the one that
+   insets for the sensor housing when a phone is turned that way. */
 .section-inner {
   max-width: 680px;
   margin: 0 auto;
-  padding: 3.5rem 2.5rem 4rem;
+  padding: 3.5rem 2.5rem calc(4rem + var(--safe-bottom));
+  padding-right: calc(2.5rem + var(--safe-right));
 }
 
 .section-inner--wide {
@@ -548,15 +575,32 @@ a.repo-card:hover {
 }
 
 /* ── Resume ──
-   The embedded viewer is the desktop presentation.  .resume-handoff is the
-   phone presentation and swaps in at the mobile breakpoint; only one of the
-   two is ever displayed, and js/main.js only fetches the PDF when the embed
-   is the visible one. */
+   Three presentations of one document, chosen by capability rather than by
+   viewport: the browser's own inline PDF viewer where there is one, pages
+   rendered into canvases where there is not, and the link-out card only if
+   the file cannot be fetched at all.  js/main.js picks one and puts the
+   matching state class on the section; without it the card is what shows,
+   so the route is never empty. */
+#section-resume .resume-wrap,
+#section-resume .resume-viewer { display: none; }
+
+#section-resume.resume--embed .resume-wrap { display: flex; }
+#section-resume.resume--render .resume-viewer { display: block; }
+#section-resume.resume--embed .resume-handoff,
+#section-resume.resume--render .resume-handoff { display: none; }
+
+/* The card is the whole route when it is what shows, so it sits in the
+   middle of the pane rather than at the top of an otherwise empty one. */
+#section-resume.resume--fallback.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .resume-wrap {
   width: 100%;
   height: 100%;
   min-height: 0;
-  display: flex;
   flex-direction: column;
 }
 
@@ -569,25 +613,92 @@ a.repo-card:hover {
   display: block;
 }
 
-.resume-handoff { display: none; }
+/* ── Rendered viewer ──
+   Pages are painted at the device's pixel density into canvases that are
+   laid out at the column width, so the sheet stays sharp when the reader
+   pinches in.  Repainting on a width change is what keeps it that way after
+   a rotation; js/main.js debounces that. */
+.resume-viewer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 2rem calc(3rem + var(--safe-bottom));
+  padding-right: calc(2rem + var(--safe-right));
+}
+
+.resume-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.resume-pages canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border: 1px solid var(--clr-border);
+}
+
+.resume-viewer-status {
+  color: var(--clr-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.resume-viewer-status[hidden] { display: none; }
+
+.resume-viewer-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.resume-viewer-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--clr-muted);
+  border: 1px solid var(--clr-border);
+  padding: 0.5rem 0.9rem;
+  transition: color var(--t), border-color var(--t);
+}
+
+.resume-viewer-action:hover {
+  color: var(--clr-link);
+  border-color: var(--clr-accent2);
+  text-decoration: none;
+}
+
+.resume-handoff {
+  display: block;
+  padding: 3rem 2.5rem calc(3rem + var(--safe-bottom));
+  padding-right: calc(2.5rem + var(--safe-right));
+}
 
 .resume-handoff-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
+  align-items: center;
+  text-align: center;
+  gap: 0.55rem;
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
   background: var(--clr-surface);
   border: 1px solid var(--clr-border);
-  padding: 1.6rem 1.5rem 1.5rem;
+  padding: 2rem 1.75rem 1.85rem;
 }
 
 .resume-handoff-icon {
   color: var(--clr-accent2);
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.35rem;
 }
 
 .resume-handoff-card h2 {
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   font-weight: 700;
   letter-spacing: -0.025em;
   color: #fff;
@@ -597,15 +708,18 @@ a.repo-card:hover {
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--clr-muted);
+  text-wrap: balance;
 }
 
 .resume-handoff-action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding: 0.7rem 1.1rem;
-  font-size: 0.95rem;
+  width: 100%;
+  margin-top: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #fff;
   background: var(--clr-accent);
@@ -919,9 +1033,137 @@ a.repo-card:hover {
 }
 
 /* =====================================================
-   RESPONSIVE — MOBILE
+   RESPONSIVE — SHORT VIEWPORT, TWO-PANE LAYOUT
+
+   A short window that is still wide enough for two panes, which after the
+   compact shell claims every short touch viewport means a desktop window
+   someone has squashed.  This layout never scrolls the page, so the sidebar
+   is the only way off the route and none of it can be allowed below a fold
+   that cannot be scrolled to: the profile gives up height until the nav and
+   the social row fit.
    ===================================================== */
-@media (max-width: 767px) {
+@media (min-width: 768px) and (max-height: 720px) {
+  .sidebar-inner {
+    padding-top: 1.35rem;
+    padding-bottom: calc(1.1rem + var(--safe-bottom));
+  }
+
+  .avatar-wrap {
+    width: clamp(88px, 18vh, 168px);
+    height: clamp(88px, 18vh, 168px);
+  }
+
+  .profile-block {
+    gap: 0.55rem;
+    padding-bottom: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .profile-name {
+    font-size: clamp(1.35rem, 3.4vh, 1.95rem);
+  }
+
+  .nav-btn {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .social-links {
+    padding-top: 0.85rem;
+  }
+}
+
+/* Shorter still.  The profile collapses to one identity row — name over
+   contact, beside the avatar — which brings the whole sidebar to ~287px. */
+@media (min-width: 768px) and (max-height: 500px) {
+  .sidebar-inner {
+    padding-top: 0.75rem;
+    padding-bottom: calc(0.65rem + var(--safe-bottom));
+  }
+
+  /* Name over contact, both beside the avatar.  Three stacked blocks became
+     one, which is most of the height this tier has to find. */
+  .profile-block {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "avatar name"
+      "avatar email";
+    align-content: center;
+    column-gap: 0.7rem;
+    row-gap: 0.3rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar-wrap {
+    grid-area: avatar;
+    align-self: center;
+    width: 52px;
+    height: 52px;
+  }
+
+  .profile-name {
+    grid-area: name;
+    align-self: end;
+    font-size: 1.15rem;
+    line-height: 1.05;
+  }
+
+  .email-link {
+    grid-area: email;
+    align-self: start;
+    justify-self: start;
+    padding: 0.24rem 0.55rem;
+  }
+
+  .nav-btn {
+    padding: 0.3rem 0.7rem;
+  }
+
+  .social-links {
+    padding-top: 0.5rem;
+  }
+
+  .social-link {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* The content pane loses its generous desktop margins too — at 300px of
+     height they cost more than the heading gains from them. */
+  .section-inner {
+    padding-top: 1.5rem;
+    padding-bottom: calc(2rem + var(--safe-bottom));
+  }
+
+  .section-inner h1 {
+    font-size: 1.9rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .section-inner h2 {
+    font-size: 1.6rem;
+  }
+
+  .section-sub {
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — COMPACT SHELL (phones)
+
+   Which shell a visitor gets is a question of the space available, not of
+   width alone.  A phone held in landscape reports 874×402: wide enough to
+   satisfy a width-only breakpoint, and nowhere near tall enough for a
+   full-height sidebar.  Anything short and touch-driven therefore gets the
+   same scrolling page phones get in portrait — hero on top, tab bar pinning
+   under it — where the page scrolls and the browser's toolbars can get out
+   of the way.
+
+   js/main.js switches on this exact condition — keep the two in step.
+   ===================================================== */
+@media (max-width: 767px), (max-height: 600px) and (pointer: coarse) {
   html, body {
     height: auto;
     min-height: 100%;
@@ -1074,7 +1316,9 @@ a.repo-card:hover {
     row-gap: var(--hero-gap-y);
     height: auto;
     width: 100%;
-    padding: var(--hero-pad-top) var(--hero-pad-x) var(--hero-pad-bottom);
+    padding: var(--hero-pad-top)
+             calc(var(--hero-pad-x) + var(--safe-x))
+             var(--hero-pad-bottom);
   }
 
   .avatar-hero {
@@ -1177,7 +1421,7 @@ a.repo-card:hover {
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0 0.62rem;
+    padding: 0 calc(0.62rem + var(--safe-x));
     height: calc(var(--bar-h) * var(--compact-progress, 0));
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, calc(0.10 * var(--compact-progress, 0)));
@@ -1258,6 +1502,7 @@ a.repo-card:hover {
     flex: none;
     height: var(--bar-h);
     width: 100%;
+    padding: 0 var(--safe-x);
   }
 
   .tab {
@@ -1335,21 +1580,26 @@ a.repo-card:hover {
     background: #f5f0e8;
   }
 
-  /* Resume: hand the PDF to the browser's own viewer instead of embedding it.
-     Mobile browsers render an embedded PDF as a single page that neither
-     scrolls nor zooms and overflows the viewport horizontally. */
-  #section-resume .resume-wrap {
-    display: none;
+  /* Centered in the space actually on screen.  Other routes reserve extra
+     height so there is always something to scroll; the card has nothing
+     below the fold to reach, so its content box is exactly the viewport
+     minus the pinned header — padding-top already holds that much. */
+  .app.app--mobile-header-fixed #section-resume.resume--fallback.active {
+    min-height: 100dvh;
+  }
+
+  .resume-viewer {
+    padding: 1rem calc(0.9rem + var(--safe-x)) 2rem;
   }
 
   .resume-handoff {
-    display: block;
-    padding: 2rem 1.25rem 3rem;
+    width: 100%;
+    padding: 2rem calc(1.25rem + var(--safe-x)) 2.5rem;
   }
 
   /* ── Content padding ── */
   .section-inner {
-    padding: 2rem 1.25rem 3rem;
+    padding: 2rem calc(1.25rem + var(--safe-x)) 3rem;
   }
 
   .section-inner h1 { font-size: 1.75rem; }
@@ -1366,7 +1616,7 @@ a.repo-card:hover {
   }
 
   .portfolio-intro {
-    padding: 0 1.25rem;
+    padding: 0 calc(1.25rem + var(--safe-x));
   }
 
   .pcard-meta { display: none; }
@@ -1378,6 +1628,115 @@ a.repo-card:hover {
 
   .pcard-content {
     padding: 1rem 1rem 1.25rem 1rem;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — COMPACT SHELL, SHORT VIEWPORT (phone in landscape)
+
+   Every viewport matching this also matches the second half of the block
+   above, so these rules only ever refine the compact shell.  Roughly 300px
+   of height survives the browser's own chrome here, so the hero collapses
+   to a single identity row and the bars give up what they can spare.  The
+   hero still scrolls away and the header still pins: every measurement
+   downstream derives from --bar-h, so it follows this override.
+   ===================================================== */
+@media (max-height: 600px) and (pointer: coarse) {
+  :root {
+    --bar-h: 46px;
+    --hero-avatar-size: 54px;
+    --hero-name-size: 1.35rem;
+    --hero-pad-top: 0.6rem;
+    --hero-pad-bottom: 0.6rem;
+    --hero-gap-x: 0.8rem;
+  }
+
+  /* Avatar, name, and contact row side by side instead of stacked. */
+  .topbar-hero {
+    grid-template-columns: var(--hero-avatar-size) max-content minmax(0, 1fr);
+    grid-template-areas: "avatar name social";
+    align-items: center;
+    row-gap: 0;
+  }
+
+  .hero-name {
+    line-height: 1.08;
+  }
+
+  .hero-social-row {
+    justify-self: end;
+  }
+
+  .hero-social-row.social-links {
+    margin-top: 0;
+    justify-content: flex-end;
+  }
+
+  /* The row no longer spans the hero, so the email must not stretch into
+     space the name is using; it keeps its label only while it fits. */
+  .hero-social-row .hero-email-inline {
+    flex: 0 1 auto;
+  }
+
+  .section-inner {
+    padding-top: 1.5rem;
+  }
+
+  .resume-handoff {
+    padding: 1.1rem calc(1.25rem + var(--safe-x)) 1.25rem;
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — SHORT VIEWPORT, RESUME FALLBACK CARD
+
+   Stacked, the card is taller than the ~230px a small phone in landscape
+   leaves for it, and the button — the only thing on the route when this
+   card is what shows — ends up below the fold.  On its side it fits.
+   ===================================================== */
+@media (max-height: 500px) {
+  .resume-viewer {
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .resume-handoff-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon title  action"
+      "icon detail action";
+    align-items: center;
+    column-gap: 1.15rem;
+    row-gap: 0.2rem;
+    text-align: left;
+    max-width: 34rem;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .resume-handoff-icon {
+    grid-area: icon;
+    margin-bottom: 0;
+  }
+
+  .resume-handoff-card h2 {
+    grid-area: title;
+    align-self: end;
+    font-size: 1.3rem;
+  }
+
+  .resume-handoff-card p {
+    grid-area: detail;
+    align-self: start;
+    font-size: 0.9rem;
+    text-wrap: pretty;
+  }
+
+  .resume-handoff-action {
+    grid-area: action;
+    width: auto;
+    margin-top: 0;
+    padding: 0.7rem 1.1rem;
   }
 }
 

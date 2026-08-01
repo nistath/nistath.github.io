@@ -25,14 +25,26 @@ if (emailTopbar && emailTextTopbar) {
   emailTopbar.setAttribute('href', 'mailto:' + email);
 }
 
+/* ── Which shell is on screen ──
+   The site has two presentations and the choice is about the space
+   available, not the width alone: a phone held in landscape reports
+   874×402, wide enough to clear any width-only breakpoint and nowhere near
+   tall enough for a full-height sidebar.  css/main.css switches on this
+   exact string; the two must stay in step. */
+var COMPACT_SHELL_QUERY = '(max-width: 767px), (max-height: 600px) and (pointer: coarse)';
+var compactShell = window.matchMedia(COMPACT_SHELL_QUERY);
+
+function isCompactShell() {
+  return compactShell.matches;
+}
+
 /* Mobile hero email: switch to icon-only only when its actual width is too small. */
 var HERO_EMAIL_ICON_ONLY_WIDTH_PX = 120;
 
 function updateHeroEmailMode() {
   if (!emailTopbar) return;
 
-  var isMobile = window.innerWidth <= 767;
-  if (!isMobile) {
+  if (!isCompactShell()) {
     emailTopbar.classList.remove('hero-email-inline--icon-only');
     return;
   }
@@ -62,7 +74,6 @@ if (emailTopbarCompact) {
    route the site does not generate — an empty content/portfolio/, say — is
    simply absent here, and every path, title, social card, and surface color
    comes from the same record the redirect stubs were built from. */
-var MOBILE_BREAKPOINT = 767;
 var githubLoaded = false;
 var resumeLoaded = false;
 var activeSection = null;
@@ -132,28 +143,182 @@ function getSectionFromPath(pathname) {
 }
 
 /* ── Resume ──
-   Only the desktop layout embeds the PDF.  Mobile browsers render an
-   embedded PDF as a single fixed page that neither scrolls nor zooms, so the
-   mobile layout shows a card that opens the file in the browser's own
-   viewer instead.  Fetching the PDF is tied to the embed actually being
-   visible, so phones never download it, and a window resized across the
-   breakpoint still ends up with a loaded viewer. */
-var mobileLayout = window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)');
+   The route reads the document in place; nobody is sent off the site to see
+   it.  How it is drawn depends on what the browser can do, which is asked
+   directly rather than guessed from the viewport:
 
-function loadResume() {
-  if (resumeLoaded || mobileLayout.matches) return;
+   - embed    the browser has an inline PDF viewer of its own (every desktop
+              browser). Handing it the file gives real text, real selection,
+              search, and printing for free.
+   - render   it does not (no browser on iOS does, and neither does Chrome
+              on Android). pdf.js paints the pages into canvases instead.
+   - fallback the file could not be fetched at all — a cross-origin host
+              that sends no CORS headers, or an offline reader. The card
+              links out, which is the only thing left that can work.
 
-  var frame = document.querySelector('#section-resume iframe[data-src]');
-  if (!frame) return;
+   pdf.js is vendored under /vendor/pdfjs and only requested by the browsers
+   that reach the render path, so the desktop route stays as light as it was
+   and the phone downloads it once, on the route that needs it. */
+var RESUME = (window.SITE_CONTENT && window.SITE_CONTENT.resume) || null;
+var PDFJS_MODULE_URL = '/vendor/pdfjs/pdf.min.mjs';
+var PDFJS_WORKER_URL = '/vendor/pdfjs/pdf.worker.min.mjs';
+var PDFJS_STANDARD_FONTS_URL = '/vendor/pdfjs/standard_fonts/';
+/* Painting above the device's own density buys headroom for a pinch-zoom
+   before the sheet turns soft.  The two caps are what keep that affordable
+   on a phone: iOS gives a tab a hard canvas-area budget and discards the
+   backing store of anything past it — a blank page where a rendered one
+   should be — so no single page may be enormous, and the pages together may
+   not be either.  A resume never comes near the budget; a long document
+   loses sharpness instead of losing pages. */
+var RESUME_OVERSAMPLE = 1.5;
+var RESUME_MAX_CANVAS_PX = 2400;
+var RESUME_MAX_TOTAL_PX = 24e6;
+var RESUME_PAGE_ASPECT_GUESS = 1.4;
+var RESUME_REPAINT_THRESHOLD_PX = 32;
 
-  frame.setAttribute('src', frame.dataset.src);
-  frame.removeAttribute('data-src');
-  resumeLoaded = true;
+var resumeSection = document.getElementById('section-resume');
+var resumeDoc = null;
+var resumePaintedWidth = 0;
+
+function setResumeState(state) {
+  if (!resumeSection) return;
+  resumeSection.classList.remove('resume--embed', 'resume--render', 'resume--fallback');
+  resumeSection.classList.add('resume--' + state);
 }
 
-mobileLayout.addEventListener('change', function() {
-  if (activeSection === 'resume') loadResume();
-});
+/* Does this browser display a PDF inline when given one?  navigator
+   .pdfViewerEnabled answers exactly that question and is the whole reason
+   this can be a capability test rather than a guess about screen size.
+   Engines predating it only ever advertised a PDF plug-in on desktop. */
+function browserRendersPdfInline() {
+  if (typeof navigator.pdfViewerEnabled === 'boolean') return navigator.pdfViewerEnabled;
+  return Boolean(navigator.mimeTypes && navigator.mimeTypes['application/pdf']);
+}
+
+function embedResume() {
+  var frame = document.querySelector('#section-resume iframe[data-src]');
+  if (frame) {
+    frame.setAttribute('src', frame.dataset.src);
+    frame.removeAttribute('data-src');
+  }
+  setResumeState('embed');
+}
+
+/* Pages are painted one after another rather than all at once: a phone
+   holding several full-resolution page bitmaps at the same time is how this
+   turns into a memory warning. */
+function paintResumePages() {
+  var host = document.getElementById('resume-pages');
+  if (!host || !resumeDoc) return Promise.resolve();
+
+  var cssWidth = host.clientWidth;
+  if (!cssWidth) return Promise.resolve();
+
+  resumePaintedWidth = cssWidth;
+  var density = Math.min(3, (window.devicePixelRatio || 1) * RESUME_OVERSAMPLE);
+  var pixelWidth = Math.min(RESUME_MAX_CANVAS_PX, Math.round(cssWidth * density));
+
+  /* Spend the whole-document budget evenly, and never below the width the
+     page is displayed at — a soft sheet still beats a blank one. */
+  var perPageBudget = RESUME_MAX_TOTAL_PX / resumeDoc.numPages;
+  if (pixelWidth * pixelWidth * RESUME_PAGE_ASPECT_GUESS > perPageBudget) {
+    pixelWidth = Math.max(
+      Math.round(cssWidth),
+      Math.floor(Math.sqrt(perPageBudget / RESUME_PAGE_ASPECT_GUESS))
+    );
+  }
+
+  var painted = document.createDocumentFragment();
+  var chain = Promise.resolve();
+
+  for (var number = 1; number <= resumeDoc.numPages; number++) {
+    chain = chain.then(paintOnePage(number, pixelWidth, painted));
+  }
+
+  return chain.then(function() {
+    host.innerHTML = '';
+    host.appendChild(painted);
+  });
+}
+
+function paintOnePage(number, pixelWidth, painted) {
+  return function() {
+    return resumeDoc.getPage(number).then(function(page) {
+      var unscaled = page.getViewport({ scale: 1 });
+      var viewport = page.getViewport({ scale: pixelWidth / unscaled.width });
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      painted.appendChild(canvas);
+
+      return page.render({
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport
+      }).promise;
+    });
+  };
+}
+
+function renderResume() {
+  setResumeState('render');
+  var status = document.getElementById('resume-viewer-status');
+
+  return import(PDFJS_MODULE_URL).then(function(pdfjs) {
+    pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+    return pdfjs.getDocument({
+      url: RESUME.pdfUrl,
+      standardFontDataUrl: PDFJS_STANDARD_FONTS_URL
+    }).promise;
+  }).then(function(doc) {
+    resumeDoc = doc;
+    return paintResumePages();
+  }).then(function() {
+    if (status) status.hidden = true;
+  }).catch(function(error) {
+    /* Anything at all — a blocked cross-origin fetch, a parse failure, a
+       browser without dynamic import — lands on the link that still works.
+       The most likely cause by far is the first, and it is not the visitor's
+       to fix, so leave the owner a note rather than a silent downgrade. */
+    if (window.console && console.warn) {
+      console.warn(
+        'Resume: could not render ' + RESUME.pdfUrl + ' inline, falling back to a link. '
+        + 'If this is a cross-origin fetch the host is refusing, host the PDF in this '
+        + 'repository and point content/resume.yml at its path instead.',
+        error
+      );
+    }
+    setResumeState('fallback');
+  });
+}
+
+function loadResume() {
+  if (resumeLoaded || !RESUME || !resumeSection) return;
+  resumeLoaded = true;
+
+  if (browserRendersPdfInline()) {
+    embedResume();
+    return;
+  }
+  renderResume();
+}
+
+/* A rotation changes the column width, and a canvas painted for the old one
+   is either soft or oversized.  Repaint from the document already in memory
+   once the width has settled and actually moved. */
+var resumeRepaintTimer = null;
+
+function scheduleResumeRepaint() {
+  if (!resumeDoc) return;
+
+  var host = document.getElementById('resume-pages');
+  if (!host || !host.clientWidth) return;
+  if (Math.abs(host.clientWidth - resumePaintedWidth) < RESUME_REPAINT_THRESHOLD_PX) return;
+
+  window.clearTimeout(resumeRepaintTimer);
+  resumeRepaintTimer = window.setTimeout(paintResumePages, 250);
+}
+
+window.addEventListener('resize', scheduleResumeRepaint, { passive: true });
 
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
@@ -258,7 +423,7 @@ function navigate(section, options) {
      Re-apply after layout so the sticky header cannot get stuck mid-reveal.
      The header is updated directly rather than through a synthetic scroll
      event, which used to wake every other scroll listener on the page too. */
-  if (window.innerWidth <= MOBILE_BREAKPOINT && contentScrollEl) {
+  if (isCompactShell() && contentScrollEl) {
     measureHero();
     var targetScrollTop = shouldCollapseMobileHero ? heroMetrics.height : 0;
 
@@ -272,16 +437,8 @@ function navigate(section, options) {
   }
 }
 
-/* ── Wire up sidebar nav buttons ── */
-document.querySelectorAll('.sidebar-nav .nav-btn').forEach(function(btn) {
-  btn.addEventListener('click', function(e) {
-    e.preventDefault();
-    navigate(btn.dataset.section, { collapseMobileHero: true });
-  });
-});
-
-/* ── Wire up topbar tabs ── */
-document.querySelectorAll('.topbar-nav .tab').forEach(function(btn) {
+/* ── Wire up sidebar nav buttons and topbar tabs ── */
+document.querySelectorAll('.sidebar-nav .nav-btn, .topbar-nav .tab').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
     e.preventDefault();
     navigate(btn.dataset.section, { collapseMobileHero: true });
@@ -348,7 +505,7 @@ function updateHeroVisibility() {
 
   /* Greece: never pin the site header.  The hero and the tab row scroll
      away together, leaving the guide's own nav sticking to the top. */
-  if (window.innerWidth > MOBILE_BREAKPOINT
+  if (!isCompactShell()
       || (appEl && appEl.classList.contains('app--greece'))) {
     stickyHeaderEl.style.setProperty('--compact-progress', '0');
     stickyHeaderEl.classList.remove('hero-hidden');
@@ -389,6 +546,17 @@ if (stickyHeaderEl && topbarEl && contentEl) {
   measureHero();
   updateHeroVisibility();
 }
+
+/* Rotating a phone swaps the whole shell, so re-derive everything that was
+   decided from it.  The hero has to be re-measured before the header is
+   re-evaluated: the landscape hero is a single row, a third of the height
+   the stacked one had. */
+compactShell.addEventListener('change', function() {
+  updateHeroEmailMode();
+  measureHero();
+  updateHeroVisibility();
+  if (activeSection === 'resume') loadResume();
+});
 
 /* ── Handle internal section links inside content (e.g. in about text) ── */
 document.getElementById('content').addEventListener('click', function(e) {
@@ -708,7 +876,7 @@ function greeceNavInit() {
     title.appendChild(chevron);
 
     function syncTipState() {
-      var isCollapsible = window.innerWidth <= MOBILE_BREAKPOINT;
+      var isCollapsible = isCompactShell();
       var isOpen = !isCollapsible || tip.classList.contains('gr-tip--open');
 
       if (isCollapsible) {
@@ -728,7 +896,7 @@ function greeceNavInit() {
     }
 
     function toggleTip() {
-      if (window.innerWidth > MOBILE_BREAKPOINT) return;
+      if (!isCompactShell()) return;
       tip.classList.toggle('gr-tip--open');
       syncTipState();
     }
