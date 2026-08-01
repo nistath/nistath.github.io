@@ -92,10 +92,18 @@ authoritative validation command.
 - `content/about.yml` contains the About heading, paragraphs, and farewell.
 - `content/github.yml` contains the GitHub heading, subtitle, loading text,
   and ordered pinned-repository list.
-- `content/resume.yml` contains the resume PDF URL, the embedded viewer's
-  title, and — under `mobile` — the heading, description, and button text of
-  the card phones get in place of that viewer, since mobile browsers cannot
-  scroll or zoom an embedded PDF.
+- `content/resume.yml` contains the resume PDF address and title, the two
+  strings the rendered viewer uses under `viewer`, and — under `fallback` —
+  the heading, description, and button text of the card shown only when the
+  file cannot be fetched at all.
+
+  `pdf_url` takes either an `https://` address or a path to a file in this
+  repository, such as `/files/resume.pdf`. Prefer the repository path. The
+  site renders the résumé into the page for browsers that have no PDF viewer
+  of their own — every browser on iOS — and that means fetching the file:
+  another host only permits that if it sends CORS headers, while a file in
+  this repository is always readable. If the fetch is refused, visitors get
+  the `fallback` card instead of the résumé itself.
 
 Routine wording, link, repository-order, and resume-source changes belong in
 these files. The template and JavaScript consume them automatically.

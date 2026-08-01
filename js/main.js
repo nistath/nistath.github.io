@@ -26,12 +26,12 @@ if (emailTopbar && emailTextTopbar) {
 }
 
 /* ── Which shell is on screen ──
-   The site has two presentations and the choice is about the space
-   available, not the width alone: a phone held in landscape reports
-   874×402, wide enough to clear any width-only breakpoint and far too short
-   for a full-height sidebar or an embedded PDF.  css/main.css switches on
-   this exact string; the two must stay in step. */
-var COMPACT_SHELL_QUERY = '(max-width: 767px), (max-height: 600px) and (pointer: coarse)';
+   Below this width there is no room for two panes and the shell becomes a
+   single scrolling page.  A phone in landscape is wider than this and keeps
+   the sidebar; what it does not have is height, which css/main.css handles
+   by collapsing the profile.  That stylesheet switches on this exact width
+   — the two must stay in step. */
+var COMPACT_SHELL_QUERY = '(max-width: 767px)';
 var compactShell = window.matchMedia(COMPACT_SHELL_QUERY);
 
 function isCompactShell() {
@@ -143,56 +143,155 @@ function getSectionFromPath(pathname) {
 }
 
 /* ── Resume ──
-   Only the wide layout embeds the PDF.  Mobile browsers render an embedded
-   PDF as a single fixed page that neither scrolls nor zooms, so the compact
-   shell hands the file to the browser's own viewer instead.  Fetching the
-   PDF is tied to the embed actually being visible, so phones never download
-   it, and a window resized across the breakpoint still ends up with a
-   loaded viewer. */
-function loadResume() {
-  if (resumeLoaded || isCompactShell()) return;
+   The route reads the document in place; nobody is sent off the site to see
+   it.  How it is drawn depends on what the browser can do, which is asked
+   directly rather than guessed from the viewport:
 
-  var frame = document.querySelector('#section-resume iframe[data-src]');
-  if (!frame) return;
+   - embed    the browser has an inline PDF viewer of its own (every desktop
+              browser). Handing it the file gives real text, real selection,
+              search, and printing for free.
+   - render   it does not (no browser on iOS does, and neither does Chrome
+              on Android). pdf.js paints the pages into canvases instead.
+   - fallback the file could not be fetched at all — a cross-origin host
+              that sends no CORS headers, or an offline reader. The card
+              links out, which is the only thing left that can work.
 
-  frame.setAttribute('src', frame.dataset.src);
-  frame.removeAttribute('data-src');
-  resumeLoaded = true;
+   pdf.js is vendored under /vendor/pdfjs and only requested by the browsers
+   that reach the render path, so the desktop route stays as light as it was
+   and the phone downloads it once, on the route that needs it. */
+var RESUME = (window.SITE_CONTENT && window.SITE_CONTENT.resume) || null;
+var PDFJS_MODULE_URL = '/vendor/pdfjs/pdf.min.mjs';
+var PDFJS_WORKER_URL = '/vendor/pdfjs/pdf.worker.min.mjs';
+var PDFJS_STANDARD_FONTS_URL = '/vendor/pdfjs/standard_fonts/';
+/* Painting above the device's own density buys headroom for a pinch-zoom
+   before the sheet turns soft; the cap keeps a page off the tens of
+   megabytes a naive scale would allocate on a wide, dense screen. */
+var RESUME_OVERSAMPLE = 1.5;
+var RESUME_MAX_CANVAS_PX = 2400;
+var RESUME_REPAINT_THRESHOLD_PX = 32;
+
+var resumeSection = document.getElementById('section-resume');
+var resumeDoc = null;
+var resumePaintedWidth = 0;
+
+function setResumeState(state) {
+  if (!resumeSection) return;
+  resumeSection.classList.remove('resume--embed', 'resume--render', 'resume--fallback');
+  resumeSection.classList.add('resume--' + state);
 }
 
-/* On the compact shell the Resume nav entry is that same handoff, one tap
-   earlier: it opens the PDF directly rather than routing to a page whose
-   only content is a button that opens the PDF.  The /resume section stays
-   for direct loads, for shared links, and for the wide layout's embed, and
-   the markup keeps its real href so the route still works without JS. */
-var RESUME_PDF_URL = (window.SITE_CONTENT && window.SITE_CONTENT.resumePdfUrl) || '';
-var resumeNavLinks = Array.prototype.slice.call(
-  document.querySelectorAll('.nav-btn[data-section="resume"], .tab[data-section="resume"]')
-);
-var resumeNavRoutePaths = resumeNavLinks.map(function(link) {
-  return link.getAttribute('href');
-});
+/* Does this browser display a PDF inline when given one?  navigator
+   .pdfViewerEnabled answers exactly that question and is the whole reason
+   this can be a capability test rather than a guess about screen size.
+   Engines predating it only ever advertised a PDF plug-in on desktop. */
+function browserRendersPdfInline() {
+  if (typeof navigator.pdfViewerEnabled === 'boolean') return navigator.pdfViewerEnabled;
+  return Boolean(navigator.mimeTypes && navigator.mimeTypes['application/pdf']);
+}
 
-function syncResumeNavMode() {
-  var handsOff = Boolean(RESUME_PDF_URL) && isCompactShell();
+function embedResume() {
+  var frame = document.querySelector('#section-resume iframe[data-src]');
+  if (frame) {
+    frame.setAttribute('src', frame.dataset.src);
+    frame.removeAttribute('data-src');
+  }
+  setResumeState('embed');
+}
 
-  resumeNavLinks.forEach(function(link, index) {
-    link.classList.toggle('nav-external', handsOff);
-    if (handsOff) {
-      link.setAttribute('href', RESUME_PDF_URL);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('rel', 'noopener noreferrer');
-    } else {
-      link.setAttribute('href', resumeNavRoutePaths[index]);
-      link.removeAttribute('target');
-      link.removeAttribute('rel');
-    }
+/* Pages are painted one after another rather than all at once: a phone
+   holding several full-resolution page bitmaps at the same time is how this
+   turns into a memory warning. */
+function paintResumePages() {
+  var host = document.getElementById('resume-pages');
+  if (!host || !resumeDoc) return Promise.resolve();
+
+  var cssWidth = host.clientWidth;
+  if (!cssWidth) return Promise.resolve();
+
+  resumePaintedWidth = cssWidth;
+  var density = Math.min(3, (window.devicePixelRatio || 1) * RESUME_OVERSAMPLE);
+  var pixelWidth = Math.min(RESUME_MAX_CANVAS_PX, Math.round(cssWidth * density));
+  var painted = document.createDocumentFragment();
+  var chain = Promise.resolve();
+
+  for (var number = 1; number <= resumeDoc.numPages; number++) {
+    chain = chain.then(paintOnePage(number, pixelWidth, painted));
+  }
+
+  return chain.then(function() {
+    host.innerHTML = '';
+    host.appendChild(painted);
   });
 }
 
-function isHandoffLink(el) {
-  return el.classList.contains('nav-external');
+function paintOnePage(number, pixelWidth, painted) {
+  return function() {
+    return resumeDoc.getPage(number).then(function(page) {
+      var unscaled = page.getViewport({ scale: 1 });
+      var viewport = page.getViewport({ scale: pixelWidth / unscaled.width });
+      var canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      painted.appendChild(canvas);
+
+      return page.render({
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport
+      }).promise;
+    });
+  };
 }
+
+function renderResume() {
+  setResumeState('render');
+  var status = document.getElementById('resume-viewer-status');
+
+  return import(PDFJS_MODULE_URL).then(function(pdfjs) {
+    pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+    return pdfjs.getDocument({
+      url: RESUME.pdfUrl,
+      standardFontDataUrl: PDFJS_STANDARD_FONTS_URL
+    }).promise;
+  }).then(function(doc) {
+    resumeDoc = doc;
+    return paintResumePages();
+  }).then(function() {
+    if (status) status.hidden = true;
+  }).catch(function() {
+    /* Anything at all — a blocked cross-origin fetch, a parse failure, a
+       browser without dynamic import — lands on the link that still works. */
+    setResumeState('fallback');
+  });
+}
+
+function loadResume() {
+  if (resumeLoaded || !RESUME || !resumeSection) return;
+  resumeLoaded = true;
+
+  if (browserRendersPdfInline()) {
+    embedResume();
+    return;
+  }
+  renderResume();
+}
+
+/* A rotation changes the column width, and a canvas painted for the old one
+   is either soft or oversized.  Repaint from the document already in memory
+   once the width has settled and actually moved. */
+var resumeRepaintTimer = null;
+
+function scheduleResumeRepaint() {
+  if (!resumeDoc) return;
+
+  var host = document.getElementById('resume-pages');
+  if (!host || !host.clientWidth) return;
+  if (Math.abs(host.clientWidth - resumePaintedWidth) < RESUME_REPAINT_THRESHOLD_PX) return;
+
+  window.clearTimeout(resumeRepaintTimer);
+  resumeRepaintTimer = window.setTimeout(paintResumePages, 250);
+}
+
+window.addEventListener('resize', scheduleResumeRepaint, { passive: true });
 
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
@@ -311,12 +410,9 @@ function navigate(section, options) {
   }
 }
 
-/* ── Wire up sidebar nav buttons and topbar tabs ──
-   A nav entry marked as a handoff is left to the browser: it points at
-   another document, not at a section of this one. */
+/* ── Wire up sidebar nav buttons and topbar tabs ── */
 document.querySelectorAll('.sidebar-nav .nav-btn, .topbar-nav .tab').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
-    if (isHandoffLink(btn)) return;
     e.preventDefault();
     navigate(btn.dataset.section, { collapseMobileHero: true });
   });
@@ -429,21 +525,16 @@ if (stickyHeaderEl && topbarEl && contentEl) {
    re-evaluated: the landscape hero is a single row, a third of the height
    the stacked one had. */
 compactShell.addEventListener('change', function() {
-  syncResumeNavMode();
   updateHeroEmailMode();
   measureHero();
   updateHeroVisibility();
   if (activeSection === 'resume') loadResume();
 });
 
-syncResumeNavMode();
-
-/* ── Handle internal section links inside content (e.g. in about text) ──
-   The mobile tab row lives inside #content too, so this also catches the
-   tabs; a handoff tab points at another document and must be left alone. */
+/* ── Handle internal section links inside content (e.g. in about text) ── */
 document.getElementById('content').addEventListener('click', function(e) {
   var link = e.target.closest('a[data-section]');
-  if (link && !isHandoffLink(link)) {
+  if (link) {
     e.preventDefault();
     navigate(link.dataset.section, { collapseMobileHero: true });
   }

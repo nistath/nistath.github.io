@@ -54,6 +54,13 @@ The production artifact is zero-framework static HTML, CSS, and JavaScript.
 Eleventy, Nunjucks, YAML parsing, Markdown rendering, and schema validation are
 build-time tools only.
 
+pdf.js is the one library that reaches the browser, vendored into
+`_site/vendor/pdfjs/` at build time and loaded only by browsers with no inline
+PDF viewer of their own, only on the resume route. See the resume section
+below. Treat it as the exception it is: a second one needs the same
+justification — a capability the platform genuinely lacks, paid for only by
+the visitors who lack it.
+
 ### Source boundaries
 
 - `content/*.yml`, `content/portfolio/`, and `content/greece/` are the
@@ -97,27 +104,33 @@ The app uses a CSS grid layout with two modes controlled by the
 - Browsing mode (other sections): topbar replaces the desktop sidebar
 - The compact shell replaces both with a scrolling page
 
-Which shell a visitor gets is a question of the space available, not of width
-alone. A phone held in landscape reports 874×402: wide enough to satisfy a
-width-only breakpoint, and nowhere near tall enough for a full-height sidebar
-or an embedded PDF. The condition is therefore
+Width decides which of the two shells applies — `(max-width: 767px)`, written
+in `css/main.css`, in the Greece mobile block in `css/greece.css`, and as
+`COMPACT_SHELL_QUERY` in `js/main.js`, which matches it with `matchMedia`
+rather than measuring `window.innerWidth`. All three must stay in step.
 
-```
-(max-width: 767px), (max-height: 600px) and (pointer: coarse)
-```
+Height is a separate question, and the one landscape gets wrong. A phone held
+that way is 874×402, so it keeps the two-pane layout, but the page here never
+scrolls and the browser therefore never hides its toolbars: about 300px of that
+height is on screen. `.app` is sized in `dvh` so it matches what is actually
+visible, `.sidebar-inner` scrolls as a backstop, and two tiers shrink the
+profile until the rest of the sidebar fits beside it:
 
-written verbatim in `css/main.css`, in the Greece mobile block in
-`css/greece.css`, and as `COMPACT_SHELL_QUERY` in `js/main.js`, which matches
-it with `matchMedia` rather than measuring `window.innerWidth`. All three must
-stay in step. A second block, `(max-height: 600px) and (pointer: coarse)`,
-refines the compact shell for a phone in landscape: the hero becomes a single
-identity row and `--bar-h` shrinks, and every other measurement follows from
-those. Everything that has to clear the sensor housing when the phone is turned
-adds `--safe-x` to its horizontal padding.
+- `(min-width: 768px) and (max-height: 720px)` — smaller avatar and name,
+  tighter spacing, for a short desktop window.
+- `(min-width: 768px) and (max-height: 500px)` — the profile collapses to one
+  identity row, name over contact beside the avatar. Everything the sidebar
+  holds then fits in about 287px, so nothing lands below a fold the visitor
+  cannot scroll to.
 
-The two-pane layout is sized in `dvh` and its sidebar scrolls, so a window too
-short to hold the profile still reaches the nav; `@media (min-width: 768px) and
-(max-height: 720px)` shrinks the profile so it rarely comes to that.
+`(max-width: 767px) and (max-height: 500px)` is the same idea for the compact
+shell: an older phone, narrow enough for the scrolling page and still short.
+
+Landscape also puts the sensor housing beside the page rather than above it,
+on whichever side the phone was turned toward. Each pane insets the edge it
+owns — the sidebar `--safe-left`, the content `--safe-right` — so it is right
+either way round. `--safe-x` is the symmetric form, for the compact shell's
+single centered column.
 
 On the compact shell the page itself is the only scroll container. Overflow is
 set on `html` (it propagates to the viewport) and must stay `visible` on `body`
@@ -160,20 +173,41 @@ fallback, navigation, titles, and social metadata all follow from the registry.
 
 ### Resume
 
-The resume is an external PDF, and a phone browser renders an embedded PDF as
-one fixed page that neither scrolls nor zooms. Only the two-pane layout embeds
-it; the compact shell hands the file to the browser's own viewer instead, and
-`loadResume` is tied to the embed being the visible presentation so a phone
-never downloads the file.
+The route shows the document in place. Nobody is sent off the site to read it,
+and which of three presentations they get is a capability test, not a guess
+about screen size — `navigator.pdfViewerEnabled` answers exactly the question
+that matters. `js/main.js` puts the matching state class on `#section-resume`
+and `css/main.css` shows one child of it:
 
-On the compact shell that handoff also moves up into the nav:
-`syncResumeNavMode` points the Resume entry at the PDF, marks it
-`nav-external`, and the click handlers step aside for anything carrying that
-class — including the delegated one on `#content`, which the tab row lives
-inside. The URL comes from `window.SITE_CONTENT.resumePdfUrl`, injected from
-`content/resume.yml`; the generated markup keeps its real `/resume` href, so
-the route still works without JavaScript and the section still renders for
-direct loads and shared links.
+| state | when | presentation |
+| --- | --- | --- |
+| `resume--embed` | the browser has an inline PDF viewer | `.resume-wrap`'s iframe — real text, selection, search, print |
+| `resume--render` | it does not: every browser on iOS, and Chrome on Android | `.resume-viewer` — pdf.js paints the pages into canvases |
+| `resume--fallback` | the file could not be fetched at all | `.resume-handoff` — the card, which links out |
+
+The markup ships in `resume--fallback`, the only state needing no JavaScript.
+`check-generated.cjs` asserts that.
+
+pdf.js is vendored: `.eleventy.js` copies `pdf.min.mjs`, its worker, and the
+standard fonts out of `node_modules` into `_site/vendor/pdfjs/`, so there is no
+CDN and no third-party runtime dependency. It is a deliberate exception to the
+zero-framework rule, and a narrow one — nothing requests it until a browser
+without its own PDF viewer opens this route, so the desktop path is unchanged
+and a phone pays for it once. Pages are painted one at a time, above CSS
+resolution so a pinch-zoom stays sharp and under a pixel cap so a page cannot
+allocate tens of megabytes; a width change repaints from the document already
+in memory, which is what keeps a rotation sharp.
+
+The renderer has to fetch the bytes, so `pdf_url` in `content/resume.yml`
+matters: a root-relative path is served from this origin and always readable,
+while another host only permits the fetch if it sends CORS headers. If it does
+not, `getDocument` rejects and the route lands on `resume--fallback` — no worse
+than a plain link, but not the inline read either. The `pdf-source` format in
+`load-content.cjs` accepts both shapes.
+
+The canvases carry `role="img"` and the document title: the rendered text is
+not selectable and there is no text layer, so the viewer's own "open the
+original" link is the accessible path to the real document.
 
 ### Portfolio cards
 

@@ -2,11 +2,20 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["pdf_url", "title", "mobile"],
+  "required": ["pdf_url", "title", "viewer", "fallback"],
   "properties": {
-    "pdf_url": { "type": "string", "format": "https-url" },
+    "pdf_url": { "type": "string", "format": "pdf-source" },
     "title": { "type": "string", "minLength": 1 },
-    "mobile": {
+    "viewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["loading", "action"],
+      "properties": {
+        "loading": { "type": "string", "minLength": 1 },
+        "action": { "type": "string", "minLength": 1 }
+      }
+    },
+    "fallback": {
       "type": "object",
       "additionalProperties": false,
       "required": ["heading", "description", "action"],

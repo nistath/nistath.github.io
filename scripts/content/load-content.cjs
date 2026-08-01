@@ -52,6 +52,22 @@ function createValidators() {
       }
     },
   });
+  /* A document this site can both link to and fetch.  A root-relative path
+     is served from this origin, so the rendered viewer can always read it;
+     an https address only works there if that host sends CORS headers. */
+  ajv.addFormat('pdf-source', {
+    type: 'string',
+    validate(value) {
+      if (/['"\u0000-\u001f\u007f]/.test(value)) return false;
+      if (value.startsWith('/') && !value.startsWith('//')) return value.length > 1;
+      try {
+        const url = new URL(value);
+        return url.protocol === 'https:' && Boolean(url.hostname);
+      } catch (_error) {
+        return false;
+      }
+    },
+  });
   ajv.addFormat('map-query', {
     type: 'string',
     validate(value) {
