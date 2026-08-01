@@ -186,12 +186,29 @@ function setResumeState(state) {
   resumeSection.classList.add('resume--' + state);
 }
 
-/* Does this browser display a PDF inline when given one?  navigator
-   .pdfViewerEnabled answers exactly that question and is the whole reason
-   this can be a capability test rather than a guess about screen size.
-   Engines predating it only ever advertised a PDF plug-in on desktop. */
+/* iOS and iPadOS have to be named rather than asked about.  There are two
+   questions here — does the browser display a PDF when you navigate to one,
+   and does it display one usefully inside an iframe — and
+   navigator.pdfViewerEnabled only answers the first.  Safari answers yes to
+   it on iOS while still rendering an embedded PDF as a single fixed page:
+   no fit-to-width, no zoom, no scrolling, spilling out of the frame on
+   every side.  Nothing in the platform distinguishes the two answers, so
+   this is a name, and it is deliberate.
+
+   iPadOS reports itself as a Mac and is caught by its touch points, which no
+   real Mac has. */
+function isApplePhoneOrTablet() {
+  var ua = navigator.userAgent || '';
+  if (/iPad|iPhone|iPod/.test(ua)) return true;
+  return /Macintosh/.test(ua) && (navigator.maxTouchPoints || 0) > 1;
+}
+
+/* Can this browser be handed the file and be trusted to show it in place? */
 function browserRendersPdfInline() {
+  if (isApplePhoneOrTablet()) return false;
   if (typeof navigator.pdfViewerEnabled === 'boolean') return navigator.pdfViewerEnabled;
+  /* Engines predating pdfViewerEnabled only ever advertised the plug-in on
+     desktop, which is the same answer by a longer route. */
   return Boolean(navigator.mimeTypes && navigator.mimeTypes['application/pdf']);
 }
 

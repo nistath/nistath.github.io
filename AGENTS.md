@@ -179,10 +179,9 @@ fallback, navigation, titles, and social metadata all follow from the registry.
 ### Resume
 
 The route shows the document in place. Nobody is sent off the site to read it,
-and which of three presentations they get is a capability test, not a guess
-about screen size — `navigator.pdfViewerEnabled` answers exactly the question
-that matters. `js/main.js` puts the matching state class on `#section-resume`
-and `css/main.css` shows one child of it:
+and which of three presentations they get is decided by what the browser can
+do, not by screen size. `js/main.js` puts the matching state class on
+`#section-resume` and `css/main.css` shows one child of it:
 
 | state | when | presentation |
 | --- | --- | --- |
@@ -192,6 +191,16 @@ and `css/main.css` shows one child of it:
 
 The markup ships in `resume--fallback`, the only state needing no JavaScript.
 `check-generated.cjs` asserts that.
+
+`navigator.pdfViewerEnabled` decides between the first two, with one platform
+named outright ahead of it. There are two questions — does the browser display
+a PDF when you navigate to one, and does it display one usefully inside an
+iframe — and that property only answers the first. Safari answers yes to it on
+iOS while still rendering an embedded PDF as a single fixed page: no
+fit-to-width, no zoom, no scrolling, spilling out of the frame on every side.
+Nothing in the platform distinguishes the two answers, so `js/main.js` names
+iOS and iPadOS and sends them to the renderer. Do not simplify that away; the
+embed state looked correct in every test that did not run on an iPhone.
 
 pdf.js is vendored: `.eleventy.js` copies `pdf.min.mjs`, its worker, and the
 standard fonts out of `node_modules` into `_site/vendor/pdfjs/`, so there is no
