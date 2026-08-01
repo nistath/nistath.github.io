@@ -95,6 +95,11 @@ function main() {
   if (!handoff || handoff[1].replace(/&amp;/g, '&') !== content.resume.pdf_url) {
     fail('The resume route is missing its link to the PDF for mobile visitors');
   }
+  /* The compact shell moves that same handoff up into the nav, which reads
+     the URL from the injected content rather than from the card's markup. */
+  if (!html.includes(JSON.stringify(content.resume.pdf_url))) {
+    fail('The injected site content is missing the resume PDF URL');
+  }
 
   for (const required of ['404.html', 'CNAME', 'css/main.css', 'js/main.js']) {
     if (!fs.existsSync(path.join(SITE, required))) fail(`Build output is missing ${required}`);

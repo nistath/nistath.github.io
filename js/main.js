@@ -25,14 +25,26 @@ if (emailTopbar && emailTextTopbar) {
   emailTopbar.setAttribute('href', 'mailto:' + email);
 }
 
+/* ── Which shell is on screen ──
+   The site has two presentations and the choice is about the space
+   available, not the width alone: a phone held in landscape reports
+   874×402, wide enough to clear any width-only breakpoint and far too short
+   for a full-height sidebar or an embedded PDF.  css/main.css switches on
+   this exact string; the two must stay in step. */
+var COMPACT_SHELL_QUERY = '(max-width: 767px), (max-height: 600px) and (pointer: coarse)';
+var compactShell = window.matchMedia(COMPACT_SHELL_QUERY);
+
+function isCompactShell() {
+  return compactShell.matches;
+}
+
 /* Mobile hero email: switch to icon-only only when its actual width is too small. */
 var HERO_EMAIL_ICON_ONLY_WIDTH_PX = 120;
 
 function updateHeroEmailMode() {
   if (!emailTopbar) return;
 
-  var isMobile = window.innerWidth <= 767;
-  if (!isMobile) {
+  if (!isCompactShell()) {
     emailTopbar.classList.remove('hero-email-inline--icon-only');
     return;
   }
@@ -62,7 +74,6 @@ if (emailTopbarCompact) {
    route the site does not generate — an empty content/portfolio/, say — is
    simply absent here, and every path, title, social card, and surface color
    comes from the same record the redirect stubs were built from. */
-var MOBILE_BREAKPOINT = 767;
 var githubLoaded = false;
 var resumeLoaded = false;
 var activeSection = null;
@@ -132,16 +143,14 @@ function getSectionFromPath(pathname) {
 }
 
 /* ── Resume ──
-   Only the desktop layout embeds the PDF.  Mobile browsers render an
-   embedded PDF as a single fixed page that neither scrolls nor zooms, so the
-   mobile layout shows a card that opens the file in the browser's own
-   viewer instead.  Fetching the PDF is tied to the embed actually being
-   visible, so phones never download it, and a window resized across the
-   breakpoint still ends up with a loaded viewer. */
-var mobileLayout = window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)');
-
+   Only the wide layout embeds the PDF.  Mobile browsers render an embedded
+   PDF as a single fixed page that neither scrolls nor zooms, so the compact
+   shell hands the file to the browser's own viewer instead.  Fetching the
+   PDF is tied to the embed actually being visible, so phones never download
+   it, and a window resized across the breakpoint still ends up with a
+   loaded viewer. */
 function loadResume() {
-  if (resumeLoaded || mobileLayout.matches) return;
+  if (resumeLoaded || isCompactShell()) return;
 
   var frame = document.querySelector('#section-resume iframe[data-src]');
   if (!frame) return;
@@ -151,9 +160,39 @@ function loadResume() {
   resumeLoaded = true;
 }
 
-mobileLayout.addEventListener('change', function() {
-  if (activeSection === 'resume') loadResume();
+/* On the compact shell the Resume nav entry is that same handoff, one tap
+   earlier: it opens the PDF directly rather than routing to a page whose
+   only content is a button that opens the PDF.  The /resume section stays
+   for direct loads, for shared links, and for the wide layout's embed, and
+   the markup keeps its real href so the route still works without JS. */
+var RESUME_PDF_URL = (window.SITE_CONTENT && window.SITE_CONTENT.resumePdfUrl) || '';
+var resumeNavLinks = Array.prototype.slice.call(
+  document.querySelectorAll('.nav-btn[data-section="resume"], .tab[data-section="resume"]')
+);
+var resumeNavRoutePaths = resumeNavLinks.map(function(link) {
+  return link.getAttribute('href');
 });
+
+function syncResumeNavMode() {
+  var handsOff = Boolean(RESUME_PDF_URL) && isCompactShell();
+
+  resumeNavLinks.forEach(function(link, index) {
+    link.classList.toggle('nav-external', handsOff);
+    if (handsOff) {
+      link.setAttribute('href', RESUME_PDF_URL);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    } else {
+      link.setAttribute('href', resumeNavRoutePaths[index]);
+      link.removeAttribute('target');
+      link.removeAttribute('rel');
+    }
+  });
+}
+
+function isHandoffLink(el) {
+  return el.classList.contains('nav-external');
+}
 
 function restoreSectionRoute() {
   var params = new URLSearchParams(window.location.search);
@@ -258,7 +297,7 @@ function navigate(section, options) {
      Re-apply after layout so the sticky header cannot get stuck mid-reveal.
      The header is updated directly rather than through a synthetic scroll
      event, which used to wake every other scroll listener on the page too. */
-  if (window.innerWidth <= MOBILE_BREAKPOINT && contentScrollEl) {
+  if (isCompactShell() && contentScrollEl) {
     measureHero();
     var targetScrollTop = shouldCollapseMobileHero ? heroMetrics.height : 0;
 
@@ -272,17 +311,12 @@ function navigate(section, options) {
   }
 }
 
-/* ── Wire up sidebar nav buttons ── */
-document.querySelectorAll('.sidebar-nav .nav-btn').forEach(function(btn) {
+/* ── Wire up sidebar nav buttons and topbar tabs ──
+   A nav entry marked as a handoff is left to the browser: it points at
+   another document, not at a section of this one. */
+document.querySelectorAll('.sidebar-nav .nav-btn, .topbar-nav .tab').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
-    e.preventDefault();
-    navigate(btn.dataset.section, { collapseMobileHero: true });
-  });
-});
-
-/* ── Wire up topbar tabs ── */
-document.querySelectorAll('.topbar-nav .tab').forEach(function(btn) {
-  btn.addEventListener('click', function(e) {
+    if (isHandoffLink(btn)) return;
     e.preventDefault();
     navigate(btn.dataset.section, { collapseMobileHero: true });
   });
@@ -348,7 +382,7 @@ function updateHeroVisibility() {
 
   /* Greece: never pin the site header.  The hero and the tab row scroll
      away together, leaving the guide's own nav sticking to the top. */
-  if (window.innerWidth > MOBILE_BREAKPOINT
+  if (!isCompactShell()
       || (appEl && appEl.classList.contains('app--greece'))) {
     stickyHeaderEl.style.setProperty('--compact-progress', '0');
     stickyHeaderEl.classList.remove('hero-hidden');
@@ -390,10 +424,26 @@ if (stickyHeaderEl && topbarEl && contentEl) {
   updateHeroVisibility();
 }
 
-/* ── Handle internal section links inside content (e.g. in about text) ── */
+/* Rotating a phone swaps the whole shell, so re-derive everything that was
+   decided from it.  The hero has to be re-measured before the header is
+   re-evaluated: the landscape hero is a single row, a third of the height
+   the stacked one had. */
+compactShell.addEventListener('change', function() {
+  syncResumeNavMode();
+  updateHeroEmailMode();
+  measureHero();
+  updateHeroVisibility();
+  if (activeSection === 'resume') loadResume();
+});
+
+syncResumeNavMode();
+
+/* ── Handle internal section links inside content (e.g. in about text) ──
+   The mobile tab row lives inside #content too, so this also catches the
+   tabs; a handoff tab points at another document and must be left alone. */
 document.getElementById('content').addEventListener('click', function(e) {
   var link = e.target.closest('a[data-section]');
-  if (link) {
+  if (link && !isHandoffLink(link)) {
     e.preventDefault();
     navigate(link.dataset.section, { collapseMobileHero: true });
   }
@@ -708,7 +758,7 @@ function greeceNavInit() {
     title.appendChild(chevron);
 
     function syncTipState() {
-      var isCollapsible = window.innerWidth <= MOBILE_BREAKPOINT;
+      var isCollapsible = isCompactShell();
       var isOpen = !isCollapsible || tip.classList.contains('gr-tip--open');
 
       if (isCollapsible) {
@@ -728,7 +778,7 @@ function greeceNavInit() {
     }
 
     function toggleTip() {
-      if (window.innerWidth > MOBILE_BREAKPOINT) return;
+      if (!isCompactShell()) return;
       tip.classList.toggle('gr-tip--open');
       syncTipState();
     }

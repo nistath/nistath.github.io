@@ -95,12 +95,34 @@ The app uses a CSS grid layout with two modes controlled by the
 
 - Default (`about`): sidebar plus content
 - Browsing mode (other sections): topbar replaces the desktop sidebar
-- Mobile layout is handled through `@media (max-width: 767px)` overrides
+- The compact shell replaces both with a scrolling page
 
-On mobile the page itself is the only scroll container. Overflow is set on
-`html` (it propagates to the viewport) and must stay `visible` on `body` and
-`.section`; giving either one its own overflow turns it into a scrollport that
-never scrolls, which silently breaks every `position: sticky` descendant.
+Which shell a visitor gets is a question of the space available, not of width
+alone. A phone held in landscape reports 874×402: wide enough to satisfy a
+width-only breakpoint, and nowhere near tall enough for a full-height sidebar
+or an embedded PDF. The condition is therefore
+
+```
+(max-width: 767px), (max-height: 600px) and (pointer: coarse)
+```
+
+written verbatim in `css/main.css`, in the Greece mobile block in
+`css/greece.css`, and as `COMPACT_SHELL_QUERY` in `js/main.js`, which matches
+it with `matchMedia` rather than measuring `window.innerWidth`. All three must
+stay in step. A second block, `(max-height: 600px) and (pointer: coarse)`,
+refines the compact shell for a phone in landscape: the hero becomes a single
+identity row and `--bar-h` shrinks, and every other measurement follows from
+those. Everything that has to clear the sensor housing when the phone is turned
+adds `--safe-x` to its horizontal padding.
+
+The two-pane layout is sized in `dvh` and its sidebar scrolls, so a window too
+short to hold the profile still reaches the nav; `@media (min-width: 768px) and
+(max-height: 720px)` shrinks the profile so it rarely comes to that.
+
+On the compact shell the page itself is the only scroll container. Overflow is
+set on `html` (it propagates to the viewport) and must stay `visible` on `body`
+and `.section`; giving either one its own overflow turns it into a scrollport
+that never scrolls, which silently breaks every `position: sticky` descendant.
 
 Greece is the one route that does not pin the site header on mobile. `navigate`
 puts `app--greece` on `#app`, which keeps `app--mobile-header-fixed` off, so the
@@ -135,6 +157,23 @@ route-relative. Direct loads on nested paths depend on that. Adding a top-level
 route means adding an entry to `scripts/content/routes.cjs`, a nav icon under
 `src/_includes/nav/`, and its `<section>` in the shell. The stub, the 404
 fallback, navigation, titles, and social metadata all follow from the registry.
+
+### Resume
+
+The resume is an external PDF, and a phone browser renders an embedded PDF as
+one fixed page that neither scrolls nor zooms. Only the two-pane layout embeds
+it; the compact shell hands the file to the browser's own viewer instead, and
+`loadResume` is tied to the embed being the visible presentation so a phone
+never downloads the file.
+
+On the compact shell that handoff also moves up into the nav:
+`syncResumeNavMode` points the Resume entry at the PDF, marks it
+`nav-external`, and the click handlers step aside for anything carrying that
+class — including the delegated one on `#content`, which the tab row lives
+inside. The URL comes from `window.SITE_CONTENT.resumePdfUrl`, injected from
+`content/resume.yml`; the generated markup keeps its real `/resume` href, so
+the route still works without JavaScript and the section still renders for
+direct loads and shared links.
 
 ### Portfolio cards
 
@@ -245,8 +284,9 @@ For a new field, block type, presentation variant, or component:
    that JSON Schema cannot express.
 4. Add or update generated-site checks and interaction code if needed.
 5. Add representative content and update `docs/content-authoring.md`.
-6. Run `npm run check` and verify the affected routes at desktop and mobile
-   widths.
+6. Run `npm run check` and verify the affected routes at a desktop width, a
+   phone in portrait, and a phone in landscape (874×402 is the shape that
+   breaks width-only assumptions).
 
 Keep content and presentation separate throughout: a future author should be
 able to revise prose and basic nesting from a phone without touching template
