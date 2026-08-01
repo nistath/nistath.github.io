@@ -1035,11 +1035,12 @@ a.repo-card:hover {
 /* =====================================================
    RESPONSIVE — SHORT VIEWPORT, TWO-PANE LAYOUT
 
-   A phone held in landscape is 874×402, and the page here never scrolls, so
-   the browser keeps its toolbars: roughly 300px of that is on screen.  The
-   sidebar is the only way off this route, so the profile gives up height
-   until the nav and the social row fit beside the content again, rather
-   than the nav sliding below a fold that cannot be scrolled to.
+   A short window that is still wide enough for two panes, which after the
+   compact shell claims every short touch viewport means a desktop window
+   someone has squashed.  This layout never scrolls the page, so the sidebar
+   is the only way off the route and none of it can be allowed below a fold
+   that cannot be scrolled to: the profile gives up height until the nav and
+   the social row fit.
    ===================================================== */
 @media (min-width: 768px) and (max-height: 720px) {
   .sidebar-inner {
@@ -1071,9 +1072,8 @@ a.repo-card:hover {
   }
 }
 
-/* Landscape on a phone.  The profile collapses to one identity row — avatar
-   beside the name, contact under it — which is what buys the nav its space.
-   ~286px of sidebar, against the ~300px a landscape phone actually shows. */
+/* Shorter still.  The profile collapses to one identity row — name over
+   contact, beside the avatar — which brings the whole sidebar to ~287px. */
 @media (min-width: 768px) and (max-height: 500px) {
   .sidebar-inner {
     padding-top: 0.75rem;
@@ -1151,16 +1151,19 @@ a.repo-card:hover {
 }
 
 /* =====================================================
-   RESPONSIVE — COMPACT SHELL (narrow viewports)
+   RESPONSIVE — COMPACT SHELL (phones)
 
-   Below this width there is no room for two panes, so the shell becomes a
-   single scrolling page: hero on top, tab bar pinning under it.  A phone in
-   landscape is wider than this and keeps the sidebar — see the short-viewport
-   rules above.
+   Which shell a visitor gets is a question of the space available, not of
+   width alone.  A phone held in landscape reports 874×402: wide enough to
+   satisfy a width-only breakpoint, and nowhere near tall enough for a
+   full-height sidebar.  Anything short and touch-driven therefore gets the
+   same scrolling page phones get in portrait — hero on top, tab bar pinning
+   under it — where the page scrolls and the browser's toolbars can get out
+   of the way.
 
-   js/main.js switches on this exact width — keep the two in step.
+   js/main.js switches on this exact condition — keep the two in step.
    ===================================================== */
-@media (max-width: 767px) {
+@media (max-width: 767px), (max-height: 600px) and (pointer: coarse) {
   html, body {
     height: auto;
     min-height: 100%;
@@ -1629,15 +1632,16 @@ a.repo-card:hover {
 }
 
 /* =====================================================
-   RESPONSIVE — COMPACT SHELL, SHORT VIEWPORT
+   RESPONSIVE — COMPACT SHELL, SHORT VIEWPORT (phone in landscape)
 
-   A narrow viewport that is also short: an older or smaller phone held in
-   landscape, which is below the two-pane width.  The hero collapses to a
-   single identity row and the bars give up what they can spare.  The hero
-   still scrolls away and the header still pins — every measurement
+   Every viewport matching this also matches the second half of the block
+   above, so these rules only ever refine the compact shell.  Roughly 300px
+   of height survives the browser's own chrome here, so the hero collapses
+   to a single identity row and the bars give up what they can spare.  The
+   hero still scrolls away and the header still pins: every measurement
    downstream derives from --bar-h, so it follows this override.
    ===================================================== */
-@media (max-width: 767px) and (max-height: 500px) {
+@media (max-height: 600px) and (pointer: coarse) {
   :root {
     --bar-h: 46px;
     --hero-avatar-size: 54px;

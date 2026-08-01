@@ -26,12 +26,12 @@ if (emailTopbar && emailTextTopbar) {
 }
 
 /* ── Which shell is on screen ──
-   Below this width there is no room for two panes and the shell becomes a
-   single scrolling page.  A phone in landscape is wider than this and keeps
-   the sidebar; what it does not have is height, which css/main.css handles
-   by collapsing the profile.  That stylesheet switches on this exact width
-   — the two must stay in step. */
-var COMPACT_SHELL_QUERY = '(max-width: 767px)';
+   The site has two presentations and the choice is about the space
+   available, not the width alone: a phone held in landscape reports
+   874×402, wide enough to clear any width-only breakpoint and nowhere near
+   tall enough for a full-height sidebar.  css/main.css switches on this
+   exact string; the two must stay in step. */
+var COMPACT_SHELL_QUERY = '(max-width: 767px), (max-height: 600px) and (pointer: coarse)';
 var compactShell = window.matchMedia(COMPACT_SHELL_QUERY);
 
 function isCompactShell() {
@@ -164,10 +164,16 @@ var PDFJS_MODULE_URL = '/vendor/pdfjs/pdf.min.mjs';
 var PDFJS_WORKER_URL = '/vendor/pdfjs/pdf.worker.min.mjs';
 var PDFJS_STANDARD_FONTS_URL = '/vendor/pdfjs/standard_fonts/';
 /* Painting above the device's own density buys headroom for a pinch-zoom
-   before the sheet turns soft; the cap keeps a page off the tens of
-   megabytes a naive scale would allocate on a wide, dense screen. */
+   before the sheet turns soft.  The two caps are what keep that affordable
+   on a phone: iOS gives a tab a hard canvas-area budget and discards the
+   backing store of anything past it — a blank page where a rendered one
+   should be — so no single page may be enormous, and the pages together may
+   not be either.  A resume never comes near the budget; a long document
+   loses sharpness instead of losing pages. */
 var RESUME_OVERSAMPLE = 1.5;
 var RESUME_MAX_CANVAS_PX = 2400;
+var RESUME_MAX_TOTAL_PX = 24e6;
+var RESUME_PAGE_ASPECT_GUESS = 1.4;
 var RESUME_REPAINT_THRESHOLD_PX = 32;
 
 var resumeSection = document.getElementById('section-resume');
@@ -211,6 +217,17 @@ function paintResumePages() {
   resumePaintedWidth = cssWidth;
   var density = Math.min(3, (window.devicePixelRatio || 1) * RESUME_OVERSAMPLE);
   var pixelWidth = Math.min(RESUME_MAX_CANVAS_PX, Math.round(cssWidth * density));
+
+  /* Spend the whole-document budget evenly, and never below the width the
+     page is displayed at — a soft sheet still beats a blank one. */
+  var perPageBudget = RESUME_MAX_TOTAL_PX / resumeDoc.numPages;
+  if (pixelWidth * pixelWidth * RESUME_PAGE_ASPECT_GUESS > perPageBudget) {
+    pixelWidth = Math.max(
+      Math.round(cssWidth),
+      Math.floor(Math.sqrt(perPageBudget / RESUME_PAGE_ASPECT_GUESS))
+    );
+  }
+
   var painted = document.createDocumentFragment();
   var chain = Promise.resolve();
 
@@ -257,9 +274,19 @@ function renderResume() {
     return paintResumePages();
   }).then(function() {
     if (status) status.hidden = true;
-  }).catch(function() {
+  }).catch(function(error) {
     /* Anything at all — a blocked cross-origin fetch, a parse failure, a
-       browser without dynamic import — lands on the link that still works. */
+       browser without dynamic import — lands on the link that still works.
+       The most likely cause by far is the first, and it is not the visitor's
+       to fix, so leave the owner a note rather than a silent downgrade. */
+    if (window.console && console.warn) {
+      console.warn(
+        'Resume: could not render ' + RESUME.pdfUrl + ' inline, falling back to a link. '
+        + 'If this is a cross-origin fetch the host is refusing, host the PDF in this '
+        + 'repository and point content/resume.yml at its path instead.',
+        error
+      );
+    }
     setResumeState('fallback');
   });
 }
