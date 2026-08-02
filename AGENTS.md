@@ -25,9 +25,17 @@ Useful commands:
 npm run build              # validate content and generate _site/
 npm run validate:content   # validate authored YAML only
 npm run check              # build plus generated-site safety checks
+npm run check:layout       # geometry checks in a real browser (needs `npx playwright install chromium`)
 npm run og                 # build and regenerate Open Graph images
 npm run texture            # regenerate img/shell-texture.png
 ```
+
+`npm run check` reads the built artifact; `npm run check:layout` drives it.
+The second exists because the failures that keep recurring are geometric and
+invisible in markup — a column narrow enough to leave one word per line, a
+card overflowing its track and sliding under a sticky aside, a control below a
+fold that cannot be scrolled to. It measures those at eleven viewports. Both
+run in CI.
 
 `_site/` is generated, ignored, and never an authoring source. Do not edit or
 commit it. For a quick static sanity check, build first and serve `_site/`, not
@@ -41,8 +49,9 @@ python3 -m http.server --directory _site
 ## Deployment
 
 Pushes to `master` run `.github/workflows/pages.yml`, which installs locked
-dependencies, runs `npm run check`, uploads `_site/`, and deploys the artifact
-to GitHub Pages. Pull requests run the build and checks without deploying.
+dependencies, runs `npm run check` and `npm run check:layout`, uploads
+`_site/`, and deploys the artifact to GitHub Pages. Pull requests run the build
+and both checks without deploying.
 
 The repository's one-time GitHub Pages setting must be **Settings → Pages →
 Build and deployment → Source: GitHub Actions**. GitHub Pages must not be
@@ -86,7 +95,11 @@ the visitors who lack it.
   canonical Google Maps search URLs.
 - `scripts/check-generated.cjs` checks the built artifact for expected content,
   unique IDs, valid anchor nesting, generated route files, and JavaScript
-  syntax. It also asserts that a disabled route emits no stub or 404 entry.
+  syntax. It also asserts that a disabled route emits no stub or 404 entry,
+  and that the Greece guide still measures itself rather than the window.
+- `scripts/check-layout.js` loads the built site in Chromium and asserts
+  geometry across a viewport matrix. Every shape in that matrix is one that
+  has broken before; add to it rather than replacing it.
 - `.eleventy.js` wires content into templates and copies runtime assets to
   `_site/`.
 
@@ -258,6 +271,27 @@ rendering and generated Greece navigation; there is no separate nav registry.
 `src/_includes/greece/components.njk` renders the schema's typed body and aside
 blocks.
 
+**The guide measures itself, not the window.** It renders inside the content
+pane, which the sidebar makes 300px narrower, so a viewport breakpoint is
+always wrong by that much: at a 1000px window the guide has 700px, and a query
+reading "wide" hands it a two-column layout plus a 288px aside it cannot fit —
+cards end up one word wide and spill under the aside. `#section-greece` is
+therefore a `guide` container, every layout query is `@container guide`, and
+every fluid size is `cqw`. `check-generated.cjs` fails the build on a `vw` unit
+or a width media query in `css/greece.css`; the one media query it allows is
+the compact-shell condition, because which shell the guide sits in is a fact
+about the window rather than about the guide.
+
+Grid tracks holding cards use `minmax(0, 1fr)`. A grid item's default minimum
+is its min-content width, so a card with a long venue name refuses to shrink
+and overflows its track instead — which is how it ends up under the aside.
+
+The guide's tip cards are collapsible below a guide width of 900px and always
+open above it. That number lives in `css/greece.css` as a container query and
+in `js/main.js` as `GUIDE_WIDE_PX`, and `check-generated.cjs` asserts they
+match: where they disagree, CSS keeps the bodies collapsed while JavaScript
+refuses to toggle them, and the content is simply unreachable.
+
 The guide nav is a horizontal rail (`.gr-nav-rail`) at every width, because
 eight chips do not fit a narrow desktop content column. `greeceNavInit`
 publishes the measured nav height as `--gr-nav-h` on `.greece-wrap`, and
@@ -332,9 +366,11 @@ For a new field, block type, presentation variant, or component:
    that JSON Schema cannot express.
 4. Add or update generated-site checks and interaction code if needed.
 5. Add representative content and update `docs/content-authoring.md`.
-6. Run `npm run check` and verify the affected routes at a desktop width, a
-   phone in portrait, and a phone in landscape (874×402 is the shape that
-   breaks width-only assumptions).
+6. Run `npm run check` and `npm run check:layout`, and verify the affected
+   routes at a desktop width, a phone in portrait, and a phone in landscape
+   (874×402 is the shape that breaks width-only assumptions). A window between
+   900 and 1200px wide is the other one worth opening: the sidebar leaves the
+   content pane 300px narrower than the number in the address bar.
 
 Keep content and presentation separate throughout: a future author should be
 able to revise prose and basic nesting from a phone without touching template

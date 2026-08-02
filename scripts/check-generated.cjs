@@ -39,6 +39,53 @@ function checkUniqueIds(html) {
   }
 }
 
+/* The Greece guide renders inside the content pane, which the sidebar makes
+   300px narrower than the window.  Sizing it against the window is therefore
+   always wrong by that much: at a 1000px window the guide has 700px, and a
+   viewport breakpoint that reads "wide" hands it a two-column layout and a
+   288px aside it cannot fit, leaving cards one word wide and spilling under
+   the aside.  The guide measures itself instead, and this keeps it that
+   way — the failure is silent at most window sizes and only shows up in the
+   band where the two disagree. */
+function checkGuideMeasuresItself() {
+  const guide = fs.readFileSync(path.join(ROOT, 'css', 'greece.css'), 'utf8');
+
+  if (!/#section-greece\s*\{[^}]*container:\s*guide\s*\/\s*inline-size/.test(guide)) {
+    fail('css/greece.css must declare the `guide` container that its queries measure');
+  }
+
+  const viewportUnit = guide.match(/\d(?:\.\d+)?(?:vw|vmin|vmax)\b/);
+  if (viewportUnit) {
+    fail(`css/greece.css sizes the guide against the window (${viewportUnit[0]}); use cqw`);
+  }
+
+  /* One media query is legitimate: which shell the guide is sitting in is a
+     fact about the window, not about the guide, and it is what decides
+     whether the site header is pinned above it and where the safe area
+     falls.  It is the same condition css/main.css switches the shell on. */
+  const shell = fs.readFileSync(path.join(ROOT, 'css', 'main.css'), 'utf8');
+  const compactShell = (shell.match(/@media \(max-width: 767px\), \(max-height: \d+px\) and \(pointer: coarse\)/) || [])[0];
+  if (!compactShell) fail('Could not find the compact-shell media query in css/main.css');
+
+  for (const query of guide.matchAll(/@media[^{]*/g)) {
+    const condition = query[0].trim();
+    if (condition === compactShell.trim()) continue;
+    if (/\b(?:min|max)-width\b/.test(condition)) {
+      fail(`css/greece.css switches the guide's layout on window width (${condition}); use @container guide`);
+    }
+  }
+
+  /* The stylesheet opens the aside's tip cards at a guide width of 900px and
+     js/main.js decides there whether they are collapsible at all.  Where the
+     two disagree the bodies stay collapsed and refuse to open. */
+  const runtime = fs.readFileSync(path.join(ROOT, 'js', 'main.js'), 'utf8');
+  const cssThreshold = guide.match(/@container guide \(min-width: (\d+)px\)/);
+  const jsThreshold = runtime.match(/GUIDE_WIDE_PX = (\d+)/);
+  if (!cssThreshold || !jsThreshold || cssThreshold[1] !== jsThreshold[1]) {
+    fail('The guide width that opens the tip cards differs between css/greece.css and js/main.js');
+  }
+}
+
 function main() {
   if (!fs.existsSync(INDEX)) fail('Missing _site/index.html; run npm run build first');
   const html = fs.readFileSync(INDEX, 'utf8');
@@ -117,6 +164,8 @@ function main() {
   for (const required of ['404.html', 'CNAME', 'css/main.css', 'js/main.js']) {
     if (!fs.existsSync(path.join(SITE, required))) fail(`Build output is missing ${required}`);
   }
+
+  checkGuideMeasuresItself();
 
   /* Every registered route needs its redirect stub and its entry in the 404
      fallback, and every unregistered one must have neither. */
