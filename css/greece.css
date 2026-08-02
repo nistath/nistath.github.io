@@ -5,6 +5,17 @@
    sun-warmed gold. The shell texture from the rest of the site is
    reused in the hero so the guide reads as part of the same place.
    ===================================================== */
+/* The guide is laid out against its own width, not the window's.  It renders
+   inside the content pane, which the sidebar makes 300px narrower, so a
+   viewport-width breakpoint reads ~1200px as "wide" while the guide actually
+   has 900px — and a viewport-width `vw` sizes type and gutters for a column
+   that does not exist.  Everything below therefore measures `guide`, and the
+   sizes are the guide's own.  Do not reintroduce `vw` or a width media query
+   in this file; scripts/check-generated.cjs fails the build for both. */
+#section-greece {
+  container: guide / inline-size;
+}
+
 .greece-wrap {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background-color: #f5f0e8;
@@ -38,27 +49,27 @@
   --gr-radius-sm:    9px;
   --gr-radius-lg:    14px;
   --gr-sheet-radius: 16px;
-  --gr-sheet-lip:    16px;
+  --gr-sheet-lip:    10px;
   --gr-nav-bg:       #f8f4ec;
   --gr-nav-h:        42px; /* kept in sync at runtime by greeceNavInit() */
 
-  --gr-page-x:       clamp(14px, 3.6vw, 22px);
+  --gr-page-x:       clamp(14px, 3.6cqw, 22px);
   --gr-main-max:     620px;
-  --gr-section-gap:  clamp(40px, 6.2vw, 58px);
-  --gr-card-py:      clamp(14px, 1.9vw, 19px);
-  --gr-card-px:      clamp(14px, 2vw, 18px);
-  --gr-tight-gap:    clamp(8px, 1.2vw, 11px);
-  --gr-stack-gap:    clamp(12px, 1.9vw, 16px);
-  --gr-stack-gap-lg: clamp(18px, 2.6vw, 24px);
+  --gr-section-gap:  clamp(40px, 6.2cqw, 58px);
+  --gr-card-py:      clamp(14px, 1.9cqw, 19px);
+  --gr-card-px:      clamp(14px, 2cqw, 18px);
+  --gr-tight-gap:    clamp(8px, 1.2cqw, 11px);
+  --gr-stack-gap:    clamp(12px, 1.9cqw, 16px);
+  --gr-stack-gap-lg: clamp(18px, 2.6cqw, 24px);
 
   /* ── Type scale ── */
-  --gr-text-body:    clamp(16px, 0.28vw + 14.9px, 17.4px);
-  --gr-text-small:   clamp(13.8px, 0.14vw + 13.3px, 14.6px);
-  --gr-text-h3:      clamp(18.5px, 0.6vw + 16.2px, 22px);
-  --gr-text-h2:      clamp(27px, 3.2vw + 16.5px, 36px);
-  --gr-text-display: clamp(41px, 8.2vw + 8px, 60px);
-  --gr-text-tagline: clamp(17px, 0.9vw + 14.5px, 20px);
-  --gr-text-kicker:  clamp(11px, 0.2vw + 10.4px, 12.5px);
+  --gr-text-body:    clamp(16px, 0.28cqw + 14.9px, 17.4px);
+  --gr-text-small:   clamp(13.8px, 0.14cqw + 13.3px, 14.6px);
+  --gr-text-h3:      clamp(18.5px, 0.6cqw + 16.2px, 22px);
+  --gr-text-h2:      clamp(27px, 3.2cqw + 16.5px, 36px);
+  --gr-text-display: clamp(41px, 8.2cqw + 8px, 60px);
+  --gr-text-tagline: clamp(17px, 0.9cqw + 14.5px, 20px);
+  --gr-text-kicker:  clamp(11px, 0.2cqw + 10.4px, 12.5px);
 }
 
 /* ── Hero ── */
@@ -67,9 +78,9 @@
   isolation: isolate;
   overflow: hidden;
   padding:
-    clamp(26px, 4vw, 46px)
+    clamp(26px, 4cqw, 46px)
     var(--gr-page-x)
-    calc(clamp(34px, 5.5vw, 58px) + var(--gr-sheet-lip));
+    calc(clamp(34px, 5.5cqw, 58px) + var(--gr-sheet-lip));
   background-color: var(--gr-sea-deep);
   background-image:
     linear-gradient(180deg, rgba(245, 240, 232, 0) 56%, rgba(245, 240, 232, 0.26) 100%),
@@ -112,9 +123,9 @@
   display: block;
   position: absolute;
   z-index: -1;
-  top: clamp(-46px, -4vw, -16px);
-  right: clamp(-58px, -5vw, -20px);
-  width: clamp(176px, 34vw, 320px);
+  top: clamp(-46px, -4cqw, -16px);
+  right: clamp(-58px, -5cqw, -20px);
+  width: clamp(176px, 34cqw, 320px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 50%,
@@ -131,7 +142,7 @@
   gap: 10px;
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-kicker);
-  letter-spacing: clamp(2.5px, 0.3vw + 1.8px, 4px);
+  letter-spacing: clamp(2.5px, 0.3cqw + 1.8px, 4px);
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.72);
   margin-bottom: 10px;
@@ -140,7 +151,7 @@
 
 .gr-hero-eyebrow::before {
   content: '';
-  width: clamp(18px, 4vw, 30px);
+  width: clamp(18px, 4cqw, 30px);
   height: 1px;
   background: rgba(255, 255, 255, 0.5);
   flex-shrink: 0;
@@ -169,15 +180,17 @@
    viewport.  Opaque rather than frosted: a translucent bar over a guide
    this dense reads as bleed-through, and backdrop blur is expensive to
    composite on every scroll frame on a phone. */
-/* Top padding is lighter than the bottom on purpose: unpinned, the sheet's
-   rounded lip sits directly above this bar in the same color and already
-   reads as space over the chips, so matching the bottom padding here left
-   the row looking pushed down. */
+/* Top padding is lighter than the bottom on purpose.  Unpinned, the sheet's
+   rounded lip sits directly above this bar in the same colour, so what reads
+   as space over the chips is the lip plus this padding, and it is the sum
+   that has to answer the padding below.  Pinned, the lip has scrolled away
+   and only this padding is left — which is why the lip stays small enough
+   that neither state looks wrong. */
 .gr-nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  padding: 2px 0 6px;
+  padding: 6px 0 10px;
   background: var(--gr-nav-bg);
   border-bottom: 1px solid var(--gr-line);
   box-shadow: 0 8px 16px -14px rgba(18, 48, 63, 0.6);
@@ -254,7 +267,7 @@
 
 /* ── Main content ── */
 .gr-main {
-  padding: clamp(20px, 3.4vw, 34px) var(--gr-page-x) clamp(54px, 7vw, 84px);
+  padding: clamp(20px, 3.4cqw, 34px) var(--gr-page-x) clamp(54px, 7cqw, 84px);
   max-width: var(--gr-main-max);
   margin: 0 auto;
 }
@@ -283,7 +296,7 @@
   font-size: var(--gr-text-h2);
   font-weight: 700;
   color: var(--gr-ink);
-  margin: 0 0 clamp(15px, 2vw, 22px);
+  margin: 0 0 clamp(15px, 2cqw, 22px);
   letter-spacing: normal;
   line-height: 1.1;
   text-wrap: balance;
@@ -382,7 +395,7 @@
   margin-top: -22px;
   position: relative;
   z-index: 2;
-  padding-top: clamp(12px, 1.7vw, 17px);
+  padding-top: clamp(12px, 1.7cqw, 17px);
 }
 
 .gr-card--city-intro .gr-h3:first-child {
@@ -445,7 +458,7 @@ a.gr-chip:focus-visible {
   color: inherit;
   background: var(--gr-paper);
   border-radius: var(--gr-radius);
-  padding: clamp(12px, 1.6vw, 16px) clamp(13px, 1.8vw, 16px);
+  padding: clamp(12px, 1.6cqw, 16px) clamp(13px, 1.8cqw, 16px);
   box-shadow: var(--gr-shadow);
   border: 1px solid var(--gr-line);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -473,7 +486,7 @@ a.gr-chip:focus-visible {
 
 .gr-venue-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(17.5px, 0.5vw + 16px, 19.5px);
+  font-size: clamp(17.5px, 0.5cqw + 16px, 19.5px);
   font-weight: 700;
   color: var(--gr-ink);
   line-height: 1.25;
@@ -499,7 +512,7 @@ a.gr-chip:focus-visible {
 /* ── Sight items ── */
 .gr-sight {
   display: block;
-  padding: clamp(11px, 1.4vw, 14px) 0;
+  padding: clamp(11px, 1.4cqw, 14px) 0;
   border-bottom: 1px solid var(--gr-line);
 }
 
@@ -521,7 +534,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 .gr-sight-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(17.5px, 0.5vw + 16px, 19.5px);
+  font-size: clamp(17.5px, 0.5cqw + 16px, 19.5px);
   font-weight: 700;
   color: var(--gr-ink);
   line-height: 1.25;
@@ -633,12 +646,12 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 /* ── Top-of-guide official tickets banner ── */
 .gr-tickets-banner {
-  margin: 0 auto clamp(20px, 2.6vw, 28px);
+  margin: 0 auto clamp(20px, 2.6cqw, 28px);
   max-width: var(--gr-main-max);
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: clamp(11px, 1.4vw, 14px) clamp(12px, 1.8vw, 16px);
+  padding: clamp(11px, 1.4cqw, 14px) clamp(12px, 1.8cqw, 16px);
   border-radius: var(--gr-radius);
   background: linear-gradient(135deg, rgba(255, 244, 224, 0.96), rgba(251, 231, 199, 0.92));
   border: 1px solid rgba(176, 125, 46, 0.24);
@@ -705,13 +718,13 @@ a.gr-sight:focus-visible .gr-sight-name {
   background: var(--gr-paper);
   border: 1px solid var(--gr-line);
   border-radius: var(--gr-radius-lg);
-  padding: clamp(18px, 2.2vw, 28px) clamp(15px, 1.9vw, 26px);
+  padding: clamp(18px, 2.2cqw, 28px) clamp(15px, 1.9cqw, 26px);
   box-shadow: var(--gr-shadow-lg);
 }
 
 .gr-island-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(29px, 1.8vw + 22px, 37px);
+  font-size: clamp(29px, 1.8cqw + 22px, 37px);
   font-weight: 700;
   color: var(--gr-ink);
   margin: 0;
@@ -721,7 +734,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 .gr-island-tagline {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(17px, 0.5vw + 15px, 19.5px);
+  font-size: clamp(17px, 0.5cqw + 15px, 19.5px);
   font-style: italic;
   color: var(--gr-sand);
   margin: 4px 0 0;
@@ -729,13 +742,13 @@ a.gr-sight:focus-visible .gr-sight-name {
 }
 
 .gr-island-body {
-  margin-top: clamp(16px, 2.2vw, 24px);
+  margin-top: clamp(16px, 2.2cqw, 24px);
 }
 
 /* ── Islands divider ── */
 .gr-islands-intro {
   text-align: center;
-  margin: clamp(46px, 6vw, 82px) 0 clamp(26px, 3.4vw, 46px);
+  margin: clamp(46px, 6cqw, 82px) 0 clamp(26px, 3.4cqw, 46px);
   padding: 0 8px;
 }
 
@@ -746,7 +759,7 @@ a.gr-sight:focus-visible .gr-sight-name {
   gap: 12px;
   font-family: 'Cormorant Garamond', serif;
   font-size: var(--gr-text-kicker);
-  letter-spacing: clamp(2.5px, 0.3vw + 1.8px, 4px);
+  letter-spacing: clamp(2.5px, 0.3cqw + 1.8px, 4px);
   text-transform: uppercase;
   color: var(--gr-sand);
   font-weight: 600;
@@ -756,14 +769,14 @@ a.gr-sight:focus-visible .gr-sight-name {
 .gr-islands-eyebrow::before,
 .gr-islands-eyebrow::after {
   content: '';
-  width: clamp(22px, 6vw, 46px);
+  width: clamp(22px, 6cqw, 46px);
   height: 1px;
   background: var(--gr-line-strong);
 }
 
 .gr-islands-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(33px, 2.4vw + 22px, 46px);
+  font-size: clamp(33px, 2.4cqw + 22px, 46px);
   font-weight: 700;
   color: var(--gr-ink);
   margin: 0;
@@ -813,11 +826,11 @@ a.gr-sight:focus-visible .gr-sight-name {
   border-radius: 0;
 }
 
-.gr-other-card-body { padding: clamp(13px, 1.6vw, 20px) clamp(13px, 1.6vw, 18px); }
+.gr-other-card-body { padding: clamp(13px, 1.6cqw, 20px) clamp(13px, 1.6cqw, 18px); }
 
 .gr-other-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(20px, 0.6vw + 17.5px, 24px);
+  font-size: clamp(20px, 0.6cqw + 17.5px, 24px);
   font-weight: 700;
   color: var(--gr-ink);
   margin: 0 0 4px;
@@ -857,7 +870,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 .gr-tip-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(16.5px, 0.4vw + 15.2px, 18.5px);
+  font-size: clamp(16.5px, 0.4cqw + 15.2px, 18.5px);
   font-weight: 700;
   color: var(--gr-ink);
   margin-bottom: 0;
@@ -992,7 +1005,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 /* ── Footer ── */
 .gr-footer {
   text-align: center;
-  padding: clamp(30px, 4.4vw, 48px) 16px clamp(16px, 2.6vw, 24px);
+  padding: clamp(30px, 4.4cqw, 48px) 16px clamp(16px, 2.6cqw, 24px);
   border-top: 1px solid var(--gr-line);
 }
 
@@ -1008,7 +1021,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 
 .gr-footer-greek {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(24px, 0.8vw + 21px, 28px);
+  font-size: clamp(24px, 0.8cqw + 21px, 28px);
   font-weight: 700;
   color: var(--gr-sea);
   line-height: 1.2;
@@ -1024,39 +1037,47 @@ a.gr-sight:focus-visible .gr-sight-name {
 /* =====================================================
    DESKTOP LAYOUT
    ===================================================== */
-@media (min-width: 900px) {
+@container guide (min-width: 900px) {
 
   .greece-wrap {
-    --gr-page-x: clamp(32px, 3.4vw, 52px);
+    --gr-page-x: clamp(32px, 3.4cqw, 52px);
     --gr-main-max: 1120px;
-    --gr-section-gap: clamp(58px, 5.6vw, 82px);
-    --gr-card-py: clamp(18px, 1.7vw, 24px);
-    --gr-card-px: clamp(18px, 1.9vw, 26px);
-    --gr-sheet-radius: 24px;
-    --gr-sheet-lip: 22px;
+    --gr-section-gap: clamp(58px, 5.6cqw, 82px);
+    --gr-card-py: clamp(18px, 1.7cqw, 24px);
+    --gr-card-px: clamp(18px, 1.9cqw, 26px);
+    --gr-sheet-radius: 20px;
+    --gr-sheet-lip: 10px;
     --gr-nav-h: 52px;
-    --gr-text-body: clamp(16px, 0.24vw + 15.1px, 17.6px);
-    --gr-text-small: clamp(14px, 0.1vw + 13.6px, 14.9px);
-    --gr-text-h2: clamp(31px, 0.9vw + 25px, 39px);
-    --gr-text-h3: clamp(19.5px, 0.4vw + 17px, 23px);
-    --gr-text-display: clamp(50px, 3.2vw + 24px, 68px);
+    --gr-text-body: clamp(16px, 0.24cqw + 15.1px, 17.6px);
+    --gr-text-small: clamp(14px, 0.1cqw + 13.6px, 14.9px);
+    --gr-text-h2: clamp(31px, 0.9cqw + 25px, 39px);
+    --gr-text-h3: clamp(19.5px, 0.4cqw + 17px, 23px);
+    --gr-text-display: clamp(50px, 3.2cqw + 24px, 68px);
   }
 
   /* Wider main container */
   .gr-main {
-    padding: clamp(28px, 2.6vw, 40px) var(--gr-page-x) 88px;
+    padding: clamp(28px, 2.6cqw, 40px) var(--gr-page-x) 88px;
   }
 
-  /* Internal nav: roomier chips, same lighter top as the mobile bar */
+  /* Roomier chips, and the band around them balanced by eye rather than by
+     the numbers: the sheet's lip sits directly above the bar in the same
+     colour, so what reads as space over the chips is the lip plus this
+     padding, and it has to be weighed against the padding below alone. */
   .gr-nav {
-    padding: 4px 0 10px;
+    padding: 6px 0 12px;
   }
 
-  /* The rail keeps scrolling here too: eight chips do not fit a narrow
-     desktop content column, and clipping them would strand the last
-     sections.  Both edge fades resolve to 0 once everything fits. */
+  /* Centred while the chips fit, and scrolling from the left the moment they
+     do not.  fit-content is what buys both: the rail is exactly as wide as
+     its chips until it runs out of room, and the auto margins have nothing
+     left to distribute once it does — so nothing is ever centred out of
+     reach the way justify-content would leave it. */
   .gr-nav-rail {
     gap: 5px;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   .gr-nav-btn {
@@ -1073,7 +1094,7 @@ a.gr-sight:focus-visible .gr-sight-name {
   .gr-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 288px;
-    gap: clamp(32px, 3.4vw, 48px);
+    gap: clamp(32px, 3.4cqw, 48px);
     align-items: start;
   }
 
@@ -1148,10 +1169,10 @@ a.gr-sight:focus-visible .gr-sight-name {
     margin-top: 24px;
   }
 
-  /* Other islands: 3-column on desktop */
+  /* Other islands: 3-column once there is room, same shrink rule. */
   .gr-other-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
 
@@ -1160,10 +1181,13 @@ a.gr-sight:focus-visible .gr-sight-name {
     margin: 82px 0 48px;
   }
 
-  /* Venue list: 2-col grid on desktop inside main body */
+  /* Venue list: 2-col grid inside the main body once there is room for it.
+     minmax(0, 1fr) rather than 1fr: a grid item's default min-width is its
+     min-content width, so a card holding a long venue name would otherwise
+     refuse to shrink and spill out of its track and under the aside. */
   .gr-body .gr-venue-list {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 10px 12px;
   }
 
@@ -1188,7 +1212,7 @@ a.gr-sight:focus-visible .gr-sight-name {
 
   /* Keep the guide clear of the sensor housing when the phone is turned. */
   .greece-wrap {
-    --gr-page-x: calc(clamp(14px, 3.6vw, 22px) + var(--safe-x, 0px));
+    --gr-page-x: calc(clamp(14px, 3.6cqw, 22px) + var(--safe-x, 0px));
   }
 
   .gr-section,
@@ -1196,6 +1220,11 @@ a.gr-sight:focus-visible .gr-sight-name {
     scroll-margin-top: calc(var(--safe-top, 0px) + var(--gr-nav-h) + 10px);
   }
 
+}
+
+/* Narrow guide: a phone, or a desktop window whose content pane is small.
+   These are the guide's own proportions, so they measure the guide. */
+@container guide (max-width: 767px) {
   /* Collapsed accordions stay compact so they never crowd the content
      they sit under. */
   .gr-tip {

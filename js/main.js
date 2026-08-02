@@ -859,17 +859,40 @@ function greeceNavInit() {
   window.addEventListener('resize', function() {
     syncNavHeight();
     syncRailEdge();
+    syncTipStates();
   }, { passive: true });
   if ('ResizeObserver' in window) {
     new ResizeObserver(function() {
       syncNavHeight();
       syncRailEdge();
     }).observe(nav);
+    /* The guide's own width is what the tips key on, and it changes when the
+       route is opened as well as when the window moves. */
+    if (greeceWrap) new ResizeObserver(syncTipStates).observe(greeceWrap);
   }
   syncNavHeight();
   syncRailEdge();
 
-  /* Collapsible tip cards (visible on mobile, always-open on desktop via CSS) */
+  /* Collapsible tip cards, always-open once the guide is wide.  The
+     stylesheet opens them at a guide width of 900px, so this has to measure
+     the same thing: keyed to the window instead, the two disagree over a
+     whole band of sizes, and in that band CSS keeps the bodies collapsed
+     while JS refuses to toggle them — the content is simply unreachable.
+     Keep this threshold and css/greece.css's container query in step. */
+  var GUIDE_WIDE_PX = 900;
+  var tipSyncers = [];
+
+  function guideIsWide() {
+    return greeceWrap ? greeceWrap.clientWidth >= GUIDE_WIDE_PX : false;
+  }
+
+  /* A hidden route measures zero, which is not an answer; leave the tips as
+     they are until the guide is on screen and has a width to report. */
+  function syncTipStates() {
+    if (!greeceWrap || !greeceWrap.clientWidth) return;
+    tipSyncers.forEach(function(sync) { sync(); });
+  }
+
   document.querySelectorAll('#section-greece .gr-aside .gr-tip').forEach(function(tip, index) {
     var title = tip.querySelector('.gr-tip-title');
     if (!title) return;
@@ -893,7 +916,7 @@ function greeceNavInit() {
     title.appendChild(chevron);
 
     function syncTipState() {
-      var isCollapsible = isCompactShell();
+      var isCollapsible = !guideIsWide();
       var isOpen = !isCollapsible || tip.classList.contains('gr-tip--open');
 
       if (isCollapsible) {
@@ -913,13 +936,13 @@ function greeceNavInit() {
     }
 
     function toggleTip() {
-      if (!isCompactShell()) return;
+      if (guideIsWide()) return;
       tip.classList.toggle('gr-tip--open');
       syncTipState();
     }
 
+    tipSyncers.push(syncTipState);
     syncTipState();
-    window.addEventListener('resize', syncTipState, { passive: true });
 
     tip.addEventListener('click', function(e) {
       if (!body.contains(e.target)) toggleTip();

@@ -36,6 +36,12 @@ jobs:
       - name: Validate and build
         run: npm run check
 
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Check layout
+        run: npm run check:layout
+
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
