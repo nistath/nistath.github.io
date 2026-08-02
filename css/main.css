@@ -1588,6 +1588,20 @@ a.repo-card:hover {
     min-height: 100dvh;
   }
 
+  /* The embed needs a definite height here.  This section is a block in a
+     scrolling page rather than a pane of a full-height grid, so `height:
+     100%` on the wrapper has nothing to resolve against and the iframe
+     silently falls back to its 150px default — a letterbox slice of page
+     one.  No Apple phone or tablet reaches this state, but a narrow desktop
+     window does. */
+  #section-resume.resume--embed.active .resume-wrap {
+    height: calc(100dvh - var(--bar-h) - var(--safe-bottom));
+  }
+
+  .app.app--mobile-header-fixed #section-resume.resume--embed.active .resume-wrap {
+    height: calc(100dvh - var(--mobile-fixed-header-h));
+  }
+
   .resume-viewer {
     padding: 1rem calc(0.9rem + var(--safe-x)) 2rem;
   }
