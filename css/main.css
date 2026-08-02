@@ -1080,39 +1080,40 @@ a.repo-card:hover {
     padding-bottom: calc(0.65rem + var(--safe-bottom));
   }
 
-  /* Name over contact, both beside the avatar.  Three stacked blocks became
-     one, which is most of the height this tier has to find. */
+  /* The name beside the avatar, contact on its own row under both — the same
+     arrangement the compact shell's hero uses, and for the same reason: the
+     avatar is sized against the two lines of the name, so anything else
+     sharing that column leaves it looking undersized next to a taller block
+     of text. */
   .profile-block {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
       "avatar name"
-      "avatar email";
-    align-content: center;
+      "email  email";
+    align-items: center;
     column-gap: 0.7rem;
-    row-gap: 0.3rem;
+    row-gap: 0.45rem;
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
   }
 
+  /* Slightly taller than the name it stands next to, which is the
+     proportion the hero strikes at its own scale. */
   .avatar-wrap {
     grid-area: avatar;
-    align-self: center;
     width: 52px;
     height: 52px;
   }
 
   .profile-name {
     grid-area: name;
-    align-self: end;
     font-size: 1.15rem;
     line-height: 1.05;
   }
 
   .email-link {
     grid-area: email;
-    align-self: start;
-    justify-self: start;
     padding: 0.24rem 0.55rem;
   }
 
