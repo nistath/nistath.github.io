@@ -199,7 +199,12 @@ function measure() {
       const padBottom = parseFloat(getComputedStyle(nav).paddingBottom) || 0;
       result.guide.navSpaceAbove = Math.round(lip + padTop);
       result.guide.navSpaceBelow = Math.round(padBottom);
-      result.guide.railFits = last ? last.right <= railR.right + 1 && first.left >= railR.left - 1 : true;
+      /* Whether the rail still has something to scroll to, which is the only
+         stable answer: the last chip's right edge lands within a pixel of the
+         rail's a good 40px before the overflow actually goes away, so reading
+         the edges makes this a coin toss that different font metrics — CI's
+         against a local machine's — land on opposite sides of. */
+      result.guide.railFits = rail.scrollWidth <= rail.clientWidth + 1;
       if (result.guide.railFits && first && last) {
         const chipsCentre = (first.left + last.right) / 2;
         result.guide.navCentred = Math.abs(chipsCentre - (navR.left + navR.width / 2)) <= 2;
