@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build": "npm run clean && npm run validate:content && eleventy",
-    "check": "npm run build && node scripts/check-generated.cjs",
+    "check": "npm run build && node scripts/check-generated.cjs && npm run check:links",
+    "check:links": "node scripts/check-links.cjs",
     "check:layout": "node scripts/check-layout.js",
     "clean": "node -e \"require('node:fs').rmSync('_site', { force: true, recursive: true })\"",
     "dev": "eleventy --serve --port=8080",
