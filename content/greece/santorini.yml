@@ -48,7 +48,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/akrotiri-thera-tickets
             icon: 🎟️
       - name: Ancient Thira
         description: Hellenistic ruins high on the ridge between Kamari and Perissa.
@@ -59,7 +59,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/ancient-thera-tickets
             icon: 🎟️
       - name: Museums in Fira
         description: Small museums in Fira covering prehistoric and archaeological finds from Santorini.

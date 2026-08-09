@@ -37,7 +37,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/delos-tickets
             icon: 🎟️
       - name: The Windmills
         description: Iconic row on the hill above Chora. Best light at sunset.

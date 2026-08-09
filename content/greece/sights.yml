@@ -26,7 +26,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets
             icon: 🎟️
       - name: Acropolis Museum
         description: At the base of the hill. The top-floor gallery offers an unforgettable view, laying out the Parthenon frieze with the actual Parthenon in the background.
@@ -62,7 +62,7 @@ aside:
   - variant: tips
     title: ⏰ Timing Tips
     items:
-      - Book Acropolis tickets in advance at [hhticket.gr](https://hhticket.gr/) (official)
+      - Book Acropolis tickets in advance at [tickets.hh.gr](https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets) (official)
       - Go before 9 AM or after 5 PM to beat the heat
       - Arrive 30 min before sunset for [Philopappos](map:Philopappos Hill Athens)
       - Museum and site hours shift between summer and winter, so check the day before

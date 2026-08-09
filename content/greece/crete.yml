@@ -59,7 +59,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/knossos-tickets
             icon: 🎟️
       - name: Heraklion Archaeological Museum
         description: Finest Minoan collection in the world.
@@ -70,7 +70,7 @@ body:
             icon: 📍
           - kind: ticket
             label: Official tickets
-            url: https://hhticket.gr/
+            url: https://tickets.hh.gr/en/venues/archaeological-museum-of-heraklion
             icon: 🎟️
       - name: Fortezza (Rethymno)
         description: Venetian fortress. Stop for a visit and lunch between Heraklion and Chania.
