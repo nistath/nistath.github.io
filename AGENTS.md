@@ -263,8 +263,8 @@ refactoring interactions.
 
 ### Greece guide
 
-`content/greece/index.yml` contains guide-wide hero, notice, island-intro, and
-footer text. Every other YAML file is one nav target. Its `order` controls both
+`content/greece/index.yml` contains guide-wide hero, island-intro, and footer
+text. Every other YAML file is one nav target. Its `order` controls both
 rendering and generated Greece navigation; there is no separate nav registry.
 
 `src/_includes/greece/guide.njk` owns the guide-level layout and

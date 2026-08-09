@@ -318,6 +318,7 @@
       "properties": {
         "variant": { "enum": ["facts", "tips", "itinerary", "eats", "essentials", "ferry", "logistics"] },
         "title": { "$ref": "#/definitions/text" },
+        "collapsible": { "type": "boolean" },
         "items": {
           "type": "array",
           "minItems": 1,

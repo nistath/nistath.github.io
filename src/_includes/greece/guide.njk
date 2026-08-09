@@ -18,11 +18,6 @@
   </nav>
 
   <div class="gr-main">
-    <aside class="gr-tickets-banner" role="note" aria-label="Official ticket source">
-      <span class="gr-tickets-banner-icon" aria-hidden="true">{{ siteContent.greece.meta.notice.icon }}</span>
-      <div class="gr-tickets-banner-body">{{ siteContent.greece.meta.notice.text | markdownInline('') | safe }}</div>
-    </aside>
-
     {% for section in siteContent.greece.sections %}
       {% if loop.index0 == siteContent.greece.firstIslandIndex %}
         <div class="gr-islands-intro">

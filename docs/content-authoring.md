@@ -211,10 +211,10 @@ change; see [When to use a coding agent](#when-to-use-a-coding-agent).
 
 ## Greece guide
 
-`content/greece/index.yml` holds guide-wide text: the hero, official-ticket
-notice, island introduction, and footer. Every other YAML file is one nav
-target. Nav buttons are derived from these files and sorted by `order`, so
-there is no separate nav list to update.
+`content/greece/index.yml` holds guide-wide text: the hero, island introduction,
+and footer. Every other YAML file is one nav target. Nav buttons are derived
+from these files and sorted by `order`, so there is no separate nav list to
+update.
 
 A nav-target file has this outer shape:
 
@@ -376,6 +376,9 @@ For an itinerary:
 ```
 
 Reuse an existing `variant`; its name selects styling, not prose meaning.
+Set `collapsible: true` on an aside that should remain an accordion at every
+guide width. Without it, aside cards collapse on narrow guides and stay open
+once the guide is at least 900px wide.
 
 ### Add or reorder a guide section
 

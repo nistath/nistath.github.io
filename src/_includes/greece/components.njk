@@ -121,7 +121,7 @@
 {% endmacro %}
 
 {% macro tip(card) %}
-  <div class="gr-tip gr-tip--{{ card.variant }}">
+  <div class="gr-tip gr-tip--{{ card.variant }}{% if card.collapsible %} gr-tip--collapsible{% endif %}">
     <div class="gr-tip-title">{{ card.title | markdownInline | safe }}</div>
     {% if card.items %}
       <ul class="gr-tip-list">

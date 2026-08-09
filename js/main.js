@@ -873,12 +873,13 @@ function greeceNavInit() {
   syncNavHeight();
   syncRailEdge();
 
-  /* Collapsible tip cards, always-open once the guide is wide.  The
-     stylesheet opens them at a guide width of 900px, so this has to measure
-     the same thing: keyed to the window instead, the two disagree over a
-     whole band of sizes, and in that band CSS keeps the bodies collapsed
-     while JS refuses to toggle them — the content is simply unreachable.
-     Keep this threshold and css/greece.css's container query in step. */
+  /* Tip cards collapse while the guide is narrow.  Most open permanently
+     once it is wide, while cards authored as gr-tip--collapsible remain
+     accordions at every size.  The stylesheet switches the ordinary cards
+     at a guide width of 900px, so this has to measure the same thing: keyed
+     to the window instead, CSS and JS would disagree and make content
+     unreachable.  Keep this threshold and css/greece.css's container query
+     in step. */
   var GUIDE_WIDE_PX = 900;
   var tipSyncers = [];
 
@@ -915,8 +916,12 @@ function greeceNavInit() {
     chevron.textContent = '›';
     title.appendChild(chevron);
 
+    function tipIsCollapsible() {
+      return tip.classList.contains('gr-tip--collapsible') || !guideIsWide();
+    }
+
     function syncTipState() {
-      var isCollapsible = !guideIsWide();
+      var isCollapsible = tipIsCollapsible();
       var isOpen = !isCollapsible || tip.classList.contains('gr-tip--open');
 
       if (isCollapsible) {
@@ -936,7 +941,7 @@ function greeceNavInit() {
     }
 
     function toggleTip() {
-      if (guideIsWide()) return;
+      if (!tipIsCollapsible()) return;
       tip.classList.toggle('gr-tip--open');
       syncTipState();
     }

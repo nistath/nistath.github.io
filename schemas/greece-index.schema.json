@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["hero", "notice", "islands_intro", "footer"],
+  "required": ["hero", "islands_intro", "footer"],
   "properties": {
     "hero": {
       "type": "object",
@@ -12,15 +12,6 @@
         "eyebrow": { "$ref": "#/definitions/text" },
         "title": { "$ref": "#/definitions/text" },
         "emphasis": { "$ref": "#/definitions/text" }
-      }
-    },
-    "notice": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["icon", "text"],
-      "properties": {
-        "icon": { "$ref": "#/definitions/text" },
-        "text": { "$ref": "#/definitions/text" }
       }
     },
     "islands_intro": {

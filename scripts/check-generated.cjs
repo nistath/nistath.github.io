@@ -75,8 +75,8 @@ function checkGuideMeasuresItself() {
     }
   }
 
-  /* The stylesheet opens the aside's tip cards at a guide width of 900px and
-     js/main.js decides there whether they are collapsible at all.  Where the
+  /* The stylesheet opens ordinary aside tip cards at a guide width of 900px
+     and js/main.js decides there whether they are collapsible.  Where the
      two disagree the bodies stay collapsed and refuse to open. */
   const runtime = fs.readFileSync(path.join(ROOT, 'js', 'main.js'), 'utf8');
   const cssThreshold = guide.match(/@container guide \(min-width: (\d+)px\)/);
@@ -122,6 +122,16 @@ function main() {
   }
   if (countMatches(html, /class="gr-nav-btn(?: active)?"/g) !== content.greece.sections.length) {
     fail('Generated Greece nav count does not match content');
+  }
+  if (html.includes('gr-tickets-banner')) {
+    fail('The removed Greece ticket banner is still present');
+  }
+  const collapsibleTipCount = content.greece.sections.reduce(
+    (count, section) => count + section.aside.filter((tip) => tip.collapsible).length,
+    0
+  );
+  if (countMatches(html, /class="gr-tip gr-tip--[^\"]+ gr-tip--collapsible"/g) !== collapsibleTipCount) {
+    fail('Generated collapsible Greece tip count does not match content');
   }
   if (html.includes('https://upload.wikimedia.org/wikipedia/commons/')) {
     fail('Generated HTML links to a full-resolution Wikimedia Commons original');

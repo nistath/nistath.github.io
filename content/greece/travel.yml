@@ -67,3 +67,15 @@ aside:
       - Hotels in [Plaka](map:Plaka Athens) are walkable to almost everything
       - Greeks eat dinner at 9–10 PM; show up at 7 and you’ll have the room to yourself
       - Book island ferries at [ferryscanner.com](https://ferryscanner.com)
+
+  - variant: tips
+    title: 🎟️ Museum & Site Tickets
+    collapsible: true
+    items:
+      - >-
+        At state-run sites, EU nationals age 25 or under and non-EU visitors age 18 or under qualify for free admission. [Check the official eligibility rules](https://www.culture.gov.gr/en/service/SitePages/view.aspx?fs=e&iID=2695&s=cl).
+      - >-
+        Reserve the eligible ticket online at [tickets.hh.gr](https://tickets.hh.gr/en/) where offered and bring the original passport or national ID. A student card alone generally does not qualify.
+      - >-
+        The [Acropolis Museum](https://www.theacropolismuseum.gr/en/plan-your-visit) is separate: collect free or reduced tickets at its ticket desk; non-EU visitors ages 6–25 receive the reduced rate.
+      - On official free-admission days, tickets are issued only at the site ticket office.

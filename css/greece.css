@@ -644,49 +644,6 @@ a.gr-sight:focus-visible .gr-sight-name {
   box-shadow: 0 3px 8px rgba(138, 90, 26, 0.3);
 }
 
-/* ── Top-of-guide official tickets banner ── */
-.gr-tickets-banner {
-  margin: 0 auto clamp(20px, 2.6cqw, 28px);
-  max-width: var(--gr-main-max);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: clamp(11px, 1.4cqw, 14px) clamp(12px, 1.8cqw, 16px);
-  border-radius: var(--gr-radius);
-  background: linear-gradient(135deg, rgba(255, 244, 224, 0.96), rgba(251, 231, 199, 0.92));
-  border: 1px solid rgba(176, 125, 46, 0.24);
-  border-left: 3px solid var(--gr-gold);
-  box-shadow: 0 1px 2px rgba(176, 125, 46, 0.09);
-}
-
-.gr-tickets-banner-icon {
-  font-size: 19px;
-  line-height: 1.2;
-  flex-shrink: 0;
-}
-
-.gr-tickets-banner-body {
-  font-size: var(--gr-text-small);
-  color: #5a4a2a;
-  line-height: 1.5;
-}
-
-.gr-tickets-banner-body strong {
-  color: var(--gr-gold-ink);
-}
-
-.gr-tickets-banner-body a {
-  color: #8a5a1a;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  font-weight: 700;
-}
-
-.gr-tickets-banner-body a:hover,
-.gr-tickets-banner-body a:focus-visible {
-  text-decoration-thickness: 2px;
-}
-
 .gr-inline-link {
   color: var(--gr-sea);
   text-decoration: underline;
@@ -1106,22 +1063,26 @@ a.gr-sight:focus-visible .gr-sight-name {
     margin-top: 0;
   }
 
-  /* Desktop: tip bodies always open, no chevron, card not clickable */
+  /* Desktop: ordinary tip bodies stay open.  An explicitly collapsible card
+     remains an accordion so detailed advice can stay tucked away. */
   .gr-tip {
-    cursor: default;
-    touch-action: auto;
     padding: 14px 17px 16px;
     margin-bottom: 12px;
   }
 
-  .gr-tip-title {
+  .gr-tip:not(.gr-tip--collapsible) {
+    cursor: default;
+    touch-action: auto;
+  }
+
+  .gr-tip:not(.gr-tip--collapsible) .gr-tip-title {
     user-select: auto;
     margin-bottom: 11px;
   }
 
-  .gr-tip-chevron { display: none; }
+  .gr-tip:not(.gr-tip--collapsible) .gr-tip-chevron { display: none; }
 
-  .gr-tip-body {
+  .gr-tip:not(.gr-tip--collapsible) .gr-tip-body {
     display: block;
     opacity: 1;
     padding-top: 0;
@@ -1129,7 +1090,7 @@ a.gr-sight:focus-visible .gr-sight-name {
     transition: none;
   }
 
-  .gr-tip-body-inner {
+  .gr-tip:not(.gr-tip--collapsible) .gr-tip-body-inner {
     overflow: visible;
   }
 
