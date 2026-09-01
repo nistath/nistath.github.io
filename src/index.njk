@@ -1,16 +1,27 @@
+---
+pagination:
+  data: siteContent.pages
+  size: 1
+  alias: shellPage
+permalink: "{{ shellPage.permalink }}"
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  {#- The shell boots on the first route; js/main.js retitles and rewrites the
-      social tags below as the visitor navigates. -#}
-  {% set home = siteContent.routes[0] %}
-  <title>{{ home.title }}</title>
+  {#- The complete shell is written once per registered route (see shellPages
+      in scripts/content/routes.cjs), so a clean path like /greece is a real
+      file on GitHub Pages and loads directly, with its own title and social
+      card baked in. js/main.js retitles and rewrites the social tags below as
+      the visitor navigates. -#}
+  {% set pageRoute = shellPage.route %}
+  {% set pageUrl = siteOrigin + shellPage.path %}
+  <title>{{ pageRoute.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="{{ home.theme }}">
+  <meta name="theme-color" content="{{ pageRoute.theme }}">
   <meta name="author" content="Nick Stathas">
-  <link rel="canonical" href="{{ siteOrigin }}/">
+  <link rel="canonical" href="{{ pageUrl }}">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -20,19 +31,19 @@
   <!-- Open Graph / Facebook / Messenger / iMessage -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Nick Stathas">
-  <meta property="og:title" content="{{ home.social.title }}">
-  <meta property="og:url" content="{{ siteOrigin }}/">
-  <meta property="og:image" content="{{ siteOrigin }}{{ home.social.image }}">
+  <meta property="og:title" content="{{ pageRoute.social.title }}">
+  <meta property="og:url" content="{{ pageUrl }}">
+  <meta property="og:image" content="{{ siteOrigin }}{{ pageRoute.social.image }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="{{ home.social.title }}">
+  <meta property="og:image:alt" content="{{ pageRoute.social.title }}">
   <meta property="og:locale" content="en_US">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ home.social.title }}">
-  <meta name="twitter:image" content="{{ siteOrigin }}{{ home.social.image }}">
-  <meta name="twitter:image:alt" content="{{ home.social.title }}">
+  <meta name="twitter:title" content="{{ pageRoute.social.title }}">
+  <meta name="twitter:image" content="{{ siteOrigin }}{{ pageRoute.social.image }}">
+  <meta name="twitter:image:alt" content="{{ pageRoute.social.title }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=EB+Garamond:wght@700&display=swap" rel="stylesheet">

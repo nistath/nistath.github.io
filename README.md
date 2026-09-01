@@ -71,14 +71,15 @@ deployment**, set **Source** to **GitHub Actions**. This is a one-time setup;
 without it, the workflow cannot publish the generated site.
 
 The workflow deploys a build artifact rather than committing generated files.
-Eleventy generates the clean-route stubs and `404.html` from the route registry
-and copies `CNAME` and the static assets into that artifact.
+Eleventy writes the shell at the root and at every route in the registry, so
+clean paths such as `/greece` are real files, generates `404.html`, and copies
+`CNAME` and the static assets into that artifact.
 
 ## Project layout
 
 - `content/` — human-authored YAML and Markdown strings
-- `src/index.njk` — application shell
-- `src/routes.njk`, `src/404.njk` — generated clean-path stubs and fallback
+- `src/index.njk` — application shell, written once per route
+- `src/404.njk` — the not-found page
 - `src/_includes/` — navigation, portfolio, and Greece rendering components
 - `schemas/` — schemas for every content file shape
 - `scripts/content/` — validated content loader and route registry used by

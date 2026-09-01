@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { loadContent } = require('./content/load-content.cjs');
-const { siteRoutes } = require('./content/routes.cjs');
+const { siteRoutes, shellPages, SITE_ORIGIN } = require('./content/routes.cjs');
 const { buildShellTexture, OUTPUT: SHELL_TEXTURE } = require('./render-shell-texture.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -177,30 +177,50 @@ function main() {
 
   checkGuideMeasuresItself();
 
-  /* Every registered route needs its redirect stub and its entry in the 404
-     fallback, and every unregistered one must have neither. */
+  /* Every registered route is a complete copy of the shell at its own clean
+     path, carrying that route's title and social card, and every unregistered
+     one is absent. Nothing in the artifact may still route through a query
+     string: /greece is the whole address. */
   const routes = siteRoutes(content);
   const notFound = fs.readFileSync(path.join(SITE, '404.html'), 'utf8');
+  const runtime = fs.readFileSync(path.join(SITE, 'js', 'main.js'), 'utf8');
+
+  for (const shellPage of shellPages(routes)) {
+    const file = path.join(SITE, shellPage.permalink);
+    if (!fs.existsSync(file)) fail(`Build output is missing ${shellPage.permalink}`);
+
+    const pageHtml = fs.readFileSync(file, 'utf8');
+    const pageUrl = SITE_ORIGIN + shellPage.path;
+    if (!pageHtml.includes('<div id="app"')) fail(`${shellPage.permalink} is not the application shell`);
+    if (!pageHtml.includes(`<link rel="canonical" href="${pageUrl}">`)) {
+      fail(`${shellPage.permalink} does not declare ${pageUrl} as its canonical URL`);
+    }
+    if (!pageHtml.includes(`<meta property="og:url" content="${pageUrl}">`)) {
+      fail(`${shellPage.permalink} does not carry its own social card`);
+    }
+    if (!pageHtml.includes(`<title>${shellPage.route.title}</title>`)) {
+      fail(`${shellPage.permalink} does not carry its route's title`);
+    }
+    if (pageHtml.includes('rel="preload" as="image"')) {
+      fail(`${shellPage.permalink} eagerly preloads a social preview image`);
+    }
+    if (pageHtml.includes('?route=')) fail(`${shellPage.permalink} still routes through a query string`);
+  }
 
   for (const route of routes) {
-    const stub = path.join(SITE, route.path.slice(1), 'index.html');
-    if (!fs.existsSync(stub)) fail(`Build output is missing ${route.path}/index.html`);
-
-    const routeHtml = fs.readFileSync(stub, 'utf8');
-    if (routeHtml.includes('rel="preload" as="image"')) {
-      fail(`${route.path}/index.html eagerly preloads a social preview image before redirecting`);
-    }
-    if (!routeHtml.includes(`encodeURIComponent('${route.path}')`)) {
-      fail(`${route.path}/index.html does not hand its route back to the shell`);
-    }
-    if (!notFound.includes(`"${route.path}":true`)) fail(`404.html does not recover ${route.path}`);
     if (!html.includes(`data-section="${route.id}"`)) fail(`Missing shell navigation for ${route.path}`);
   }
 
+  for (const [name, source] of [['404.html', notFound], ['js/main.js', runtime]]) {
+    if (source.includes('?route=') || source.includes("get('route')")) {
+      fail(`${name} still routes through a query string`);
+    }
+  }
+  if (!notFound.includes('<a href="/"')) fail('404.html does not link back to the site');
+
   for (const disabled of ['portfolio']) {
     if (routes.some((route) => route.id === disabled)) continue;
-    if (fs.existsSync(path.join(SITE, disabled))) fail(`Disabled route ${disabled} still emits a stub`);
-    if (notFound.includes(`"/${disabled}"`)) fail(`404.html still recovers the disabled /${disabled} route`);
+    if (fs.existsSync(path.join(SITE, disabled))) fail(`Disabled route /${disabled} is still written`);
   }
 
   /* The shell texture is a checked-in build product balanced against

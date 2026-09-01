@@ -77,11 +77,12 @@ the visitors who lack it.
   basic nesting. About, GitHub, Resume, and pinned-repository configuration
   must stay here rather than in templates or runtime JavaScript.
 - `src/index.njk` is the application shell that replaces the old authored root
-  `index.html`.
-- `src/routes.njk` and `src/404.njk` generate the clean-path redirect stubs and
-  the direct-load fallback. They are output, not authoring surfaces.
+  `index.html`. It is written once at the root and once more at every
+  registered route, so `/greece` is a real file on GitHub Pages.
+- `src/404.njk` is the plain not-found page. It is output, not an authoring
+  surface, and it recovers nothing.
 - `scripts/content/routes.cjs` is the single route registry. Shell navigation,
-  redirect stubs, the 404 fallback list, the route table injected into
+  the list of paths the shell is written at, the route table injected into
   `js/main.js`, and the generated checks all read it.
 - `src/_includes/portfolio/` and `src/_includes/greece/` own generated markup,
   CSS classes, SVGs, and accessibility attributes.
@@ -95,8 +96,9 @@ the visitors who lack it.
   canonical Google Maps search URLs.
 - `scripts/check-generated.cjs` checks the built artifact for expected content,
   unique IDs, valid anchor nesting, generated route files, and JavaScript
-  syntax. It also asserts that a disabled route emits no stub or 404 entry,
-  and that the Greece guide still measures itself rather than the window.
+  syntax. It also asserts that a disabled route is not written at all, that
+  nothing in the artifact routes through a query string, and that the Greece
+  guide still measures itself rather than the window.
 - `scripts/check-layout.js` loads the built site in Chromium and asserts
   geometry across a viewport matrix. Every shape in that matrix is one that
   has broken before; add to it rather than replacing it.
@@ -177,17 +179,23 @@ registry the build injects as `window.SITE_CONTENT.routes`. `js/main.js` holds
 no route list of its own, so a route the build does not generate cannot be
 navigated to.
 
-Production direct-route support is handled by the generated route stubs and
-`404.html`, not server rewrites. The fallback only captures the routes in the
-registry; unknown paths are intentionally left alone so other Pages content
-under this domain, such as project repositories on their own path prefixes,
-can continue to resolve normally.
+GitHub Pages has no rewrites, so a clean path only loads directly if a real
+file sits there. The build therefore writes the complete shell at every
+registered route (`/greece/index.html` and so on, via `shellPages` in the
+registry and the pagination in `src/index.njk`), each copy with its own title,
+canonical URL, and social card. Nothing redirects and nothing is carried in a
+query string: `https://nistath.com/greece` is the whole address, and it is the
+only shape of address the site supports. Pages answers `/greece` with a
+redirect to `/greece/`; `tidyRoutePath` in `js/main.js` puts the clean path
+back in the address bar before `navigate` reads it. `404.html` is a plain
+not-found page. It recovers nothing, so other Pages content under this domain,
+such as project repositories on their own path prefixes, resolves normally.
 
 Keep local asset references in `src/index.njk` root-relative, not
 route-relative. Direct loads on nested paths depend on that. Adding a top-level
 route means adding an entry to `scripts/content/routes.cjs`, a nav icon under
-`src/_includes/nav/`, and its `<section>` in the shell. The stub, the 404
-fallback, navigation, titles, and social metadata all follow from the registry.
+`src/_includes/nav/`, and its `<section>` in the shell. The route's page,
+navigation, titles, and social metadata all follow from the registry.
 
 ### Resume
 
@@ -240,7 +248,7 @@ original" link is the accessible path to the real document.
 
 The portfolio route is optional and currently disabled: `content/portfolio/`
 is empty, so `loadPortfolio` returns `null`, the registry drops `/portfolio`,
-and no section, nav entry, stub, or 404 entry is generated. The schema,
+and no section, nav entry, or page is generated. The schema,
 renderer, theme map, icons, card styles, and expand/collapse code all remain,
 so restoring the page is a content change. To revive it, add
 `content/portfolio/index.yml` listing project slugs plus one YAML file per
