@@ -86,6 +86,45 @@ function checkGuideMeasuresItself() {
   }
 }
 
+/* Fonts are vendored: nothing may still reach for Google Fonts, every file
+   css/fonts.css names must have been copied, and every face the shell
+   preloads must be one of them. */
+function checkFonts(html, page) {
+  if (/fonts\.googleapis\.com|fonts\.gstatic\.com/.test(html)) {
+    fail(`${page} still loads fonts from Google; run npm run fonts and link /css/fonts.css`);
+  }
+  if (!html.includes('<link rel="stylesheet" href="/css/fonts.css">')) fail(`${page} does not link /css/fonts.css`);
+
+  const fontCss = fs.readFileSync(path.join(SITE, 'css', 'fonts.css'), 'utf8');
+  const files = Array.from(fontCss.matchAll(/url\((\/fonts\/[^)]+)\)/g), (match) => match[1]);
+  if (!files.length) fail('css/fonts.css declares no font files; run npm run fonts');
+  for (const file of files) {
+    if (!fs.existsSync(path.join(SITE, file))) fail(`css/fonts.css names ${file}, which is not in the build output`);
+  }
+  for (const match of html.matchAll(/<link rel="preload" href="([^"]+)" as="font"/g)) {
+    if (!files.includes(match[1])) fail(`${page} preloads ${match[1]}, which css/fonts.css does not declare`);
+  }
+  for (const family of ['Inter', 'Cormorant Garamond', 'EB Garamond']) {
+    if (!fontCss.includes(`font-family: '${family}';`)) fail(`css/fonts.css is missing ${family}`);
+  }
+}
+
+/* Guide photos are lazy in the markup, so the other routes never fetch
+   them, and each frame carries the preview js/main.js paints while its
+   photo is on the way. */
+function checkGuidePhotos(html) {
+  const guide = (html.match(/<section id="section-greece"[\s\S]*?<\/main>/) || [''])[0];
+  const photos = Array.from(guide.matchAll(/<img\b[^>]*>/g), (match) => match[0]);
+  if (!photos.length) fail('The Greece guide renders no photos');
+  for (const photo of photos) {
+    if (!/\bloading="lazy"/.test(photo)) fail('A Greece guide photo is not lazy; a hidden guide would fetch it');
+  }
+  const previews = countMatches(guide, /\bdata-preview="https:\/\/[^"]+width=24"/g);
+  if (previews !== photos.length) {
+    fail(`The Greece guide has ${photos.length} photos but ${previews} blur-up previews`);
+  }
+}
+
 function main() {
   if (!fs.existsSync(INDEX)) fail('Missing _site/index.html; run npm run build first');
   const html = fs.readFileSync(INDEX, 'utf8');
@@ -205,6 +244,7 @@ function main() {
       fail(`${shellPage.permalink} eagerly preloads a social preview image`);
     }
     if (pageHtml.includes('?route=')) fail(`${shellPage.permalink} still routes through a query string`);
+    checkFonts(pageHtml, shellPage.permalink);
   }
 
   for (const route of routes) {
@@ -222,6 +262,8 @@ function main() {
     if (routes.some((route) => route.id === disabled)) continue;
     if (fs.existsSync(path.join(SITE, disabled))) fail(`Disabled route /${disabled} is still written`);
   }
+
+  checkGuidePhotos(html);
 
   /* The shell texture is a checked-in build product balanced against
      --sidebar-overlay. Catch it drifting from its generator. */

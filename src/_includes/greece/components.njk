@@ -1,6 +1,10 @@
 {% macro image(block) %}
   {% set imageSrcset = block.src | responsiveImageSrcset %}
+  {#- Photos load lazily, so a hidden guide costs nothing. Once the guide is
+      open, js/main.js fetches them top to bottom and paints each frame with
+      a blurred preview until its photo arrives. -#}
   <div class="gr-img{% if block.variant == 'island' %} gr-island-img-wrap{% elif block.variant == 'city' %} gr-city-image{% endif %}"
+       {% if imageSrcset %}data-preview="{{ block.src | responsiveImageUrl(24) }}"{% endif %}
        style="aspect-ratio:{{ block.aspect or '16/9' }}{% if block.variant == 'inset' %};margin-bottom:12px{% endif %}">
     <img
       src="{{ block.src | responsiveImageUrl }}"
