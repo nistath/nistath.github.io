@@ -44,9 +44,15 @@ permalink: "{{ shellPage.permalink }}"
   <meta name="twitter:title" content="{{ pageRoute.social.title }}">
   <meta name="twitter:image" content="{{ siteOrigin }}{{ pageRoute.social.image }}">
   <meta name="twitter:image:alt" content="{{ pageRoute.social.title }}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=EB+Garamond:wght@700&display=swap" rel="stylesheet">
+  {#- Fonts are vendored (npm run fonts). The faces the first paint needs are
+      preloaded so they are requested with the HTML rather than after the
+      stylesheet has been parsed; unicode-range in fonts.css keeps every
+      other subset from downloading until a glyph asks for it. #}
+  <link rel="preload" href="/fonts/inter-normal-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  {% if pageRoute.id == 'greece' -%}
+  <link rel="preload" href="/fonts/cormorant-garamond-normal-600-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  {% endif -%}
+  <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/greece.css">
 </head>

@@ -28,6 +28,7 @@ npm run check              # build plus generated-site safety checks
 npm run check:layout       # geometry checks in a real browser (needs `npx playwright install chromium`)
 npm run og                 # build and regenerate Open Graph images
 npm run texture            # regenerate img/shell-texture.png
+npm run fonts              # re-vendor the web fonts into fonts/ and css/fonts.css
 ```
 
 `npm run check` reads the built artifact; `npm run check:layout` drives it.
@@ -279,6 +280,19 @@ rendering and generated Greece navigation; there is no separate nav registry.
 `src/_includes/greece/components.njk` renders the schema's typed body and aside
 blocks.
 
+**Photos load lazily, then in order.** Every guide photo is `loading="lazy"`
+in the markup, so a visitor on another route never fetches one; the guide is
+hidden, so nothing is near the viewport. Opening the guide calls
+`greecePhotosInit` in `js/main.js`, which walks the frames top to bottom and
+flips them to eager a couple at a time, so on a slow connection the next
+photo is usually in before the reader scrolls to it rather than twelve
+downloads finishing late together. Until a photo arrives its frame shows a
+blurred 24px preview from `data-preview`, which the template derives from the
+same Wikimedia source, and the photo fades in over it. The frame's
+`aspect-ratio` box is what keeps the page from moving either way. A visitor
+with Save-Data on keeps the plain lazy behaviour. `check-generated.cjs`
+asserts every photo is lazy and carries a preview.
+
 **The guide measures itself, not the window.** It renders inside the content
 pane, which the sidebar makes 300px narrower, so a viewport breakpoint is
 always wrong by that much: at a 1000px window the guide has 700px, and a query
@@ -337,6 +351,18 @@ decoded at runtime and injected into:
 ### Styling
 
 Design tokens live in `:root` in `css/main.css`.
+
+Fonts are self-hosted. `scripts/fetch-fonts.cjs` (`npm run fonts`) asks
+Google Fonts for Inter, Cormorant Garamond, and EB Garamond in the weights the
+stylesheets use, keeps the Latin and Greek subsets, downloads the woff2 files
+into `fonts/`, and writes `css/fonts.css` with the same `@font-face` rules
+pointed at this origin. Both outputs are checked in, so the build needs no
+network and a visitor never opens a connection to a third party for text.
+`unicode-range` is preserved, so only the subsets a page uses are downloaded,
+and the shell preloads the one or two faces the first paint needs. Changing a
+family, weight, or subset is an edit to that script followed by re-running it.
+`check-generated.cjs` fails if the shell still reaches for Google or preloads
+a face the stylesheet does not declare.
 
 The shell and hero treatment are controlled by the shell theme variables:
 

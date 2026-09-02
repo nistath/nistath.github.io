@@ -421,9 +421,10 @@ function navigate(section, options) {
     renderPortfolio();
   }
 
-  /* Init Greece guide internal nav */
+  /* Init Greece guide internal nav, and start its photos downloading */
   if (section === 'greece') {
     greeceNavInit();
+    greecePhotosInit();
   }
 
   /* On mobile: navigation clicks should always land in the compact state.
@@ -739,6 +740,75 @@ function renderPortfolio() {
 /* =====================================================
    GREECE GUIDE — internal sticky nav
    ===================================================== */
+/* ── Greece photos ──
+   The photos are lazy in the markup, so a visitor who never opens the guide
+   never fetches them.  Opening it starts them downloading top to bottom, a
+   couple at a time: on a slow connection twelve parallel downloads all
+   arrive late, while a short queue has the next photo ready before the
+   reader scrolls to it.  The browser still fetches whatever is on screen
+   first.  Until a photo arrives its frame shows a blurred preview. */
+var GREECE_PHOTO_CONCURRENCY = 2;
+var greecePhotosInitialized = false;
+
+function isPhotoLoaded(img) {
+  return img.complete && img.naturalWidth > 0;
+}
+
+function greecePhotosInit() {
+  if (greecePhotosInitialized) return;
+  greecePhotosInitialized = true;
+
+  var frames = Array.prototype.slice.call(document.querySelectorAll('#section-greece .gr-img'));
+  var pending = [];
+
+  frames.forEach(function(frame) {
+    var img = frame.querySelector('img');
+    if (!img || isPhotoLoaded(img)) return;
+
+    var preview = frame.getAttribute('data-preview');
+    if (preview) {
+      frame.style.setProperty('--gr-preview', 'url("' + preview + '")');
+      frame.classList.add('gr-img--previewing');
+      /* Drop the blurred layer once the photo has faded in over it. */
+      img.addEventListener('transitionend', function(e) {
+        if (e.propertyName === 'opacity' && frame.classList.contains('gr-img--loaded')) {
+          frame.classList.remove('gr-img--previewing');
+        }
+      });
+    }
+
+    var settle = function() {
+      frame.classList.add('gr-img--loaded');
+    };
+    img.addEventListener('load', settle, { once: true });
+    img.addEventListener('error', settle, { once: true });
+    pending.push(img);
+  });
+
+  /* A visitor who asked for less data gets the plain lazy behaviour. */
+  if (navigator.connection && navigator.connection.saveData) return;
+
+  var inFlight = 0;
+
+  function fetchNext() {
+    while (inFlight < GREECE_PHOTO_CONCURRENCY && pending.length) {
+      var img = pending.shift();
+      if (isPhotoLoaded(img)) continue;
+
+      inFlight += 1;
+      var done = function() {
+        inFlight -= 1;
+        fetchNext();
+      };
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+      img.loading = 'eager';
+    }
+  }
+
+  fetchNext();
+}
+
 var greeceNavInitialized = false;
 
 function greeceNavInit() {

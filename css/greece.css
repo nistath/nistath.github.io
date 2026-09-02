@@ -356,6 +356,7 @@
 
 /* ── Images ── */
 .gr-img {
+  position: relative;
   width: 100%;
   border-radius: var(--gr-radius);
   overflow: hidden;
@@ -363,11 +364,37 @@
 }
 
 .gr-img img {
+  position: relative;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   transition: transform 0.5s ease;
+}
+
+/* Blur-up: while a photo is still on its way, the frame shows a blurred
+   24px preview that js/main.js hands it in --gr-preview, then fades the real
+   photo in over it.  The frame keeps its aspect-ratio box either way, so
+   nothing moves; without JavaScript the photo simply appears as before. */
+.gr-img--previewing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gr-preview) center / cover no-repeat;
+  filter: blur(16px);
+  transform: scale(1.1);
+}
+
+.gr-img--previewing img {
+  opacity: 0;
+}
+
+/* Only the fade-in transitions: an element takes its transition from the
+   state it is entering, so going hidden above is instant and no end event
+   fires before the photo is actually here. */
+.gr-img--previewing.gr-img--loaded img {
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.4s ease;
 }
 
 .gr-img:hover img {
