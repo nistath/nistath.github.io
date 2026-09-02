@@ -5,7 +5,7 @@ const {
 } = require('./scripts/content/images.cjs');
 const { loadContent } = require('./scripts/content/load-content.cjs');
 const { contentHref, expandMapLinks } = require('./scripts/content/links.cjs');
-const { siteRoutes, SITE_ORIGIN } = require('./scripts/content/routes.cjs');
+const { siteRoutes, shellPages, SITE_ORIGIN } = require('./scripts/content/routes.cjs');
 
 const markdown = new MarkdownIt({
   html: false,
@@ -39,22 +39,20 @@ module.exports = function configureEleventy(eleventyConfig) {
   eleventyConfig.addFilter('responsiveImageSrcset', responsiveImageSrcset);
   eleventyConfig.addFilter('responsiveImageUrl', responsiveImageUrl);
   eleventyConfig.addFilter('json', (value) => JSON.stringify(value).replace(/</g, '\\u003c'));
-  eleventyConfig.addFilter('knownRoutes', (routes) => (
-    routes.reduce((known, route) => Object.assign(known, { [route.path]: true }), { '/': true })
-  ));
 
-  /* One content load per build feeds the shell, the generated route stubs,
-     the 404 fallback, and the route table handed to js/main.js. */
+  /* One content load per build feeds the shell, the paths it is rendered at,
+     and the route table handed to js/main.js. */
   eleventyConfig.addGlobalData('siteContent', () => {
     const content = loadContent();
-    return { ...content, routes: siteRoutes(content) };
+    const routes = siteRoutes(content);
+    return { ...content, routes, pages: shellPages(routes) };
   });
   eleventyConfig.addGlobalData('siteOrigin', SITE_ORIGIN);
   eleventyConfig.addWatchTarget('content');
   eleventyConfig.addWatchTarget('schemas');
 
-  /* Route stubs and 404.html are generated from the route registry; only
-     genuinely static assets are copied. */
+  /* The shell's per-route copies and 404.html are generated from templates;
+     only genuinely static assets are copied. */
   [
     'CNAME',
     'LICENSE.txt',

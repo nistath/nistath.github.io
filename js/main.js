@@ -73,7 +73,7 @@ if (emailTopbarCompact) {
    The build injects the route registry (scripts/content/routes.cjs), so a
    route the site does not generate — an empty content/portfolio/, say — is
    simply absent here, and every path, title, social card, and surface color
-   comes from the same record the redirect stubs were built from. */
+   comes from the same record the build wrote each route's page from. */
 var githubLoaded = false;
 var resumeLoaded = false;
 var activeSection = null;
@@ -337,26 +337,16 @@ function scheduleResumeRepaint() {
 
 window.addEventListener('resize', scheduleResumeRepaint, { passive: true });
 
-function restoreSectionRoute() {
-  var params = new URLSearchParams(window.location.search);
-  var requestedRoute = params.get('route');
+/* Each route is a real file on GitHub Pages, and Pages answers /greece with
+   a redirect to /greece/. Show the clean path the visitor typed instead. */
+function tidyRoutePath() {
+  var cleanPath = normalizeRoutePath(window.location.pathname);
+  if (cleanPath === window.location.pathname) return;
 
-  if (!requestedRoute || normalizeRoutePath(window.location.pathname) !== '/') return;
-
-  var requestedUrl;
-  try {
-    requestedUrl = new URL(requestedRoute, window.location.origin);
-  } catch (err) {
-    return;
-  }
-
-  if (requestedUrl.origin !== window.location.origin) return;
-
-  var nextUrl = normalizeRoutePath(requestedUrl.pathname) + requestedUrl.search + requestedUrl.hash;
   window.history.replaceState(
-    { section: getSectionFromPath(requestedUrl.pathname) },
+    { section: getSectionFromPath(cleanPath) },
     '',
-    nextUrl
+    cleanPath + window.location.search + window.location.hash
   );
 }
 
@@ -961,5 +951,5 @@ function greeceNavInit() {
   });
 }
 
-restoreSectionRoute();
+tidyRoutePath();
 navigate(getSectionFromPath(window.location.pathname), { updateHistory: false });

@@ -29,8 +29,8 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE_ROOT = path.join(ROOT, '_site');
 const OUT_DIR = path.join(ROOT, 'img', 'og');
 
-/* Serve clean paths the way GitHub Pages plus the shell do, for the routes
-   this build actually generated. */
+/* Serve clean paths the way GitHub Pages does: each registered route is its
+   own copy of the shell on disk. */
 const SPA_ROUTES = new Set(siteRoutes(loadContent()).map((route) => route.path));
 const MIME = {
   '.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8',
@@ -44,7 +44,7 @@ function startServer() {
   const server = http.createServer((req, res) => {
     let urlPath = decodeURIComponent(req.url.split('?')[0]);
     const normalized = urlPath.replace(/\/+$/, '') || '/';
-    if (SPA_ROUTES.has(normalized)) urlPath = '/index.html';
+    if (SPA_ROUTES.has(normalized)) urlPath = `${normalized}/index.html`;
     if (urlPath === '/') urlPath = '/index.html';
     const filePath = path.join(SITE_ROOT, urlPath);
     if (!filePath.startsWith(SITE_ROOT)) { res.writeHead(403).end(); return; }

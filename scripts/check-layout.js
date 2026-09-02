@@ -67,7 +67,7 @@ function startServer() {
   const server = http.createServer((req, res) => {
     let urlPath = decodeURIComponent(req.url.split('?')[0]);
     const normalized = urlPath.replace(/\/+$/, '') || '/';
-    if (SPA_ROUTES.has(normalized)) urlPath = '/index.html';
+    if (SPA_ROUTES.has(normalized)) urlPath = `${normalized}/index.html`;
     if (urlPath === '/') urlPath = '/index.html';
     const filePath = path.join(SITE, urlPath);
     if (!filePath.startsWith(SITE)) { res.writeHead(403).end(); return; }

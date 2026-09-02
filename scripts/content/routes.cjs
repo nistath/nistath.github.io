@@ -1,9 +1,9 @@
 /* Every top-level route on the site, in navigation order.
  *
  * This is the single registry the build reads. It feeds the shell navigation,
- * the generated redirect stubs, the 404 fallback list, the route table
- * injected into js/main.js, and the generated-site checks. Adding or removing
- * a route is one edit here plus its section markup.
+ * the list of paths the shell is rendered at, the route table injected into
+ * js/main.js, and the generated-site checks. Adding or removing a route is
+ * one edit here plus its section markup.
  *
  * `requires` names a content key that must be present for the route to exist
  * at all. The portfolio uses it: when content/portfolio/ is empty the loader
@@ -11,10 +11,9 @@
  * above, so /portfolio genuinely does not exist rather than rendering empty.
  *
  * Fields:
- *   title       browser-tab title (document.title, and the stub's <title>
- *               is `social.title` because that is what a share card shows)
+ *   title       browser-tab title, and the <title> of the route's own page
  *   social      Open Graph / Twitter card title and image
- *   theme       browser chrome color for the route's redirect stub
+ *   theme       browser chrome color while the route's page loads
  *   surface     mobile page background behind the active section
  */
 const SITE_ROUTES = [
@@ -72,4 +71,16 @@ function siteRoutes(content) {
   return SITE_ROUTES.filter((route) => !route.requires || Boolean(content[route.requires]));
 }
 
-module.exports = { siteRoutes, SITE_ORIGIN };
+/* Where the shell is written. GitHub Pages has no rewrites, so a clean path
+ * such as /greece only loads directly if a real file sits there: the build
+ * renders the complete shell once per route, plus once at the root for the
+ * first one, each copy carrying that route's own title and social card.
+ * Nothing redirects and nothing is carried in a query string. */
+function shellPages(routes) {
+  if (!routes.length) return [];
+  return [{ path: '/', permalink: 'index.html', route: routes[0] }].concat(
+    routes.map((route) => ({ path: route.path, permalink: `${route.path.slice(1)}/index.html`, route }))
+  );
+}
+
+module.exports = { siteRoutes, shellPages, SITE_ORIGIN };
