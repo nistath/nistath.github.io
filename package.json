@@ -19,10 +19,9 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
     "ajv": "^8.20.0",
-    "markdown-it": "^14.3.0",
-    "nunjucks": "^3.2.4",
-    "pdfjs-dist": "^5.7.284",
-    "playwright": "^1.56.1",
+    "markdown-it": "^15.0.1",
+    "pdfjs-dist": "^6.3.289",
+    "playwright": "^1.62.1",
     "yaml": "^2.9.0"
   }
 }
