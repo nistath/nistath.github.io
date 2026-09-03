@@ -746,54 +746,77 @@ function renderPortfolio() {
    couple at a time: on a slow connection twelve parallel downloads all
    arrive late, while a short queue has the next photo ready before the
    reader scrolls to it.  The browser still fetches whatever is on screen
-   first.  Until a photo arrives its frame shows a blurred preview. */
+   first, and the queue waits for the page's own load event so the route
+   the visitor landed on is never competing with it.  Until a photo arrives
+   its frame shows a blurred preview, prepared ahead of time by warmRoutes
+   below so it is already there when the guide opens. */
 var GREECE_PHOTO_CONCURRENCY = 2;
+var greecePhotosPrepared = false;
 var greecePhotosInitialized = false;
 
 function isPhotoLoaded(img) {
   return img.complete && img.naturalWidth > 0;
 }
 
-function greecePhotosInit() {
-  if (greecePhotosInitialized) return;
-  greecePhotosInitialized = true;
+function greecePhotoFrames() {
+  return Array.prototype.slice.call(document.querySelectorAll('#section-greece .gr-img'));
+}
 
-  var frames = Array.prototype.slice.call(document.querySelectorAll('#section-greece .gr-img'));
-  var pending = [];
+function greecePhoto(frame) {
+  return frame.querySelector('img:not(.gr-img-preview)');
+}
 
-  frames.forEach(function(frame) {
-    var img = frame.querySelector('img');
+/* Give every frame its preview and its loaded/previewing bookkeeping.  Safe
+   to call while the guide is hidden: the preview <img> is fetched anyway. */
+function greecePhotosPrepare() {
+  if (greecePhotosPrepared) return;
+  greecePhotosPrepared = true;
+
+  greecePhotoFrames().forEach(function(frame) {
+    var img = greecePhoto(frame);
     if (!img || isPhotoLoaded(img)) return;
 
-    var preview = frame.getAttribute('data-preview');
-    if (preview) {
-      frame.style.setProperty('--gr-preview', 'url("' + preview + '")');
+    var previewSrc = frame.getAttribute('data-preview');
+    var preview = null;
+    if (previewSrc) {
+      preview = document.createElement('img');
+      preview.className = 'gr-img-preview';
+      preview.alt = '';
+      preview.setAttribute('aria-hidden', 'true');
+      preview.decoding = 'async';
+      preview.src = previewSrc;
+      frame.insertBefore(preview, img);
       frame.classList.add('gr-img--previewing');
-      /* Drop the blurred layer once the photo has faded in over it. */
-      img.addEventListener('transitionend', function(e) {
-        if (e.propertyName === 'opacity' && frame.classList.contains('gr-img--loaded')) {
-          frame.classList.remove('gr-img--previewing');
-        }
-      });
     }
+
+    /* Drop the blurred layer once the photo has faded in over it.  The
+       fade's end event is the cue, with a timer behind it: a photo that
+       arrives while the guide is hidden never transitions at all. */
+    var cleanup = function() {
+      frame.classList.remove('gr-img--previewing');
+      if (preview && preview.parentNode === frame) frame.removeChild(preview);
+    };
+    img.addEventListener('transitionend', function(e) {
+      if (e.propertyName === 'opacity' && frame.classList.contains('gr-img--loaded')) cleanup();
+    });
 
     var settle = function() {
       frame.classList.add('gr-img--loaded');
+      window.setTimeout(cleanup, frame.getClientRects().length ? 600 : 0);
     };
     img.addEventListener('load', settle, { once: true });
     img.addEventListener('error', settle, { once: true });
-    pending.push(img);
   });
+}
 
-  /* A visitor who asked for less data gets the plain lazy behaviour. */
-  if (navigator.connection && navigator.connection.saveData) return;
-
+function fetchPhotosInOrder(imgs, concurrency) {
+  var pending = imgs.slice();
   var inFlight = 0;
 
   function fetchNext() {
-    while (inFlight < GREECE_PHOTO_CONCURRENCY && pending.length) {
+    while (inFlight < concurrency && pending.length) {
       var img = pending.shift();
-      if (isPhotoLoaded(img)) continue;
+      if (isPhotoLoaded(img) || img.loading !== 'lazy') continue;
 
       inFlight += 1;
       var done = function() {
@@ -807,6 +830,73 @@ function greecePhotosInit() {
   }
 
   fetchNext();
+}
+
+function greecePhotosInit() {
+  if (greecePhotosInitialized) return;
+  greecePhotosInitialized = true;
+
+  greecePhotosPrepare();
+
+  /* A visitor who asked for less data gets the plain lazy behaviour. */
+  if (navigator.connection && navigator.connection.saveData) return;
+
+  afterPageLoad(function() {
+    fetchPhotosInOrder(greecePhotoFrames().map(greecePhoto).filter(Boolean), GREECE_PHOTO_CONCURRENCY);
+  });
+}
+
+/* ── Warming the other routes ──
+   The route the visitor landed on comes first: nothing here runs until the
+   page's load event has fired and the browser reports idle time.  Then what
+   the next click would otherwise wait on is fetched while they read, so a
+   switch lands on a finished page: the guide's hero photo, every blurred
+   preview, and the photos on its first screen; the GitHub cards.  The
+   resume is left alone, since its PDF is large and the browser's own viewer
+   would fetch it again.  Save-Data skips all of it. */
+var GREECE_FIRST_SCREEN_PHOTOS = 2;
+var routesWarmed = false;
+
+function afterPageLoad(fn) {
+  if (document.readyState === 'complete') fn();
+  else window.addEventListener('load', fn, { once: true });
+}
+
+function whenIdle(fn) {
+  if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 3000 });
+  else window.setTimeout(fn, 1000);
+}
+
+function warmRoutes() {
+  if (routesWarmed) return;
+  routesWarmed = true;
+  if (navigator.connection && navigator.connection.saveData) return;
+
+  afterPageLoad(function() {
+    whenIdle(function() {
+      if (routeById('greece')) warmGreece();
+      if (routeById('github') && !githubLoaded) {
+        githubLoaded = true;
+        loadGitHubRepos();
+      }
+    });
+  });
+}
+
+function warmGreece() {
+  var section = document.getElementById('section-greece');
+  if (!section) return;
+
+  var heroImage = getComputedStyle(section).getPropertyValue('--gr-hero-image');
+  var heroUrl = heroImage && heroImage.match(/url\(\s*["']?([^"')]+)["']?\s*\)/);
+  if (heroUrl) {
+    var hero = new Image();
+    hero.src = heroUrl[1];
+  }
+
+  greecePhotosPrepare();
+  var firstScreen = greecePhotoFrames().slice(0, GREECE_FIRST_SCREEN_PHOTOS).map(greecePhoto).filter(Boolean);
+  fetchPhotosInOrder(firstScreen, 1);
 }
 
 var greeceNavInitialized = false;
@@ -1023,3 +1113,4 @@ function greeceNavInit() {
 
 tidyRoutePath();
 navigate(getSectionFromPath(window.location.pathname), { updateHistory: false });
+warmRoutes();
