@@ -55,24 +55,6 @@ body:
 
   - type: venues
     items:
-      - icon: 🌳
-        name: ΚΛΑΚΑΖ
-        description: Ruin bar with a hidden garden, string lights, and great cocktails, a few steps from Monastiraki Square. Formerly known as six d.o.g.s. Renovated, and open from 11:00 for coffee through the night.
-        map: ΚΛΑΚΑΖ Avramiotou 6 Athens
-        lang: el
-      - icon: 🏙️
-        name: Bios
-        description: Legendary rooftop bar near Psiri. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
-        map: Bios Athens
-      - icon: 🎶
-        name: Drachmi
-        description: Lively cocktail bar close to Syntagma. Packed on weekends. Great drinks, people dancing, young crowd.
-        map: Drachmi Athens
-      - icon: 🧺
-        name: Πλυντήριο
-        description: Laundromat-themed club for the youngins.
-        map: Πλυντήριο Bar Athens
-        lang: el
       - icon: 🍻
         name: Cantina Social
         description: Hidden courtyard bar between buildings, through an unmarked passage off Leokoriou. Cheap drinks, resident DJs, and a dancing crowd late, but relaxed enough to just sit with a beer.
@@ -81,10 +63,28 @@ body:
         name: TAF (The Art Foundation)
         description: Art gallery turned bar in an old Ottoman building, with a tree-filled garden patio under a canopy. Good for mid-day coffee or a casual cocktail, with plenty of room for a large group.
         map: TAF The Art Foundation Normanou 5 Athens
+      - icon: 🏙️
+        name: Bios
+        description: Legendary rooftop bar near Psiri. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
+        map: Bios Athens
+      - icon: 🎶
+        name: Drachmi
+        description: Lively cocktail bar close to Syntagma. Packed on weekends. Great drinks, people dancing, young crowd.
+        map: Drachmi Athens
       - icon: 🌃
         name: Aiolou Food Strip
         description: Late-night food strip by Agias Irinis Square. Gyros, loukoumades, burgers. Perfect for a snack during a night out.
         map: Aiolou 21 Athens
+      - icon: 🌳
+        name: ΚΛΑΚΑΖ
+        description: Ruin bar with a hidden garden, string lights, and great cocktails, a few steps from Monastiraki Square. Formerly known as six d.o.g.s. Renovated, and open from 11:00 for coffee through the night.
+        map: ΚΛΑΚΑΖ Avramiotou 6 Athens
+        lang: el
+      - icon: 🧺
+        name: Πλυντήριο
+        description: Laundromat-themed club for the youngins.
+        map: Πλυντήριο Bar Athens
+        lang: el
 
 aside:
   - variant: eats
