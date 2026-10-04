@@ -14,14 +14,14 @@ image:
 body:
   - type: prose
     text: >-
-      Yes, it’s expensive and loud. Old town [Chora](map:Mykonos Chora) is still beautiful, and Delos is a short boat ride away.
+      Yes, it’s expensive and loud. Old town [Chora](map:Mykonos Old Port) is still beautiful, and Delos is a short boat ride away.
 
   - type: heading
     text: Beaches
 
   - type: prose
     text: >-
-      Good but below average by Greek island standards. You’re here to party. [Paradise](map:Paradise Beach Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are fun beaches.
+      Good but below average by Greek island standards. You’re here to party. [Paradise](map:Paradise Beach Club Mykonos) and [Super Paradise](map:Super Paradise Beach Mykonos) are fun beaches.
 
   - type: heading
     text: Don’t Miss
@@ -65,7 +65,7 @@ aside:
   - variant: essentials
     title: 🌊 Essentials
     items:
-      - Stay in old town [Chora](map:Mykonos Chora), not beach hotels
+      - Stay in old town [Chora](map:Mykonos Old Port), not beach hotels
       - "[Delos](map:Delos Archaeological Site) boat trip, with a guide"
       - "Sunset drinks: [Cerise](map:Cerise Bar Mykonos) in [Little Venice](map:Little Venice Mykonos)"
       - "Big night out: [Skandinavian](map:Skandinavian Bar Mykonos)"

@@ -25,9 +25,10 @@ body:
         description: One of Athens’ best steakhouses. Premium cuts, great wine list.
         map: Basegrill Athens
       - icon: 🫕
-        name: Barbadimos
-        description: Authentic Greek restaurant.
-        map: Barbadimos Athens
+        name: Μπάρμπα Δήμος
+        description: Historic family taverna in Kallithea. Founded in 1910 and at this address since 1956, now run by the founder’s grandsons. Separate from the Barbadimos kebab chain.
+        map: mparmpadimos Davaki 39 Kallithea Athens
+        lang: el
       - icon: 🥙
         name: Gyristroula
         description: Solid souvlaki next to Thisio station.
@@ -54,10 +55,11 @@ body:
 
   - type: venues
     items:
-      - icon: 🌿
-        name: six d.o.g.s
-        description: Ruin bar with a hidden garden and great cocktails. Unfortunately closed and might be replaced by some restaurant.
-        map: six d.o.g.s Athens
+      - icon: 🌳
+        name: ΚΛΑΚΑΖ
+        description: Ruin bar with a hidden garden, string lights, and great cocktails, a few steps from Monastiraki Square. Formerly known as six d.o.g.s. Renovated, and open from 11:00 for coffee through the night.
+        map: ΚΛΑΚΑΖ Avramiotou 6 Athens
+        lang: el
       - icon: 🏙️
         name: Bios
         description: Legendary rooftop bar near Psiri. Deck chairs, DJs, incredible Acropolis views. Try the popsicle cocktail.
@@ -71,6 +73,18 @@ body:
         description: Laundromat-themed club for the youngins.
         map: Πλυντήριο Bar Athens
         lang: el
+      - icon: 🍻
+        name: Cantina Social
+        description: Hidden courtyard bar between buildings, through an unmarked passage off Leokoriou. Cheap drinks, resident DJs, and a dancing crowd late, but relaxed enough to just sit with a beer.
+        map: Cantina Social Leokoriou 8 Athens
+      - icon: 🎨
+        name: TAF (The Art Foundation)
+        description: Art gallery turned bar in an old Ottoman building, with a tree-filled garden patio under a canopy. Good for mid-day coffee or a casual cocktail, with plenty of room for a large group.
+        map: TAF The Art Foundation Normanou 5 Athens
+      - icon: 🌃
+        name: Aiolou Food Strip
+        description: Late-night food strip by Agias Irinis Square. Gyros, loukoumades, burgers. Perfect for a snack during a night out.
+        map: Aiolou 21 Athens
 
 aside:
   - variant: eats

@@ -18,7 +18,7 @@ body:
           aspect: 16/7
       - name: Rhodes
         description: >-
-          Rhodes has the [Medieval Old Town](map:Rhodes Old Town), a walled UNESCO city you can lose hours in, plus beaches, [ancient Lindos](map:Lindos Acropolis Rhodes), and a different vibe from the Cyclades.
+          Rhodes has the [Medieval Old Town](map:Old Town of Rhodes), a walled UNESCO city you can lose hours in, plus beaches, [ancient Lindos](map:Lindos Acropolis), and a different vibe from the Cyclades.
         image:
           src: https://commons.wikimedia.org/wiki/Special:FilePath/Rhodes_old_town_Greece_6.jpg
           alt: Rhodes Old Town
