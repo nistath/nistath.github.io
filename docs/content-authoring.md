@@ -71,6 +71,13 @@ map: Acropolis Museum Athens
 The build converts both forms to a normal Google Maps search URL. Use `url:`
 instead when a specific shared pin, official site, or ticket page matters.
 
+`npm run check` looks every `map:` query up on Google and fails if it does not
+land on one place with a matching name. A bare town or island name such as
+`Parikia Paros` can resolve to the whole island, and a vague name can resolve to
+a list of results. Add the street or a landmark (`mparmpadimos Davaki 39
+Kallithea Athens`) until it resolves to the intended place. The check cannot tell that a
+venue has closed, so look at the Maps entry yourself when adding one.
+
 For multiple paragraphs, use separate blocks:
 
 ```yaml

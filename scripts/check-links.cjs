@@ -211,14 +211,6 @@ function normalizedWords(value) {
   ).filter((word) => word.length >= 4);
 }
 
-function compactText(value) {
-  return String(value)
-    .normalize('NFKD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, '');
-}
-
 function levenshtein(left, right) {
   const distance = Array.from({ length: right.length + 1 }, (_value, index) => index);
 
@@ -240,52 +232,78 @@ function levenshtein(left, right) {
   return distance[right.length];
 }
 
-function nameMatchesQuery(query, name) {
-  const compactQuery = compactText(query);
-  const compactName = compactText(name);
-  if (compactName.length >= 3 && (compactQuery.includes(compactName) || compactName.includes(compactQuery))) return true;
+// Words that name the island or city a query is scoped to ("Parikia Paros").
+// A resolved place need not repeat them, but it must not be nothing more than
+// them: "Parikia Paros" resolving to the island "Paros" is the wrong place.
+const SCOPE_WORDS = new Set([
+  'athens', 'athina', 'greece', 'crete', 'santorini', 'mykonos', 'paros', 'naxos', 'milos', 'rhodes', 'corfu',
+  'zakynthos',
+]);
 
-  return normalizedWords(query).some((queryWord) =>
-    normalizedWords(name).some(
-      (nameWord) => levenshtein(queryWord, nameWord) / Math.max(queryWord.length, nameWord.length) <= 0.35
-    )
-  );
+// Queries that Google answers with a ranked list rather than one place, where
+// someone looked at the real Maps page and its first result was the intended
+// place. Everything else must resolve to a single named place, so a vague
+// query cannot quietly drift to a different one.
+const REVIEWED_LISTS = new Set(['Acropolis of Athens', 'Archaeological Museum of Thera Fira']);
+
+function wordsMatch(left, right) {
+  return levenshtein(left, right) / Math.max(left.length, right.length) <= 0.35;
 }
 
-function hasGooglePlaceResult(body, query) {
+function namesTheRightPlace(query, name) {
+  const queryWords = normalizedWords(query).filter((word) => !SCOPE_WORDS.has(word));
+  const nameWords = normalizedWords(name).filter((word) => !SCOPE_WORDS.has(word));
+  if (!queryWords.length) return true;
+  return queryWords.some((queryWord) => nameWords.some((nameWord) => wordsMatch(queryWord, nameWord)));
+}
+
+function classifyGooglePlaceResult(body, query) {
   const match = body.match(EMBED_ARGUMENT);
-  if (!match) return false;
+  if (!match) return { found: false, reason: 'the lookup returned no place data' };
 
   let data;
   try {
     data = JSON.parse(match[1]);
   } catch {
-    return false;
+    return { found: false, reason: 'the lookup returned unreadable place data' };
   }
 
   const kind = data?.[5]?.[0]?.[0]?.[1];
   if (kind === 'spotlit') {
     const place = data?.[21]?.[3];
-    return (
-      GOOGLE_CID.test(place?.[0]?.[0] || '') &&
-      GOOGLE_PLACE_ID.test(place?.[27] || '') &&
-      nameMatchesQuery(query, place?.[1] || '')
-    );
+    const name = place?.[1] || '';
+    if (
+      !GOOGLE_CID.test(place?.[0]?.[0] || '') ||
+      !GOOGLE_PLACE_ID.test(place?.[27] || '')
+    ) {
+      return { found: false, reason: 'the lookup returned no place identity' };
+    }
+    if (!namesTheRightPlace(query, name)) {
+      return { found: false, reason: `it resolves to "${name}", which is not what the query names` };
+    }
+    return { found: true };
   }
 
   if (kind === 'categorical-search-results-injection') {
     const result = data?.[5]?.[3]?.[0];
     const score = result?.[12]?.[1];
-    return (
+    const listed =
       result?.[1] === query &&
       Array.isArray(result?.[4]) &&
       result[4].length > 0 &&
       Number.isFinite(score) &&
-      score > 0
-    );
+      score > 0;
+    if (!listed) return { found: false, reason: 'the lookup returned no matching place' };
+    if (REVIEWED_LISTS.has(query)) return { found: true };
+    return {
+      found: false,
+      reason:
+        'it resolves to a list of results rather than one place, so the link may land on the wrong entry; ' +
+        'add the street or district to the query, or add it to REVIEWED_LISTS once the first result is confirmed',
+    };
   }
 
-  return false;
+  return { found: false, reason: 'the lookup returned no place or geographic feature' };
 }
 
 function googleMapsEmbedUrl(query) {
@@ -318,12 +336,12 @@ async function getGooglePlaceResult(context, query) {
 
     const body = await result.response.text();
     await result.response.dispose();
-    lastResult = { found: hasGooglePlaceResult(body, query) };
+    lastResult = classifyGooglePlaceResult(body, query);
     if (lastResult.found || attempt === MAX_ATTEMPTS) return lastResult;
     await sleep(300 * 2 ** (attempt - 1));
   }
 
-  return lastResult || { found: false };
+  return lastResult || { found: false, reason: 'the lookup returned no place data' };
 }
 
 async function checkGoogleMapsQueries(queries, failures, warnings) {
@@ -377,7 +395,7 @@ async function checkGoogleMapsQueries(queries, failures, warnings) {
         } else if (result.status) {
           failures.push(`Google Maps lookup returned HTTP ${result.status} for "${query}"`);
         } else if (!result.found) {
-          failures.push(`Google Maps returned no matching place or geographic feature for "${query}" (${describe(links[0])})`);
+          failures.push(`Google Maps link for "${query}" is not reliable: ${result.reason} (${describe(links[0])})`);
         }
       }
     );
@@ -435,7 +453,11 @@ async function main() {
   console.log(`Live link checks passed (${links.length} unique user-facing URLs).`);
 }
 
-main().catch((error) => {
-  console.error(error.message || error);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error.message || error);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { classifyGooglePlaceResult, namesTheRightPlace };
