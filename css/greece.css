@@ -14,6 +14,10 @@
    in this file; scripts/check-generated.cjs fails the build for both. */
 #section-greece {
   container: guide / inline-size;
+  /* The hero photo, declared here so js/main.js can read it and warm it
+     while the guide is still hidden: a hidden element's background is never
+     fetched, so without that the hero would arrive after the switch. */
+  --gr-hero-image: url('/img/cache/athens-skyline.jpg');
 }
 
 .greece-wrap {
@@ -85,7 +89,7 @@
   background-image:
     linear-gradient(180deg, rgba(245, 240, 232, 0) 56%, rgba(245, 240, 232, 0.26) 100%),
     linear-gradient(163deg, rgba(9, 48, 74, 0.94) 0%, rgba(20, 96, 138, 0.86) 46%, rgba(60, 160, 188, 0.70) 100%),
-    url('/img/cache/athens-skyline.jpg');
+    var(--gr-hero-image);
   background-size: auto, auto, cover;
   background-position: center, center, center 62%;
   background-repeat: no-repeat, no-repeat, no-repeat;
@@ -372,32 +376,37 @@
   transition: transform 0.5s ease;
 }
 
-/* Blur-up: while a photo is still on its way, the frame shows a blurred
-   24px preview that js/main.js hands it in --gr-preview, then fades the real
-   photo in over it.  The frame keeps its aspect-ratio box either way, so
-   nothing moves; without JavaScript the photo simply appears as before. */
-.gr-img--previewing::before {
-  content: '';
+/* Blur-up: while a photo is still on its way, the frame shows a blurred 24px
+   preview of it, then fades the real photo in over it.  The preview is an
+   <img> that js/main.js inserts rather than a CSS background, because an
+   <img> is fetched even while the guide is hidden, which is what lets the
+   previews be warmed before the visitor switches to the guide.  The frame
+   keeps its aspect-ratio box either way, so nothing moves; without
+   JavaScript the photo simply appears as before. */
+.gr-img-preview {
   position: absolute;
   inset: 0;
-  background: var(--gr-preview) center / cover no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   filter: blur(16px);
   transform: scale(1.1);
+  pointer-events: none;
 }
 
-.gr-img--previewing img {
+.gr-img--previewing img:not(.gr-img-preview) {
   opacity: 0;
 }
 
 /* Only the fade-in transitions: an element takes its transition from the
    state it is entering, so going hidden above is instant and no end event
    fires before the photo is actually here. */
-.gr-img--previewing.gr-img--loaded img {
+.gr-img--previewing.gr-img--loaded img:not(.gr-img-preview) {
   opacity: 1;
   transition: transform 0.5s ease, opacity 0.4s ease;
 }
 
-.gr-img:hover img {
+.gr-img:hover img:not(.gr-img-preview) {
   transform: scale(1.02);
 }
 

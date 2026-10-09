@@ -175,6 +175,15 @@ scroll event arriving before the class update cannot mis-lay the page.
    once.
 5. Syncs browser history and clean paths such as `/resume` and `/greece`.
 
+After `navigate` has settled the landing route, `warmRoutes` uses the page's
+load event plus idle time to fetch what the next click would otherwise wait
+on: the guide's hero photo (read from `--gr-hero-image` on `#section-greece`,
+because a hidden element's CSS background is never fetched on its own), every
+blurred preview, the first two guide photos, and the GitHub cards. Switching
+then lands on a finished page. The resume PDF is deliberately not warmed, and
+Save-Data skips the whole step. The landing route always has priority: nothing
+in `warmRoutes` or the photo queue runs before `load`.
+
 Every path, title, social card, and mobile surface color comes from the route
 registry the build injects as `window.SITE_CONTENT.routes`. `js/main.js` holds
 no route list of its own, so a route the build does not generate cannot be
@@ -283,14 +292,17 @@ blocks.
 **Photos load lazily, then in order.** Every guide photo is `loading="lazy"`
 in the markup, so a visitor on another route never fetches one; the guide is
 hidden, so nothing is near the viewport. Opening the guide calls
-`greecePhotosInit` in `js/main.js`, which walks the frames top to bottom and
-flips them to eager a couple at a time, so on a slow connection the next
-photo is usually in before the reader scrolls to it rather than twelve
-downloads finishing late together. Until a photo arrives its frame shows a
-blurred 24px preview from `data-preview`, which the template derives from the
-same Wikimedia source, and the photo fades in over it. The frame's
-`aspect-ratio` box is what keeps the page from moving either way. A visitor
-with Save-Data on keeps the plain lazy behaviour. `check-generated.cjs`
+`greecePhotosInit` in `js/main.js`, which waits for the page's load event and
+then walks the frames top to bottom, flipping them to eager a couple at a
+time, so on a slow connection the next photo is usually in before the reader
+scrolls to it rather than twelve downloads finishing late together. Until a
+photo arrives its frame shows a blurred 24px preview of it, an `<img>` that
+`greecePhotosPrepare` inserts from `data-preview` (the template derives it
+from the same Wikimedia source), and the photo fades in over it. The preview
+is an image element rather than a CSS background because an image is fetched
+even while the guide is hidden, which is what lets it be warmed early. The
+frame's `aspect-ratio` box is what keeps the page from moving either way. A
+visitor with Save-Data on keeps the plain lazy behaviour. `check-generated.cjs`
 asserts every photo is lazy and carries a preview.
 
 **The guide measures itself, not the window.** It renders inside the content

@@ -144,6 +144,8 @@ function isKnownAutomationBlock(link, status, finalUrl) {
     return true;
   }
   if (status === 429 && hosts.some((host) => host === 'free-now.com' || host === 'www.free-now.com')) return true;
+  /* LinkedIn answers automated clients with its non-standard 999 status. */
+  if (status === 999 && hosts.some((host) => host === 'linkedin.com' || host.endsWith('.linkedin.com'))) return true;
   if (status === 403 && hosts.some((host) => host === 'culture.gov.gr' || host.endsWith('.culture.gov.gr'))) return true;
   return false;
 }
